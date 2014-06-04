@@ -61,7 +61,8 @@ public final class CinematicEditorTopComponent extends TopComponent {
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         layeredTopContainer = new javax.swing.JLayeredPane();
-        timeSlider = new javax.swing.JLabel();
+        timeSlider = new javax.swing.JPanel();
+        timeSliderDel = new javax.swing.JLabel();
         topContainer = new javax.swing.JScrollPane();
         timeline = new javax.swing.JTable();
 
@@ -73,9 +74,23 @@ public final class CinematicEditorTopComponent extends TopComponent {
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton1);
 
-        org.openide.awt.Mnemonics.setLocalizedText(timeSlider, "jLabel1");
-        timeSlider.setBounds(0, 0, 20, 130);
+        javax.swing.GroupLayout timeSliderLayout = new javax.swing.GroupLayout(timeSlider);
+        timeSlider.setLayout(timeSliderLayout);
+        timeSliderLayout.setHorizontalGroup(
+            timeSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+        timeSliderLayout.setVerticalGroup(
+            timeSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        timeSlider.setBounds(290, 0, 50, 100);
         layeredTopContainer.add(timeSlider, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        org.openide.awt.Mnemonics.setLocalizedText(timeSliderDel, "jLabel1");
+        timeSliderDel.setBounds(0, 0, 20, 130);
+        layeredTopContainer.add(timeSliderDel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         timeline.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -122,7 +137,8 @@ public final class CinematicEditorTopComponent extends TopComponent {
     private javax.swing.JButton jButton1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLayeredPane layeredTopContainer;
-    private javax.swing.JLabel timeSlider;
+    private javax.swing.JPanel timeSlider;
+    private javax.swing.JLabel timeSliderDel;
     private javax.swing.JTable timeline;
     private javax.swing.JScrollPane topContainer;
     // End of variables declaration//GEN-END:variables
