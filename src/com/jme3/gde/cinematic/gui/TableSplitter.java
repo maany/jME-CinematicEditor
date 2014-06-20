@@ -57,7 +57,7 @@ public class TableSplitter implements ChangeListener, PropertyChangeListener{
     	    columnModel.removeColumn( column );
 			layerContainer.getColumnModel().addColumn( column );
 		}
-
+                System.out.println("Layer COntainer Width from inside : " + layerContainer.getWidth() + " main :" + main.getWidth());
 		//  Add the layerContainer table to the scroll pane
 
         layerContainer.setPreferredScrollableViewportSize(layerContainer.getPreferredSize());

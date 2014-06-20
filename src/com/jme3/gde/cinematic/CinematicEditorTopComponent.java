@@ -5,12 +5,6 @@
 package com.jme3.gde.cinematic;
 
 import com.jme3.gde.cinematic.framework.CinematicClip;
-import com.jme3.gde.cinematic.framework.Frame;
-import com.jme3.gde.cinematic.gui.TableSplitter;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -40,14 +34,12 @@ import org.openide.util.NbBundle.Messages;
 })
 public final class CinematicEditorTopComponent extends TopComponent {
 
-    private JTable layerContainer = null;
-    private CinematicClip cinematicClip = null;
     public CinematicEditorTopComponent() {
         initComponents();
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
         
-        initCinematicEditor();
+        launchCinematicEditor();
     }
 
     /**
@@ -58,89 +50,24 @@ public final class CinematicEditorTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        layeredTopContainer = new javax.swing.JLayeredPane();
-        timeSlider = new javax.swing.JPanel();
-        timeSliderDel = new javax.swing.JLabel();
-        topContainer = new javax.swing.JScrollPane();
-        timeline = new javax.swing.JTable();
-
-        jToolBar1.setRollover(true);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, "jButton1");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
-
-        javax.swing.GroupLayout timeSliderLayout = new javax.swing.GroupLayout(timeSlider);
-        timeSlider.setLayout(timeSliderLayout);
-        timeSliderLayout.setHorizontalGroup(
-            timeSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-        timeSliderLayout.setVerticalGroup(
-            timeSliderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        timeSlider.setBounds(290, 0, 50, 100);
-        layeredTopContainer.add(timeSlider, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        org.openide.awt.Mnemonics.setLocalizedText(timeSliderDel, "jLabel1");
-        timeSliderDel.setBounds(0, 0, 20, 130);
-        layeredTopContainer.add(timeSliderDel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        timeline.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        topContainer.setViewportView(timeline);
-
-        topContainer.setBounds(0, 0, 590, 110);
-        layeredTopContainer.add(topContainer, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        CinematicEditorFX = new javafx.embed.swing.JFXPanel();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 34, Short.MAX_VALUE)
-                        .addComponent(layeredTopContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25)))
-                .addContainerGap())
+            .addComponent(CinematicEditorFX, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(7, 7, 7)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(layeredTopContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 30, Short.MAX_VALUE)
+                .addComponent(CinematicEditorFX, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JLayeredPane layeredTopContainer;
-    private javax.swing.JPanel timeSlider;
-    private javax.swing.JLabel timeSliderDel;
-    private javax.swing.JTable timeline;
-    private javax.swing.JScrollPane topContainer;
+    private javafx.embed.swing.JFXPanel CinematicEditorFX;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -166,51 +93,13 @@ public final class CinematicEditorTopComponent extends TopComponent {
     /**
      * This method loads the different renderer's, and splits the main JTable into layerContainer and timeline
      */
-    private void initCinematicEditor() {
-        cinematicClip = new CinematicClip();
-        initTimeline();
-        TableSplitter tableSplitter = new TableSplitter(1,topContainer);
-        layerContainer = tableSplitter.getLayerContainer(); 
-        // Now, the variable timeline refers to table on RHS, while layerContainer refers to table on LHS
-        
-        
-        initLayerContainer();
-        initTimeSlider();
-    }
-
-    private void initTimeline() {
-        int durationValue = cinematicClip.getDuration();
-        DefaultTableModel model = (DefaultTableModel) timeline.getModel();
-        model.setColumnCount(durationValue);
-        int cols = model.getColumnCount();
-        System.out.println("ColumnCount : " + cols);
-        TableColumnModel columnModel = timeline.getColumnModel();
-        
-        TableColumn layersColumn = columnModel.getColumn(0);
-        layersColumn.setHeaderValue("Layers");
-        layersColumn.setMinWidth(80);
-        layersColumn.setPreferredWidth(150);
-        
-        for(int i=1;i<cols;i++)
-        {
-            TableColumn column =  columnModel.getColumn(i);
-            column.setHeaderValue(i);
-            System.out.println("running for " + i);
-            column.setMinWidth(30);
-            // column.setMaxWidth(30);
-            column.setPreferredWidth(30);
+    private void launchCinematicEditor() {
+        try {
+            // cinematicClip = CinematicEditorManager.getInstance().getCurrentClip();
+        } catch (Exception ex) {
+        } finally {
         }
-        System.out.println("success");
-        timeline.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     }
 
-    private void initLayerContainer() {
-        Frame showHide = new Frame();
-        layerContainer.addColumn(showHide);
-        
-    }
 
-    private void initTimeSlider() {
-        
-    }
 }
