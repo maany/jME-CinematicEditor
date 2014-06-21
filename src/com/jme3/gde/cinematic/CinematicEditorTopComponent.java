@@ -4,7 +4,10 @@
  */
 package com.jme3.gde.cinematic;
 
-import com.jme3.gde.cinematic.framework.CinematicClip;
+import com.jme3.cinematic.gui.jfx.CinematicEditorUI;
+import com.jme3.cinematic.gui.jfx.StartHere;
+import javafx.application.Platform;
+import javafx.scene.Scene;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -39,7 +42,14 @@ public final class CinematicEditorTopComponent extends TopComponent {
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
         
-        launchCinematicEditor();
+        Platform.runLater(new Runnable(){
+
+            @Override
+            public void run() {
+                launchCinematicEditor();
+            }
+        
+        });
     }
 
     /**
@@ -50,24 +60,40 @@ public final class CinematicEditorTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        CinematicEditorFX = new javafx.embed.swing.JFXPanel();
+        cinematicEditorFX = new javafx.embed.swing.JFXPanel();
+        reloadButton = new javax.swing.JButton();
+
+        cinematicEditorFX.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        cinematicEditorFX.setMaximumSize(new java.awt.Dimension(660, 220));
+
+        org.openide.awt.Mnemonics.setLocalizedText(reloadButton, "Reload");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(CinematicEditorFX, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cinematicEditorFX, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(reloadButton)
+                .addGap(164, 164, 164))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 30, Short.MAX_VALUE)
-                .addComponent(CinematicEditorFX, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(reloadButton)
+                .addGap(3, 3, 3)
+                .addComponent(cinematicEditorFX, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javafx.embed.swing.JFXPanel CinematicEditorFX;
+    private javafx.embed.swing.JFXPanel cinematicEditorFX;
+    private javax.swing.JButton reloadButton;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -95,11 +121,21 @@ public final class CinematicEditorTopComponent extends TopComponent {
      */
     private void launchCinematicEditor() {
         try {
-            // cinematicClip = CinematicEditorManager.getInstance().getCurrentClip();
+            System.out.println("Launching cinematic editor");
+            CinematicEditorUI cinematicEditor = new CinematicEditorUI();
+            Scene scene = new Scene(cinematicEditor,660,220);
+            scene.getStylesheets().add(new StartHere().getClass().getResource("layer_container.css").toExternalForm());
+            cinematicEditorFX.setScene(scene);
+            cinematicEditorFX.setVisible(true);
+            cinematicEditor.initCinematicEditorUI();
+            cinematicEditor.initView(CinematicEditorManager.getInstance().getCurrentClip().getRoot());
         } catch (Exception ex) {
+            System.out.println("OOPPss");
+            ex.printStackTrace();
         } finally {
         }
     }
+
 
 
 }
