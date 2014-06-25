@@ -41,7 +41,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
         initComponents();
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
-        
+        Platform.setImplicitExit(false);
         Platform.runLater(new Runnable(){
 
             @Override
@@ -63,8 +63,12 @@ public final class CinematicEditorTopComponent extends TopComponent {
         cinematicEditorFX = new javafx.embed.swing.JFXPanel();
         reloadButton = new javax.swing.JButton();
 
+        setMaximumSize(new java.awt.Dimension(660, 272));
+        setPreferredSize(new java.awt.Dimension(660, 272));
+
         cinematicEditorFX.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cinematicEditorFX.setMaximumSize(new java.awt.Dimension(660, 220));
+        cinematicEditorFX.setPreferredSize(new java.awt.Dimension(660, 220));
 
         org.openide.awt.Mnemonics.setLocalizedText(reloadButton, "Reload");
 
@@ -78,7 +82,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
                 .addGap(164, 164, 164))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cinematicEditorFX, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
+                .addComponent(cinematicEditorFX, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(

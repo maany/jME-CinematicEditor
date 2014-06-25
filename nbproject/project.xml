@@ -34,14 +34,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>jfxrt</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>org.netbeans.modules.settings</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -84,6 +76,22 @@
                 </dependency>
             </module-dependencies>
             <public-packages/>
+            <class-path-extension>
+                <runtime-relative-path>ext/deploy.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/deploy.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jfxrt.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jfxrt.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/plugin.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/plugin.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/javaws.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/javaws.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>
