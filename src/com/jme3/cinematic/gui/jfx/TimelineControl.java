@@ -53,8 +53,8 @@ public class TimelineControl extends VBox implements DurationChangeListener {
     private Slider zoom;
     @FXML
     private ToggleButton snapToggle;
-   // @FXML
-   // private AnchorPane anchor;
+    @FXML
+    private AnchorPane anchor;
     @FXML
     private Label durationInput;
     @FXML
@@ -163,9 +163,7 @@ public class TimelineControl extends VBox implements DurationChangeListener {
             public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
                 double extraDistance = timelineScrollPaneVBox.getPrefWidth() - timelineScrollPane.getPrefWidth();
                 double timebarHVal = -1 * t1.doubleValue() * extraDistance;
-               // timebarTimesliderSuperGroup.setTranslateX(timebarHVal);
-                timebar.setTranslateX(timebarHVal);
-                timeslider.setTranslateX(timebarHVal);
+                timebarTimesliderSuperGroup.setTranslateX(timebarHVal);
                 //System.out.println("Margins : " +  getMargin(zoom));
                 System.out.println("Positions : " + timebarTimesliderSuperGroup.getTranslateX());
             }
@@ -193,7 +191,7 @@ public class TimelineControl extends VBox implements DurationChangeListener {
                 double expectedPosition = (timebar.getWidth() - endAdjustment - startAdjustment) * timebar.getValue() / timebar.getMax();
                 expectedPosition += startAdjustment;
                 isTimesliderSync = timeslider.getLayoutX() == expectedPosition;
-             //   System.out.println("Expected Position : " + expectedPosition + " timebar layout : " + timebar.getLayoutX() + " timebar trans" + timebar.getTranslateX() + "Anchor pane " + anchor.getLayoutX() + " : " + anchor.getTranslateX());
+                System.out.println("Expected Position : " + expectedPosition + " timebar layout : " + timebar.getLayoutX() + " timebar trans" + timebar.getTranslateX() + "Anchor pane " + anchor.getLayoutX() + " : " + anchor.getTranslateX());
                 if (!isTimesliderSync) {
                     timeslider.setLayoutX(expectedPosition);
                 }
@@ -289,7 +287,7 @@ public class TimelineControl extends VBox implements DurationChangeListener {
 
     public final void initView() {
         resetView();
-        Rectangle timebarClip = new Rectangle(0, 0, 440, 190);
+        Rectangle timebarClip = new Rectangle(0, 0, 660, 190);
         //timebarTimeSliderStackPane.getChildren().add(timebarClip);
         timebarTimeSliderStackPane.setClip(timebarClip);
         //timebarTimesliderSuperGroup
