@@ -52,6 +52,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
             public void run() {
                 cinematicEditor = new CinematicEditorUI();
                 Scene scene = new Scene(cinematicEditor,660,220);
+                scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_container.css").toExternalForm());
                 cinematicJFXPanel.setScene(scene);
                 cinematicJFXPanel.setVisible(true);
                 cinematicEditor.initCinematicEditorUI();
@@ -79,15 +80,15 @@ public final class CinematicEditorTopComponent extends TopComponent {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addGap(30, 30, 30)
+                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51))
         );
     }// </editor-fold>//GEN-END:initComponents
 
