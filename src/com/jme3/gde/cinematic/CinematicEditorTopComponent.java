@@ -4,6 +4,10 @@
  */
 package com.jme3.gde.cinematic;
 
+import com.jme3.cinematic.gui.jfx.CinematicEditorUI;
+import com.jme3.gde.cinematic.core.Layer;
+import javafx.application.Platform;
+import javafx.scene.Scene;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -33,11 +37,29 @@ import org.openide.util.NbBundle.Messages;
 })
 public final class CinematicEditorTopComponent extends TopComponent {
 
+    private CinematicEditorUI cinematicEditor; 
     public CinematicEditorTopComponent() {
         initComponents();
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
+        /*
+         * Very important
+         */
+        Platform.setImplicitExit(false);
+        Platform.runLater(new Runnable() {
 
+            @Override
+            public void run() {
+                cinematicEditor = new CinematicEditorUI();
+                Scene scene = new Scene(cinematicEditor,880,220);
+                scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_container.css").toExternalForm());
+                cinematicJFXPanel.setScene(scene);
+                cinematicJFXPanel.setVisible(true);
+                cinematicEditor.initCinematicEditorUI();
+                cinematicEditor.initView(new Layer("Root-Test",null));
+            }
+        });
+        
     }
 
     /**
@@ -48,61 +70,32 @@ public final class CinematicEditorTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        topContainer = new javax.swing.JScrollPane();
-        timeline = new javax.swing.JTable();
-        jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
+        cinematicJFXPanel = new javafx.embed.swing.JFXPanel();
 
-        timeline.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        topContainer.setViewportView(timeline);
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jToolBar1.setRollover(true);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, "jButton1");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
+        cinematicJFXPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(150, Short.MAX_VALUE)
-                .addComponent(topContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68))
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(100, 100, 100))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(7, 7, 7)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(topContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                .addGap(16, 16, 16))
+                .addContainerGap(30, Short.MAX_VALUE)
+                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JTable timeline;
-    private javax.swing.JScrollPane topContainer;
+    private javafx.embed.swing.JFXPanel cinematicJFXPanel;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -117,7 +110,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "3.0");
+        p.setProperty("version", "1.0");
         // TODO store your settings
     }
 
