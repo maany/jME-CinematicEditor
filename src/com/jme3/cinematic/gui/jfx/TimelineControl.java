@@ -53,8 +53,8 @@ public class TimelineControl extends VBox implements DurationChangeListener {
     private Slider zoom;
     @FXML
     private ToggleButton snapToggle;
-    @FXML
-    private AnchorPane anchor;
+   // @FXML
+   // private AnchorPane anchor;
     @FXML
     private Label durationInput;
     @FXML
@@ -163,7 +163,9 @@ public class TimelineControl extends VBox implements DurationChangeListener {
             public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
                 double extraDistance = timelineScrollPaneVBox.getPrefWidth() - timelineScrollPane.getPrefWidth();
                 double timebarHVal = -1 * t1.doubleValue() * extraDistance;
-                timebarTimesliderSuperGroup.setTranslateX(timebarHVal);
+               // timebarTimesliderSuperGroup.setTranslateX(timebarHVal);
+                timebar.setTranslateX(timebarHVal);
+                timeslider.setTranslateX(timebarHVal);
                 //System.out.println("Margins : " +  getMargin(zoom));
                 System.out.println("Positions : " + timebarTimesliderSuperGroup.getTranslateX());
             }
@@ -191,7 +193,7 @@ public class TimelineControl extends VBox implements DurationChangeListener {
                 double expectedPosition = (timebar.getWidth() - endAdjustment - startAdjustment) * timebar.getValue() / timebar.getMax();
                 expectedPosition += startAdjustment;
                 isTimesliderSync = timeslider.getLayoutX() == expectedPosition;
-                System.out.println("Expected Position : " + expectedPosition + " timebar layout : " + timebar.getLayoutX() + " timebar trans" + timebar.getTranslateX() + "Anchor pane " + anchor.getLayoutX() + " : " + anchor.getTranslateX());
+             //   System.out.println("Expected Position : " + expectedPosition + " timebar layout : " + timebar.getLayoutX() + " timebar trans" + timebar.getTranslateX() + "Anchor pane " + anchor.getLayoutX() + " : " + anchor.getTranslateX());
                 if (!isTimesliderSync) {
                     timeslider.setLayoutX(expectedPosition);
                 }

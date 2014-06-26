@@ -10,43 +10,45 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="javafx.scene.layout.VBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="440.0" snapToPixel="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
-  <StackPane id="StackPane" fx:id="timebarTimeSliderStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="440.0" VBox.margin="$x1">
+<fx:root type="javafx.scene.layout.VBox" fillWidth="true" maxHeight="-Infinity" maxWidth="-1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="576.0" snapToPixel="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <StackPane id="StackPane" fx:id="timebarTimeSliderStackPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="440.0" VBox.margin="$x1">
     <children>
+      <ScrollPane fx:id="timelineScrollPane" hmax="1.0" maxWidth="1.7976931348623157E308" prefHeight="145.0" prefWidth="440.0" vbarPolicy="NEVER" vmax="1.0">
+        <content>
+          <VBox id="Content" fx:id="timelineScrollPaneVBox" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="173.0" prefWidth="440.0">
+            <children>
+              <HBox prefHeight="45.75" prefWidth="440.0" />
+              <HBox prefHeight="100.0" prefWidth="200.0">
+                <children>
+                  <Button mnemonicParsing="false" text="Button" />
+                </children>
+              </HBox>
+            </children>
+          </VBox>
+        </content>
+      </ScrollPane>
       <Group id="Group" StackPane.alignment="CENTER_LEFT">
         <children>
-          <VBox layoutX="0.0" layoutY="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.75" prefWidth="440.0" />
-          <ScrollPane fx:id="timelineScrollPane" hmax="1.0" layoutX="0.0" layoutY="42.0" prefHeight="145.0" prefWidth="440.0" vbarPolicy="NEVER" vmax="1.0">
-            <content>
-              <VBox id="Content" fx:id="timelineScrollPaneVBox" minHeight="0.0" minWidth="0.0" prefHeight="145.0" prefWidth="440.0" />
-            </content>
-          </ScrollPane>
+          <VBox layoutX="0.0" layoutY="0.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.75" prefWidth="440.0" />
         </children>
         <StackPane.margin>
           <Insets fx:id="x1" />
         </StackPane.margin>
       </Group>
-      <Group id="Group" fx:id="timebarTimesliderSuperGroup" scaleX="1.0" scaleY="1.0" StackPane.alignment="CENTER_LEFT" StackPane.margin="$x1">
+      <Slider fx:id="timebar" blockIncrement="15.0" majorTickUnit="15.0" max="60.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="15" prefHeight="45.75" prefWidth="440.0" showTickLabels="true" showTickMarks="true" snapToTicks="false" StackPane.alignment="TOP_LEFT" />
+      <Separator fx:id="timeslider" halignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="162.0" prefWidth="1.0">
+        <effect>
+          <Glow level="0.5515723270440251" />
+        </effect>
+      </Separator>
+      <Group id="Group" fx:id="timebarTimesliderSuperGroup" autoSizeChildren="false" scaleX="1.0" scaleY="1.0" StackPane.alignment="CENTER_LEFT" StackPane.margin="$x1">
         <children>
-          <Group id="Group" fx:id="timebarTimesliderGroup" layoutX="0.0" layoutY="0.0" scaleX="1.0" scaleY="1.0">
-            <children>
-              <AnchorPane id="AnchorPane" fx:id="anchor" layoutX="0.0" layoutY="0.0" prefWidth="440.0" scaleX="1.0">
-                <children>
-                  <Slider fx:id="timebar" blockIncrement="15.0" layoutX="0.0" layoutY="0.0" majorTickUnit="15.0" max="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" minorTickCount="15" prefHeight="40.0" prefWidth="440.0" showTickLabels="true" showTickMarks="true" snapToTicks="false" />
-                </children>
-              </AnchorPane>
-              <Separator fx:id="timeslider" halignment="CENTER" layoutX="6.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="162.0" prefWidth="1.0">
-                <effect>
-                  <Glow level="0.5515723270440251" />
-                </effect>
-              </Separator>
-            </children>
-          </Group>
+          <Group id="Group" fx:id="timebarTimesliderGroup" layoutX="0.0" layoutY="0.0" scaleX="1.0" scaleY="1.0" />
         </children>
       </Group>
     </children>
   </StackPane>
-  <ToolBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="440.0" rotate="0.0" VBox.margin="$x1">
+  <ToolBar maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="440.0" rotate="0.0" VBox.margin="$x1">
     <items>
       <Separator orientation="VERTICAL" prefHeight="200.0" />
       <ToggleButton fx:id="snapToggle" mnemonicParsing="false" text="SNAP" textAlignment="CENTER" />
