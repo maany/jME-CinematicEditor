@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.VBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="440.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <AnchorPane id="timelineAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="440.0">
+    <children>
+      <Slider fx:id="timebar" layoutX="0.0" layoutY="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="550.0" showTickLabels="true" showTickMarks="true" snapToTicks="false" />
+    </children>
+  </AnchorPane>
+  <StackPane id="StackPane" fx:id="timelineStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="440.0" VBox.vgrow="ALWAYS">
+    <children>
+      <ScrollPane fx:id="timelineScrollPane" hmax="1.0" prefHeight="161.0" prefWidth="440.0" vmax="1.0" StackPane.alignment="CENTER_LEFT">
+        <content>
+          <VBox id="Content" fx:id="timelineVBox" minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="550.0">
+            <children>
+              <Button mnemonicParsing="false" text="Button" />
+              <ChoiceBox>
+                <items>
+                  <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Item 1" />
+                    <String fx:value="Item 2" />
+                    <String fx:value="Item 3" />
+                  </FXCollections>
+                </items>
+              </ChoiceBox>
+            </children>
+          </VBox>
+        </content>
+      </ScrollPane>
+      <Separator fx:id="timeslider" halignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="158.0" prefWidth="15.0" StackPane.alignment="CENTER_LEFT">
+        <effect>
+          <Glow level="0.5515723270440251" />
+        </effect>
+      </Separator>
+    </children>
+  </StackPane>
+</fx:root>
