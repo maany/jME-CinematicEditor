@@ -4,7 +4,7 @@
  */
 package com.jme3.gde.cinematic.core;
 
-import com.jme3.cinematic.gui.jfx.EventControl;
+import com.jme3.gde.cinematic.gui.jfx.EventControl;
 
 /**
  * 

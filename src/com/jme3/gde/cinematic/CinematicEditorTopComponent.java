@@ -4,7 +4,7 @@
  */
 package com.jme3.gde.cinematic;
 
-import com.jme3.cinematic.gui.jfx.CinematicEditorUI;
+import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
 import javafx.application.Platform;
 import javafx.scene.Scene;

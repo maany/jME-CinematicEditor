@@ -4,7 +4,7 @@
  */
 package com.jme3.gde.cinematic.core;
 
-import com.jme3.cinematic.gui.jfx.EventStrip;
+import com.jme3.gde.cinematic.gui.jfx.EventStrip;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.gui.LayerLAF;
 import java.awt.Color;
