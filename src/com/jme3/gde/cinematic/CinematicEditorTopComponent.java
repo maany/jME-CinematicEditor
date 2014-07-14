@@ -60,6 +60,9 @@ public final class CinematicEditorTopComponent extends TopComponent {
             }
         });
         
+        CinematicApplication cinematicApplication = CinematicApplication.getInstance();
+        System.out.println("Starting Scene Viewer");
+        cinematicApplication.launch();
     }
 
     /**
