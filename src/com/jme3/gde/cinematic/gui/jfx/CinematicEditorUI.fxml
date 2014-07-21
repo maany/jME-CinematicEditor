@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jme3.cinematic.gui.jfx.*?>
+<?import com.jme3.gde.cinematic.gui.jfx.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.control.*?>
