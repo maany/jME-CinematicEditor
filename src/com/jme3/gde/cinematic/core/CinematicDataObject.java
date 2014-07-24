@@ -4,18 +4,25 @@
  */
 package com.jme3.gde.cinematic.core;
 
+import java.io.File;
 import java.io.IOException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.netbeans.core.spi.multiview.MultiViewElement;
 import org.netbeans.core.spi.multiview.text.MultiViewEditorElement;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.filesystems.MIMEResolver;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.MultiFileLoader;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
@@ -106,5 +113,23 @@ public class CinematicDataObject extends MultiDataObject {
     @Messages("LBL_Cinematic_EDITOR=Source")
     public static MultiViewEditorElement createEditor(Lookup lkp) {
         return new MultiViewEditorElement(lkp);
+    }
+
+    public void loadData() {
+        FileObject primaryFileObject = getPrimaryFile();
+        File primaryFile = FileUtil.toFile(primaryFileObject);
+        SAXBuilder builder = new SAXBuilder();
+        try {
+            Document doc = (Document) builder.build(primaryFile);
+            Element root = doc.getRootElement();
+            System.out.println("ROOT : " + root.getName());
+            
+        } catch (JDOMException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        
+    
     }
 }
