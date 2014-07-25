@@ -85,4 +85,118 @@
             </folder>
         </folder>
     </folder>
+    <folder name="Loaders">
+        <folder name="text">
+            <folder name="j3c+cxml">
+                <folder name="Actions">
+                    <file name="org-openide-actions-OpenAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-OpenAction.instance"/>
+                        <attr intvalue="100" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-OpenAction-separatorAfter.instance">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="instanceCreate" newvalue="javax.swing.JSeparator"/>
+                        <attr intvalue="200" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-CutAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/Edit/org-openide-actions-CutAction.instance"/>
+                        <attr intvalue="300" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-CopyAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/Edit/org-openide-actions-CopyAction.instance"/>
+                        <attr intvalue="400" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-CopyAction-separatorAfter.instance">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="instanceCreate" newvalue="javax.swing.JSeparator"/>
+                        <attr intvalue="500" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-DeleteAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/Edit/org-openide-actions-DeleteAction.instance"/>
+                        <attr intvalue="600" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-RenameAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-RenameAction.instance"/>
+                        <attr intvalue="700" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-RenameAction-separatorAfter.instance">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="instanceCreate" newvalue="javax.swing.JSeparator"/>
+                        <attr intvalue="800" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-SaveAsTemplateAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-SaveAsTemplateAction.instance"/>
+                        <attr intvalue="900" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-SaveAsTemplateAction-separatorAfter.instance">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="instanceCreate" newvalue="javax.swing.JSeparator"/>
+                        <attr intvalue="1000" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-FileSystemAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-FileSystemAction.instance"/>
+                        <attr intvalue="1100" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-FileSystemAction-separatorAfter.instance">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="instanceCreate" newvalue="javax.swing.JSeparator"/>
+                        <attr intvalue="1200" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-ToolsAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-ToolsAction.instance"/>
+                        <attr intvalue="1300" name="position"/>
+                    </file>
+                    <file name="org-openide-actions-PropertiesAction.shadow">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-PropertiesAction.instance"/>
+                        <attr intvalue="1400" name="position"/>
+                    </file>
+                </folder>
+                <folder name="Factories">
+                    <file name="com-jme3-gde-cinematic-CinematicDataObject.instance">
+                        <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                        <attr name="iconBase" stringvalue="com/jme3/gde/cinematic/icons/cinematic_clip_icon.png"/>
+                        <attr intvalue="300" name="position"/>
+                        <attr
+                            bundlevalue="com.jme3.gde.cinematic.Bundle#LBL_Cinematic_LOADER" name="displayName"/>
+                        <attr
+                            methodvalue="org.openide.loaders.DataLoaderPool.factory" name="instanceCreate"/>
+                        <attr name="dataObjectClass" stringvalue="com.jme3.gde.cinematic.CinematicDataObject"/>
+                        <attr name="mimeType" stringvalue="text/j3c+cxml"/>
+                    </file>
+                </folder>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="Services">
+        <folder name="MIMEResolver">
+            <file name="com-jme3-gde-cinematic-CinematicDataObject-Extension.xml">
+                <!--com.jme3.gde.cinematic.CinematicDataObject-->
+                <attr
+                    methodvalue="org.openide.filesystems.MIMEResolver.create" name="instanceCreate"/>
+                <attr name="instanceClass" stringvalue="org.openide.filesystems.MIMEResolver"/>
+                <attr name="mimeType" stringvalue="text/j3c+cxml"/>
+                <attr name="ext.0" stringvalue="j3c"/>
+                <attr name="ext.1" stringvalue="J3C"/>
+                <attr
+                    bundlevalue="com.jme3.gde.cinematic.Bundle#LBL_Cinematic_LOADER" name="displayName"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Templates">
+        <folder name="Other">
+            <file name="CinematicTemplate.j3c" url="nbresloc:/com/jme3/gde/cinematic/CinematicTemplate.j3c">
+                <!--com.jme3.gde.cinematic-->
+                <attr boolvalue="true" name="template"/>
+            </file>
+        </folder>
+    </folder>
 </filesystem>

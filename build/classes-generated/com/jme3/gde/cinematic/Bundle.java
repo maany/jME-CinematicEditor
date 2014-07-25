@@ -23,5 +23,12 @@ class Bundle {
     static String HINT_CinematicEditorTopComponent() {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_CinematicEditorTopComponent");
     }
+    /**
+     * @return <i>Files of Cinematic</i>
+     * @see CinematicDataObject
+     */
+    static String LBL_Cinematic_LOADER() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "LBL_Cinematic_LOADER");
+    }
     private void Bundle() {}
 }
