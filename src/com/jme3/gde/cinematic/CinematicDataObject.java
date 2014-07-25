@@ -31,61 +31,61 @@ import org.openide.windows.TopComponent;
 })
 @MIMEResolver.ExtensionRegistration(
         displayName = "#LBL_Cinematic_LOADER",
-        mimeType = "text/j3c+cxml",
+        mimeType = "text/j3c+xml",
         extension = {"j3c", "J3C"})
 @DataObject.Registration(
-        mimeType = "text/j3c+cxml",
+        mimeType = "text/j3c+xml",
         iconBase = "com/jme3/gde/cinematic/icons/cinematic_clip_icon.png",
         displayName = "#LBL_Cinematic_LOADER",
         position = 300)
 @ActionReferences({
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "System", id = "org.openide.actions.OpenAction"),
             position = 100,
             separatorAfter = 200),
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "Edit", id = "org.openide.actions.CutAction"),
             position = 300),
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "Edit", id = "org.openide.actions.CopyAction"),
             position = 400,
             separatorAfter = 500),
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "Edit", id = "org.openide.actions.DeleteAction"),
             position = 600),
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "System", id = "org.openide.actions.RenameAction"),
             position = 700,
             separatorAfter = 800),
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "System", id = "org.openide.actions.SaveAsTemplateAction"),
             position = 900,
             separatorAfter = 1000),
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "System", id = "org.openide.actions.FileSystemAction"),
             position = 1100,
             separatorAfter = 1200),
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "System", id = "org.openide.actions.ToolsAction"),
             position = 1300),
     @ActionReference(
-            path = "Loaders/text/j3c+cxml/Actions",
+            path = "Loaders/text/j3c+xml/Actions",
             id =
             @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"),
             position = 1400)
@@ -94,7 +94,7 @@ public class CinematicDataObject extends MultiDataObject {
 
     public CinematicDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
-        registerEditor("text/j3c+cxml", false);
+        registerEditor("text/j3c+xml", false);
         /*
          * add file change listener
          */

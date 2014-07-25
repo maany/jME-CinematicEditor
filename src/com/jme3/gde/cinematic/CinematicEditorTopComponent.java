@@ -25,7 +25,7 @@ import org.openide.util.NbBundle.Messages;
         iconBase = "com/jme3/gde/cinematic/icons/cinematic_editor_icon.png",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = false)
-@ActionID(category = "Window", id = "com.jme3.gde.cinematic.CinematicEditorTopComponent")
+@ActionID(category = "CinematicEditor", id = "com.jme3.gde.cinematic.CinematicEditorTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_CinematicEditorAction",
