@@ -4,6 +4,8 @@
  */
 package com.jme3.gde.cinematic;
 
+import com.jme3.gde.core.assets.BinaryModelDataObject;
+import com.sun.media.jfxmedia.logging.Logger;
 import java.io.File;
 import java.io.IOException;
 import org.jdom2.Document;
@@ -94,7 +96,8 @@ public class CinematicDataObject extends MultiDataObject {
 
     public CinematicDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
-        registerEditor("text/j3c+xml", false);
+        //registerEditor("text/j3c+xml", false);
+        
         /*
          * add file change listener
          */
@@ -122,13 +125,13 @@ public class CinematicDataObject extends MultiDataObject {
         SAXBuilder builder = new SAXBuilder();
         try {
             Document doc = builder.build(primaryFile);
-            System.out.println("READ : " + doc.getRootElement());
+            Logger.logMsg(Logger.INFO, "Read successful");
         } catch (JDOMException ex) {
             Exceptions.printStackTrace(ex);
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
     }
-    
+
     
 }

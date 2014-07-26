@@ -6,11 +6,15 @@ package com.jme3.gde.cinematic;
 
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.core.assets.BinaryModelDataObject;
+import java.io.IOException;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.loaders.DataObjectExistsException;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -46,6 +50,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
          * Very important
          */
         Platform.setImplicitExit(false);
+        
         Platform.runLater(new Runnable() {
 
             @Override
@@ -61,7 +66,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
         });
         
         CinematicApplication cinematicApplication = CinematicApplication.getInstance();
-        System.out.println("Starting Scene Viewer");
+        System.out.println("Starting Cinematic Editor.....");
         cinematicApplication.launch();
     }
 
