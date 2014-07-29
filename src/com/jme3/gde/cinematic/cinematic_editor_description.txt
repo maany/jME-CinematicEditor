@@ -1,0 +1,1 @@
+Tools to quickly make trailers/cutscene's for you game using a GUI based cinematic editor.

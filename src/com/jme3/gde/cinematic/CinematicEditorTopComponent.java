@@ -10,6 +10,7 @@ import com.jme3.gde.core.assets.BinaryModelDataObject;
 import java.io.IOException;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javax.swing.JOptionPane;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -41,6 +42,10 @@ import org.openide.util.NbBundle.Messages;
 })
 public final class CinematicEditorTopComponent extends TopComponent {
 
+    static String getID() {
+       return "CinematicEditorTopComponent";
+    }
+    private CinematicDataObject currentDataObject;
     private CinematicEditorUI cinematicEditor; 
     public CinematicEditorTopComponent() {
         initComponents();
@@ -80,6 +85,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
 
         cinematicJFXPanel = new javafx.embed.swing.JFXPanel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -92,6 +98,13 @@ public final class CinematicEditorTopComponent extends TopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(CinematicEditorTopComponent.class, "CinematicEditorTopComponent.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -99,14 +112,19 @@ public final class CinematicEditorTopComponent extends TopComponent {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(21, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1))
                     .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(100, 100, 100))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
@@ -117,9 +135,14 @@ public final class CinematicEditorTopComponent extends TopComponent {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        currentDataObject.setModified();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javafx.embed.swing.JFXPanel cinematicJFXPanel;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -142,4 +165,20 @@ public final class CinematicEditorTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
+    public CinematicDataObject getCurrentDataObject() {
+        return currentDataObject;
+    }
+
+    public void setCurrentDataObject(CinematicDataObject currentDataObject) {
+        this.currentDataObject = currentDataObject;
+    }
+
+    void loadCinematicFromFile(CinematicDataObject context) {
+        currentDataObject = context;
+        System.out.println("LOADING IN TOP COMPONENT : "+currentDataObject.teststring);
+        JOptionPane.showMessageDialog(null,"LOADING IN TOP COMPONENT : " + currentDataObject.teststring);
+    }
+    
+    
 }
