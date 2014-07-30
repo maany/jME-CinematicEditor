@@ -23,7 +23,7 @@ import org.openide.windows.WindowManager;
         iconBase = "com/jme3/gde/cinematic/icons/cinematic_editor_icon.png",
         displayName = "#CTL_OpenCinematic")
 @ActionReferences({
-    @ActionReference(path = "Menu/File", position = -100),
+    
     @ActionReference(path = "Loaders/application/jme3cinematic/Actions", position = -90, separatorAfter = -40)
 })
 @Messages("CTL_OpenCinematic=Open in Cinematic Editor")
@@ -38,43 +38,40 @@ public final class OpenCinematic implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         // TODO use context
-        JOptionPane.showMessageDialog(null,"OPEN-ACTION "+ context.teststring);
+        JOptionPane.showMessageDialog(null, "OPEN-ACTION " + context.teststring);
         System.out.println("OPEN-ACTION " + context.teststring);
         
-        Runnable call = new Runnable(){
+        Runnable call;
+        call = new Runnable() {
             CinematicEditorTopComponent cinematicEditor;
-            ProgressHandle handle ;
+            boolean success = false;
+            ProgressHandle handle;
+            
             @Override
             public void run() {
                 try {
-                handle = ProgressHandleFactory.createHandle("Opening Cinematic Editor");
-                handle.start();
-                java.awt.EventQueue.invokeLater(new Runnable(){
-
-                    @Override
-                    public void run() {
-                        //To change body of generated methods, choose Tools | Templates.
-                        cinematicEditor = (CinematicEditorTopComponent) WindowManager.getDefault().findTopComponent(CinematicEditorTopComponent.getID());
-                if(cinematicEditor==null)
-                    cinematicEditor= new CinematicEditorTopComponent();
-                cinematicEditor.loadCinematicFromFile(context);
-                    }
-                
-                });
-                
-                }catch(Exception ex)
-                {
+                    handle = ProgressHandleFactory.createHandle("Opening Cinematic Editor");
+                    handle.start();
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            cinematicEditor = CinematicEditorManager.getInstance().getCinematicEditorTopComponent();
+                            cinematicEditor.loadCinematicFromFile(context);
+                            success = true;
+                            
+                        }
+                    });
+                    
+                } catch (Exception ex) {
                     ex.printStackTrace();
-                }
-                finally{
+                } finally {
                     //cinematicEditor.loadCinematicFromFile(context);
                     JOptionPane.showMessageDialog(null, "CONTEXT LOADING COMPLETE");
-                    System.out.println("LOADING IN CINEMATIC EDITOR : complete");
+                    System.out.println("LOADING DATA IN CINEMATIC EDITOR : complete" + ": SUCCESSFULLY?? : " + success);
                     handle.finish();
                 }
                 
             }
-        
         };
         new Thread(call).start();
     }

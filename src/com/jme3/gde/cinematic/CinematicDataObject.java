@@ -25,7 +25,10 @@ import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.MultiFileLoader;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 
 @Messages({
     "LBL_Cinematic_LOADER=Files of Cinematic"
@@ -94,7 +97,9 @@ import org.openide.util.NbBundle.Messages;
 public class CinematicDataObject extends MultiDataObject implements Savable{
     
     public String teststring = "level 0";
-    private boolean modified = false;
+    private Boolean modified = false;
+    private Lookup lookup;
+    private InstanceContent lookupContent;
     public CinematicDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
         registerEditor("application/jme3cinematic", false);
@@ -102,7 +107,8 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
         System.out.println("CONSTRUCTOR : " + teststring);
         //JOptionPane.showMessageDialog(null,"CONSTRUCTOR : " + teststring);
         
-        
+        lookupContent = new InstanceContent();
+        lookup = new AbstractLookup(lookupContent);
     }
     public void setModified() {
         getCookieSet().assign(SaveCookie.class,new SaveCookie(){
@@ -125,13 +131,23 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
         
         });
     }
-
-    public CinematicDataObject getInstance(){
+    /**
+     * This method returns this instance itself. Used to provide instance of
+     * outer class (this class) to inner classes.
+     *
+     * @return
+     */
+    public CinematicDataObject getInstance() {
         return CinematicDataObject.this;
-    } 
+    }
     @Override
     protected int associateLookup() {
         return 1;
+    }
+
+    @Override
+    public Lookup getLookup() {
+        return lookup;
     }
 
     
@@ -153,5 +169,9 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
         System.out.println("READ : " + teststring); 
         JOptionPane.showMessageDialog(null,"READ : " + teststring);
     }
+    
+    /*
+     * Getters and Setters 
+     */
     
 }

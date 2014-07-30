@@ -43,6 +43,7 @@ import org.openide.util.lookup.InstanceContent;
 })
 public final class CinematicEditorTopComponent extends TopComponent {
 
+    public static String PREFFERED_ID = "CinematicEditorTopComponent";
     private CinematicDataObject currentDataObject;
     private CinematicEditorUI cinematicEditor;
     private Lookup lookup;
@@ -55,12 +56,17 @@ public final class CinematicEditorTopComponent extends TopComponent {
         initComponents();
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
-        
+        /*
+         * set up lookup
+         */
         lookupContent = new InstanceContent();
+        lookupContent.add(currentDataObject);
+        //InstanceContent is available through getLookup().lookup(InstanceContent.class);
+        lookupContent.add(lookupContent);
         lookup = new AbstractLookup(lookupContent);
         
         /*
-         * Very important
+         * Very important. Relaods Javafx context which would otherwise close whenever JFXPanel resizes.
          */
         Platform.setImplicitExit(false);
         /*
@@ -201,8 +207,8 @@ public final class CinematicEditorTopComponent extends TopComponent {
     public Lookup getLookup() {
         return lookup;
     }
-    static String getID() {
-        return "CinematicEditorTopComponent";
-    }
+    
+
+    
     
 }
