@@ -60,14 +60,14 @@ public class CinematicEditorManager {
      * @return 
      */
     //TODO modify needs modifications.
-    public CinematicEditorTopComponent getCinematicEditorTopComponent() {
+ /*   public CinematicEditorTopComponent getCinematicEditorTopComponent() {
         cinematicEditorTopComponent = (CinematicEditorTopComponent) WindowManager.getDefault().findTopComponent(CinematicEditorTopComponent.PREFFERED_ID);
         if (cinematicEditorTopComponent == null) {
             cinematicEditorTopComponent = new CinematicEditorTopComponent();
         }
         return cinematicEditorTopComponent;
     }
-
+*/
     public void setCinematicEditorTopComponent(CinematicEditorTopComponent cinematicEditorTopComponent) {
         this.cinematicEditorTopComponent = cinematicEditorTopComponent;
     }

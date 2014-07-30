@@ -44,7 +44,7 @@ import org.openide.util.lookup.InstanceContent;
 public final class CinematicEditorTopComponent extends TopComponent {
 
     public static String PREFFERED_ID = "CinematicEditorTopComponent";
-    private CinematicDataObject currentDataObject;
+    
     private CinematicEditorUI cinematicEditor;
     private Lookup lookup;
     private InstanceContent lookupContent;
@@ -60,10 +60,11 @@ public final class CinematicEditorTopComponent extends TopComponent {
          * set up lookup
          */
         lookupContent = new InstanceContent();
-        lookupContent.add(currentDataObject);
+        
         //InstanceContent is available through getLookup().lookup(InstanceContent.class);
-        lookupContent.add(lookupContent);
+       
         lookup = new AbstractLookup(lookupContent);
+        lookupContent.add(lookupContent);
         
         /*
          * Very important. Relaods Javafx context which would otherwise close whenever JFXPanel resizes.
@@ -85,12 +86,16 @@ public final class CinematicEditorTopComponent extends TopComponent {
                 cinematicEditor.initView(new Layer("Root-Test", null));
             }
         });
+        // wtf, why is it null?? 
+       if(cinematicEditor!=null)
         lookupContent.add(cinematicEditor);
+       else
+           JOptionPane.showMessageDialog(null,"Cinematic Editor UI in top comp is null");
         /*
          * Create Blank Scene Request, launch Viewer
          */
-        CinematicApplication cinematicApplication = CinematicApplication.getInstance();
-        cinematicApplication.launch();
+       // CinematicApplication cinematicApplication = CinematicApplication.getInstance();
+      //  cinematicApplication.launch();
         handle.finish();
     }
 
@@ -162,9 +167,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        currentDataObject.setModified();
         
-        jTextField1.setText(currentDataObject.getName()+ " : " + currentDataObject.teststring);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -196,17 +199,12 @@ public final class CinematicEditorTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-    public void loadCinematicFromFile(CinematicDataObject context) {
-        currentDataObject = context;
-        System.out.println("LOADING IN TOP COMPONENT : "+currentDataObject.teststring);
-        JOptionPane.showMessageDialog(null,"LOADING IN TOP COMPONENT : " + currentDataObject.teststring);
-        
-    }
+   
 
-    @Override
-    public Lookup getLookup() {
-        return lookup;
-    }
+   // @Override
+   // public Lookup getLookup() {
+     //   return lookup;
+  //  }
     
 
     
