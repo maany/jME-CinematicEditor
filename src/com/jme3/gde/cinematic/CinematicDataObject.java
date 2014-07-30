@@ -102,6 +102,7 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
         System.out.println("CONSTRUCTOR : " + teststring);
         //JOptionPane.showMessageDialog(null,"CONSTRUCTOR : " + teststring);
         
+        
     }
     public void setModified() {
         getCookieSet().assign(SaveCookie.class,new SaveCookie(){

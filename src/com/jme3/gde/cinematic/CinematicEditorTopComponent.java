@@ -6,18 +6,19 @@ package com.jme3.gde.cinematic;
 
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
-import com.jme3.gde.core.assets.BinaryModelDataObject;
-import java.io.IOException;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javax.swing.JOptionPane;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.loaders.DataObjectExistsException;
-import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 
 /**
  * Top component which displays something.
@@ -42,37 +43,49 @@ import org.openide.util.NbBundle.Messages;
 })
 public final class CinematicEditorTopComponent extends TopComponent {
 
-    static String getID() {
-       return "CinematicEditorTopComponent";
-    }
     private CinematicDataObject currentDataObject;
-    private CinematicEditorUI cinematicEditor; 
+    private CinematicEditorUI cinematicEditor;
+    private Lookup lookup;
+    private InstanceContent lookupContent;
+    
     public CinematicEditorTopComponent() {
+        ProgressHandle handle = ProgressHandleFactory.createHandle("Starting Cinematic Editor...");
+        handle.start();
+
         initComponents();
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
+        
+        lookupContent = new InstanceContent();
+        lookup = new AbstractLookup(lookupContent);
+        
         /*
          * Very important
          */
         Platform.setImplicitExit(false);
-        
+        /*
+         * Load Javafx UI into JFXPanel
+         */
         Platform.runLater(new Runnable() {
-
             @Override
             public void run() {
+
                 cinematicEditor = new CinematicEditorUI();
-                Scene scene = new Scene(cinematicEditor,880,220);
+                Scene scene = new Scene(cinematicEditor, 880, 220);
                 scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_container.css").toExternalForm());
                 cinematicJFXPanel.setScene(scene);
                 cinematicJFXPanel.setVisible(true);
                 cinematicEditor.initCinematicEditorUI();
-                cinematicEditor.initView(new Layer("Root-Test",null));
+                cinematicEditor.initView(new Layer("Root-Test", null));
             }
         });
-        
+        lookupContent.add(cinematicEditor);
+        /*
+         * Create Blank Scene Request, launch Viewer
+         */
         CinematicApplication cinematicApplication = CinematicApplication.getInstance();
-        System.out.println("Starting Cinematic Editor.....");
         cinematicApplication.launch();
+        handle.finish();
     }
 
     /**
@@ -84,19 +97,30 @@ public final class CinematicEditorTopComponent extends TopComponent {
     private void initComponents() {
 
         cinematicJFXPanel = new javafx.embed.swing.JFXPanel();
+        jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         cinematicJFXPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jToolBar1.setRollover(true);
+
         org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(CinematicEditorTopComponent.class, "CinematicEditorTopComponent.jButton1.text")); // NOI18N
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        jToolBar1.add(jButton1);
+
+        jTextField1.setText(org.openide.util.NbBundle.getMessage(CinematicEditorTopComponent.class, "CinematicEditorTopComponent.jTextField1.text")); // NOI18N
+        jToolBar1.add(jTextField1);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(CinematicEditorTopComponent.class, "CinematicEditorTopComponent.jButton2.text")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -104,30 +128,26 @@ public final class CinematicEditorTopComponent extends TopComponent {
                 jButton2ActionPerformed(evt);
             }
         });
+        jToolBar1.add(jButton2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1))
-                    .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(100, 100, 100))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(455, 455, 455))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -137,12 +157,17 @@ public final class CinematicEditorTopComponent extends TopComponent {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         currentDataObject.setModified();
+        
+        jTextField1.setText(currentDataObject.getName()+ " : " + currentDataObject.teststring);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javafx.embed.swing.JFXPanel cinematicJFXPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -165,20 +190,19 @@ public final class CinematicEditorTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-
-    public CinematicDataObject getCurrentDataObject() {
-        return currentDataObject;
-    }
-
-    public void setCurrentDataObject(CinematicDataObject currentDataObject) {
-        this.currentDataObject = currentDataObject;
-    }
-
-    void loadCinematicFromFile(CinematicDataObject context) {
+    public void loadCinematicFromFile(CinematicDataObject context) {
         currentDataObject = context;
         System.out.println("LOADING IN TOP COMPONENT : "+currentDataObject.teststring);
         JOptionPane.showMessageDialog(null,"LOADING IN TOP COMPONENT : " + currentDataObject.teststring);
+        
     }
-    
+
+    @Override
+    public Lookup getLookup() {
+        return lookup;
+    }
+    static String getID() {
+        return "CinematicEditorTopComponent";
+    }
     
 }
