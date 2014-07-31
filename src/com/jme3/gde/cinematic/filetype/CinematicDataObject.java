@@ -171,7 +171,8 @@ public class CinematicDataObject extends MultiDataObject implements Savable,Seri
             FileOutputStream fout = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fout);
             test = "PASSED.Just before writing.";
-            out.writeObject(this);
+            //out.writeObject(this);
+            writeReplace();
             test = "FAILED.Just after writing";
             getCookieSet().assign(SaveCookie.class);
             } catch (Exception ex) {

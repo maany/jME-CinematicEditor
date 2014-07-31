@@ -46,9 +46,9 @@ public final class TestValue implements ActionListener {
           //  Spatial loadModel = assetManager.loadModel(FileUtil.toFile(context.getPrimaryFile()).getAbsolutePath());
            // context = SpatialWrapper.unPackCinematicForImport((SpatialWrapper)loadModel);
            // context.showTestResult();
-            File file = FileUtil.toFile(context.getPrimaryFile());
-            FileInputStream fin = new FileInputStream(file);
-            ObjectInputStream in = new ObjectInputStream(fin);
+  //          File file = FileUtil.toFile(context.getPrimaryFile());
+    //        FileInputStream fin = new FileInputStream(file);
+//            ObjectInputStream in = new ObjectInputStream(fin);
             
             JOptionPane.showMessageDialog(null,"just loaded context from dataobject and displayin test result : "+context.showTestResult());
         } catch (Exception ex) {
