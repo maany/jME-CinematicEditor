@@ -9,11 +9,13 @@ import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
-import com.jme3.export.binary.BinaryExporter;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.core.assets.ProjectAssetManager;
-import com.jme3.scene.Spatial;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectManager;
 import org.openide.awt.ActionID;
@@ -95,13 +97,13 @@ import org.openide.util.lookup.InstanceContent;
             @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"),
             position = 1400)
 })
-public class CinematicDataObject extends MultiDataObject implements Savable{
+public class CinematicDataObject extends MultiDataObject implements Savable,Serializable{
     private boolean modified = false;
     private String test = "BASE";
     private CinematicClip cinematicData;
     private InstanceContent lookupContents;
     private AbstractLookup lookup;
-    ProjectAssetManager mgr = null;
+    //ProjectAssetManager mgr = null;
     
     public CinematicDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
@@ -121,7 +123,7 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
                     project = ProjectManager.getDefault().findProject(primaryFile);
                     if (project != null) {
                         lookupContents.add(project);
-                        mgr = project.getLookup().lookup(ProjectAssetManager.class);
+                        ProjectAssetManager mgr = project.getLookup().lookup(ProjectAssetManager.class);
                         if (mgr != null) {
                             lookupContents.add(mgr);
                             System.out.println("FOUND ASSETMANAGER.. ! null and added to lookupCOntents");
@@ -164,13 +166,24 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
 
         @Override
         public void save() throws IOException {
-            BinaryExporter exporter = BinaryExporter.getInstance();
-            Spatial wrapper = SpatialWrapper.packCinematicForExport(getOuterClass());
-            exporter.save(wrapper,FileUtil.toFile(getPrimaryFile()));
-            test = "file exporter. reload to see data object's value";
-            
-            
+            try {
+            File file = FileUtil.toFile(getPrimaryFile());
+            FileOutputStream fout = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fout);
+            test = "PASSED.Just before writing.";
+            out.writeObject(this);
+            test = "FAILED.Just after writing";
             getCookieSet().assign(SaveCookie.class);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            /*BinaryExporter exporter = BinaryExporter.getInstance();
+            Spatial wrapper = SpatialWrapper.packCinematicForExport(getOuterClass());
+            exporter.save(wrapper,FileUtil.toFile(getPrimaryFile()));*/
+           // test = "file exporter. reload to see data object's value"; 
+            
+            
+            
         }
     
     };
@@ -199,6 +212,6 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
         return lookupContents;
     }
     public ProjectAssetManager getAssetManger(){
-        return mgr;
+        return null;//mgr;
     }
 }

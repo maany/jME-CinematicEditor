@@ -4,14 +4,14 @@
  */
 package com.jme3.gde.cinematic.filetype.actions;
 
-import com.jme3.asset.plugins.FileLocator;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
-import com.jme3.gde.cinematic.filetype.SpatialWrapper;
 import com.jme3.gde.core.assets.ProjectAssetManager;
-import com.jme3.scene.Spatial;
 import com.sun.media.jfxmedia.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import javax.swing.JOptionPane;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -37,15 +37,20 @@ public final class TestValue implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         // TODO use context
-        context.findAssetManager();
-        assetManager = context.getAssetManger();
+       // context.findAssetManager();
+        //assetManager = context.getAssetManger();
         //String userHome = System.getProperty("user.home");
         //assetManager.registerLocator(FileUtil.toFile(context.getFolder().getPrimaryFile()).getAbsolutePath(), FileLocator.class);
         try{
-        assetManager.getAssetFolderName();
-            Spatial loadModel = assetManager.loadModel(FileUtil.toFile(context.getPrimaryFile()).getAbsolutePath());
-            context = SpatialWrapper.unPackCinematicForImport((SpatialWrapper)loadModel);
-        JOptionPane.showMessageDialog(null,"just loaded context from dataobject and displayin test result : "+context.showTestResult());
+        //assetManager.getAssetFolderName();
+          //  Spatial loadModel = assetManager.loadModel(FileUtil.toFile(context.getPrimaryFile()).getAbsolutePath());
+           // context = SpatialWrapper.unPackCinematicForImport((SpatialWrapper)loadModel);
+           // context.showTestResult();
+            File file = FileUtil.toFile(context.getPrimaryFile());
+            FileInputStream fin = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fin);
+            
+            JOptionPane.showMessageDialog(null,"just loaded context from dataobject and displayin test result : "+context.showTestResult());
         } catch (Exception ex) {
             ex.printStackTrace();
             Logger.logMsg(Logger.ERROR, "Failed to load cinematic context");
