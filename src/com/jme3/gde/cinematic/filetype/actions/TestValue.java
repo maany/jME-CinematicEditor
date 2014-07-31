@@ -50,7 +50,7 @@ public final class TestValue implements ActionListener {
     //        FileInputStream fin = new FileInputStream(file);
 //            ObjectInputStream in = new ObjectInputStream(fin);
             
-            JOptionPane.showMessageDialog(null,"just loaded context from dataobject and displayin test result : "+context.showTestResult());
+            JOptionPane.showMessageDialog(null,"just loaded context from dataobject and displayin test result : " + context.test);
         } catch (Exception ex) {
             ex.printStackTrace();
             Logger.logMsg(Logger.ERROR, "Failed to load cinematic context");

@@ -4,11 +4,6 @@
  */
 package com.jme3.gde.cinematic.filetype;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import java.io.File;
@@ -47,11 +42,11 @@ import org.openide.util.lookup.InstanceContent;
         position = 300)
 @ActionReferences({
     /*@ActionReference(
-            path = "Loaders/application/jme3cinematic/Actions",
-            id =
-            @ActionID(category = "System", id = "org.openide.actions.OpenAction"),
-            position = 100,
-            separatorAfter = 200), */
+     path = "Loaders/application/jme3cinematic/Actions",
+     id =
+     @ActionID(category = "System", id = "org.openide.actions.OpenAction"),
+     position = 100,
+     separatorAfter = 200), */
     @ActionReference(
             path = "Loaders/application/jme3cinematic/Actions",
             id =
@@ -97,25 +92,42 @@ import org.openide.util.lookup.InstanceContent;
             @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"),
             position = 1400)
 })
-public class CinematicDataObject extends MultiDataObject implements Savable,Serializable{
-    private boolean modified = false;
-    private String test = "BASE";
-    private CinematicClip cinematicData;
-    private InstanceContent lookupContents;
-    private AbstractLookup lookup;
+public class CinematicDataObject extends MultiDataObject {
+
+    private transient boolean modified;
+    public String test;
+    private transient CinematicClip cinematicData;
+    private transient InstanceContent lookupContents;
+    private transient AbstractLookup lookup;
+    private transient CinematicSaver saver;
     //ProjectAssetManager mgr = null;
-    
+
+    /**
+     * Constructor
+     *
+     * @param pf
+     * @param loader
+     * @throws DataObjectExistsException
+     * @throws IOException
+     */
     public CinematicDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
+        this.modified = false;
+        this.test = "BASE";
+        this.saver = new CinematicSaver(this);
         lookupContents = new InstanceContent();
         lookup = new AbstractLookup(lookupContents);
         findAssetManager();
         //registerEditor("application/jme3cinematic", false);
     }
- public void findAssetManager() {
+
+    /**
+     * Method to Locate the {@link ProjectAssetManager} and put it in lookup
+     */
+    public void findAssetManager() {
         FileObject primaryFile = getPrimaryFile();
         ProjectManager pm = ProjectManager.getDefault();
-        
+
         Project project = null;
         while (primaryFile != null) {
             if (primaryFile.isFolder() && pm.isProject(primaryFile)) {
@@ -135,84 +147,49 @@ public class CinematicDataObject extends MultiDataObject implements Savable,Seri
                 }
             }
             primaryFile = primaryFile.getParent();
-            }
-       // System.out.println("PROJECT MANAGER : " + pm.toString());
-         //       System.out.println("PROJECT NAME : " + pm.isProject(primaryFile));
-           //     System.out.println("ASSETMANAGER" + mgr.toString());
- }
+        }
+    }
+
     @Override
     protected int associateLookup() {
         return 1;
     }
-    public void modify(){
-        test = "File just got modified";
-        getCookieSet().assign(SaveCookie.class, saveCookie);
-    }
     /*
-     * Getters and Setters
+     * Code dealing with saving Data Object
      */
-    public boolean isModified(){
+    
+
+    @Override
+    public boolean isModified() {
         return modified;
     }
-    public void setModified(boolean modify){
+
+    @Override
+    public void setModified(boolean modify) {
         modified = modify;
         if (modified) {
-            modify();
+            test = "File was modified";
+            getCookieSet().assign(SaveCookie.class, saver);
         } else {
             getCookieSet().assign(SaveCookie.class);
         }
     }
-    SaveCookie saveCookie = new SaveCookie(){
 
-        @Override
-        public void save() throws IOException {
-            try {
-            File file = FileUtil.toFile(getPrimaryFile());
-            FileOutputStream fout = new FileOutputStream(file);
-            ObjectOutputStream out = new ObjectOutputStream(fout);
-            test = "PASSED.Just before writing.";
-            //out.writeObject(this);
-            writeReplace();
-            test = "FAILED.Just after writing";
-            getCookieSet().assign(SaveCookie.class);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            /*BinaryExporter exporter = BinaryExporter.getInstance();
-            Spatial wrapper = SpatialWrapper.packCinematicForExport(getOuterClass());
-            exporter.save(wrapper,FileUtil.toFile(getPrimaryFile()));*/
-           // test = "file exporter. reload to see data object's value"; 
-            
-            
-            
-        }
+    /*
+     * Getters and Setters
+     */
     
-    };
-
-    private CinematicDataObject getOuterClass(){
+    /**
+     * Returns instance of this class. Purpose is to provide access of the outer
+     * class to inner class
+     *
+     * @return
+     */
+    private CinematicDataObject getOuterClass() {
         return this;
     }
-    @Override
-    public void write(JmeExporter je) throws IOException {
-        OutputCapsule capsule = je.getCapsule(this);
-        capsule.write(test, "TEST", "wrote_null");
-    }
 
-    @Override
-    public void read(JmeImporter ji) throws IOException {
-        InputCapsule capsule = ji.getCapsule(this);
-        test = capsule.readString("TEST", null);
-        if(test!=null)
-            test = "REAd successful. method works";
-    }
-    public String showTestResult(){
-        return test;
-    }
-    
-    public InstanceContent getLookupContents(){
+    public InstanceContent getLookupContents() {
         return lookupContents;
-    }
-    public ProjectAssetManager getAssetManger(){
-        return null;//mgr;
     }
 }

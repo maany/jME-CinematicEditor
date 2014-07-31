@@ -4,11 +4,13 @@
  */
 package com.jme3.gde.cinematic.core;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author MAYANK
  */
-public class Event {
+public class Event implements Serializable{
     private Layer layer;
     private String name;
     private double duration;

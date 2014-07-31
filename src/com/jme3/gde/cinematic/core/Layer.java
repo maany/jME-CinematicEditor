@@ -8,6 +8,7 @@ import com.jme3.gde.cinematic.gui.jfx.EventStrip;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.gui.LayerLAF;
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author MAYANK
  */
-public class Layer {
+public class Layer implements Serializable {
     private int depth=0;
     private String name;
     private List<Layer> children;

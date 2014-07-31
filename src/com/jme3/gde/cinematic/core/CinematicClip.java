@@ -4,8 +4,8 @@
  */
 package com.jme3.gde.cinematic.core;
 
-import com.jme3.export.Savable;
 import com.jme3.gde.cinematic.gui.GuiManager;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author MAYANK
  */
-public class CinematicClip {
+public class CinematicClip implements Serializable{
     public String test = "Stage 1";
     private double duration= GuiManager.DEFAULT_DURATION;
     private List<DurationChangeListener> durationChangeListeners = new ArrayList<>();
