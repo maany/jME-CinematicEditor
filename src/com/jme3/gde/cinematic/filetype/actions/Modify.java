@@ -30,6 +30,7 @@ public final class Modify implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         // TODO use context
+        context.getCinematicClip().setName("CHANGED");
         context.setModified(true);
     }
 }

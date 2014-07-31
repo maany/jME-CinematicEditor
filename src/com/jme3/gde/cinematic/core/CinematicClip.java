@@ -20,6 +20,9 @@ public class CinematicClip implements Serializable{
     private String name;
     private Layer root;
     
+    public CinematicClip(){
+        name = GuiManager.DEFAULT_NAME;
+    }
     public CinematicClip(String name)
     {
         this.name = name;

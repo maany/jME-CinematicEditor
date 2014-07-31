@@ -96,9 +96,9 @@ public class CinematicDataObject extends MultiDataObject {
 
     private transient boolean modified;
     public String test;
-    private transient CinematicClip cinematicData;
-    private transient InstanceContent lookupContents;
-    private transient AbstractLookup lookup;
+    private CinematicClip cinematicClip;
+    private InstanceContent lookupContents;
+    private AbstractLookup contentLookup;
     private transient CinematicSaver saver;
     //ProjectAssetManager mgr = null;
 
@@ -115,8 +115,9 @@ public class CinematicDataObject extends MultiDataObject {
         this.modified = false;
         this.test = "BASE";
         this.saver = new CinematicSaver(this);
+        this.cinematicClip = new CinematicClip();
         lookupContents = new InstanceContent();
-        lookup = new AbstractLookup(lookupContents);
+        contentLookup = new AbstractLookup(lookupContents);
         findAssetManager();
         //registerEditor("application/jme3cinematic", false);
     }
@@ -192,4 +193,24 @@ public class CinematicDataObject extends MultiDataObject {
     public InstanceContent getLookupContents() {
         return lookupContents;
     }
+
+    public CinematicClip getCinematicClip() {
+        return cinematicClip;
+    }
+
+    public void setCinematicClip(CinematicClip cinematicClip) {
+        this.cinematicClip = cinematicClip;
+    }
+
+    public AbstractLookup getContentLookup() {
+        return contentLookup;
+    }
+
+    public void setContentLookup(AbstractLookup contentLookup) {
+        this.contentLookup = contentLookup;
+    }
+
+  
+    
+    
 }

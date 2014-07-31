@@ -30,6 +30,7 @@ public class GuiManager {
     public static final String INDENTATION = "  ";
     public static final double DEFAULT_DURATION = 30;
     private static GuiManager instance = null;
+    public static final String DEFAULT_NAME= "Untitled Cinematic Clip";
     
     private GuiManager(){}
     public static GuiManager getInstance()
