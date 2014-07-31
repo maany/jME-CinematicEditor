@@ -11,7 +11,11 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.gde.cinematic.core.CinematicClip;
+import com.jme3.gde.core.assets.ProjectAssetManager;
+import com.jme3.scene.Spatial;
 import java.io.IOException;
+import org.netbeans.api.project.Project;
+import org.netbeans.api.project.ProjectManager;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -24,6 +28,8 @@ import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.MultiFileLoader;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 
 @Messages({
     "LBL_Cinematic_LOADER=Files of Cinematic Editor"
@@ -93,11 +99,45 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
     private boolean modified = false;
     private String test = "BASE";
     private CinematicClip cinematicData;
+    private InstanceContent lookupContents;
+    private AbstractLookup lookup;
+    ProjectAssetManager mgr = null;
+    
     public CinematicDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
+        lookupContents = new InstanceContent();
+        lookup = new AbstractLookup(lookupContents);
+        findAssetManager();
         //registerEditor("application/jme3cinematic", false);
     }
-
+ public void findAssetManager() {
+        FileObject primaryFile = getPrimaryFile();
+        ProjectManager pm = ProjectManager.getDefault();
+        
+        Project project = null;
+        while (primaryFile != null) {
+            if (primaryFile.isFolder() && pm.isProject(primaryFile)) {
+                try {
+                    project = ProjectManager.getDefault().findProject(primaryFile);
+                    if (project != null) {
+                        lookupContents.add(project);
+                        mgr = project.getLookup().lookup(ProjectAssetManager.class);
+                        if (mgr != null) {
+                            lookupContents.add(mgr);
+                            System.out.println("FOUND ASSETMANAGER.. ! null and added to lookupCOntents");
+                            return;
+                        }
+                    }
+                } catch (IOException ex) {
+                } catch (IllegalArgumentException ex) {
+                }
+            }
+            primaryFile = primaryFile.getParent();
+            }
+       // System.out.println("PROJECT MANAGER : " + pm.toString());
+         //       System.out.println("PROJECT NAME : " + pm.isProject(primaryFile));
+           //     System.out.println("ASSETMANAGER" + mgr.toString());
+ }
     @Override
     protected int associateLookup() {
         return 1;
@@ -125,8 +165,11 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
         @Override
         public void save() throws IOException {
             BinaryExporter exporter = BinaryExporter.getInstance();
-            exporter.save(getOuterClass(),FileUtil.toFile(getPrimaryFile()));
+            Spatial wrapper = SpatialWrapper.packCinematicForExport(getOuterClass());
+            exporter.save(wrapper,FileUtil.toFile(getPrimaryFile()));
             test = "file exporter. reload to see data object's value";
+            
+            
             getCookieSet().assign(SaveCookie.class);
         }
     
@@ -144,9 +187,18 @@ public class CinematicDataObject extends MultiDataObject implements Savable{
     @Override
     public void read(JmeImporter ji) throws IOException {
         InputCapsule capsule = ji.getCapsule(this);
-        test = capsule.readString("TEST", "read_null");
+        test = capsule.readString("TEST", null);
+        if(test!=null)
+            test = "REAd successful. method works";
     }
     public String showTestResult(){
         return test;
+    }
+    
+    public InstanceContent getLookupContents(){
+        return lookupContents;
+    }
+    public ProjectAssetManager getAssetManger(){
+        return mgr;
     }
 }

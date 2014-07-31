@@ -4,13 +4,19 @@
  */
 package com.jme3.gde.cinematic.filetype.actions;
 
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
+import com.jme3.gde.cinematic.filetype.SpatialWrapper;
+import com.jme3.gde.core.assets.ProjectAssetManager;
+import com.jme3.scene.Spatial;
+import com.sun.media.jfxmedia.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.NbBundle.Messages;
 
 @ActionID(
@@ -21,8 +27,8 @@ import org.openide.util.NbBundle.Messages;
 @ActionReference(path = "Loaders/application/jme3cinematic/Actions", position = 100)
 @Messages("CTL_TestValue=show test value")
 public final class TestValue implements ActionListener {
-
-    private final CinematicDataObject context;
+    private ProjectAssetManager assetManager;
+    private CinematicDataObject context;
 
     public TestValue(CinematicDataObject context) {
         this.context = context;
@@ -31,6 +37,20 @@ public final class TestValue implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         // TODO use context
-        JOptionPane.showMessageDialog(null, "Test Result : " + context.showTestResult());
+        context.findAssetManager();
+        assetManager = context.getAssetManger();
+        //String userHome = System.getProperty("user.home");
+        //assetManager.registerLocator(FileUtil.toFile(context.getFolder().getPrimaryFile()).getAbsolutePath(), FileLocator.class);
+        try{
+        assetManager.getAssetFolderName();
+            Spatial loadModel = assetManager.loadModel(FileUtil.toFile(context.getPrimaryFile()).getAbsolutePath());
+            context = SpatialWrapper.unPackCinematicForImport((SpatialWrapper)loadModel);
+        JOptionPane.showMessageDialog(null,"just loaded context from dataobject and displayin test result : "+context.showTestResult());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Logger.logMsg(Logger.ERROR, "Failed to load cinematic context");
+            
+        }
+        
     }
 }
