@@ -84,13 +84,17 @@ public final class CinematicEditorTopComponent extends TopComponent {
                 cinematicJFXPanel.setVisible(true);
                 cinematicEditor.initCinematicEditorUI();
                 cinematicEditor.initView(new Layer("Root-Test", null));
+                lookupContent.add(cinematicEditor);
             }
         });
-        // wtf, why is it null?? 
-       if(cinematicEditor!=null)
-        lookupContent.add(cinematicEditor);
-       else
-           JOptionPane.showMessageDialog(null,"Cinematic Editor UI in top comp is null");
+        // null coz initialized in different thread. check solultion?? 
+        cinematicEditor = getLookup().lookup(CinematicEditorUI.class);
+
+        if (cinematicEditor != null) {
+            JOptionPane.showMessageDialog(null, "Yipee yayayya");
+        } else {
+            JOptionPane.showMessageDialog(null, "Cinematic Editor UI in top comp is null");
+        }
         /*
          * Create Blank Scene Request, launch Viewer
          */

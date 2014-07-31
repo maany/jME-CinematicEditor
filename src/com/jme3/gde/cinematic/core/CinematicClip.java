@@ -4,12 +4,8 @@
  */
 package com.jme3.gde.cinematic.core;
 
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.gde.cinematic.gui.GuiManager;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +13,8 @@ import java.util.List;
  *
  * @author MAYANK
  */
-public class CinematicClip implements Savable{
-    
+public class CinematicClip {
+    public String test = "Stage 1";
     private double duration= GuiManager.DEFAULT_DURATION;
     private List<DurationChangeListener> durationChangeListeners = new ArrayList<>();
     private String name;
@@ -40,17 +36,9 @@ public class CinematicClip implements Savable{
         this.duration = duration;
     }
     
-    @Override
-    public void write(JmeExporter je) throws IOException {
-        OutputCapsule capsule = je.getCapsule(this);
+    
         
-    }
-
-    @Override
-    public void read(JmeImporter ji) throws IOException {
-        ji.getCapsule(this);
-        
-    }
+    
     private void notifyDurationChangeListeners(){
         for(DurationChangeListener listener:durationChangeListeners)
             listener.durationChanged();
