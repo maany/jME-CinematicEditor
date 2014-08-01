@@ -36,7 +36,7 @@ public final class OpenCinematicEditor implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         // TODO use context
-        JOptionPane.showMessageDialog(null,context.test);
+        
         
     }
 }

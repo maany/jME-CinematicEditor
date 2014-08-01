@@ -95,7 +95,6 @@ import org.openide.util.lookup.InstanceContent;
 public class CinematicDataObject extends MultiDataObject {
 
     private transient boolean modified;
-    public String test;
     private CinematicClip cinematicClip;
     private InstanceContent lookupContents;
     private AbstractLookup contentLookup;
@@ -113,7 +112,6 @@ public class CinematicDataObject extends MultiDataObject {
     public CinematicDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
         this.modified = false;
-        this.test = "BASE";
         this.saver = new CinematicSaver(this);
         this.cinematicClip = new CinematicClip();
         lookupContents = new InstanceContent();
@@ -169,7 +167,6 @@ public class CinematicDataObject extends MultiDataObject {
     public void setModified(boolean modify) {
         modified = modify;
         if (modified) {
-            test = "File was modified";
             getCookieSet().assign(SaveCookie.class, saver);
         } else {
             getCookieSet().assign(SaveCookie.class);

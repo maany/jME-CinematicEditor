@@ -29,9 +29,7 @@ public class CinematicSaver implements SaveCookie{
         try {
             fout = new FileOutputStream(FileUtil.toFile(data.getPrimaryFile()));
             out = new ObjectOutputStream(fout);
-            data.test = "Just before writing.FAILED";
             out.writeObject(data);
-            data.test = "just after writing.Pass if no exception";
             data.setModified(false);
         } catch (Exception ex) {
             ex.printStackTrace();
