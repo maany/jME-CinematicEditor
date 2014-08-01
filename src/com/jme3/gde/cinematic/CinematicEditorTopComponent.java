@@ -65,12 +65,10 @@ public final class CinematicEditorTopComponent extends TopComponent {
          * set up lookup
          */
         lookupContent = new InstanceContent();
-        
         //InstanceContent is available through getLookup().lookup(InstanceContent.class);
-       
         lookup = new AbstractLookup(lookupContent);
+        associateLookup(lookup);
         lookupContent.add(lookupContent);
-        
         /*
          * Very important. Relaods Javafx context which would otherwise close whenever JFXPanel resizes.
          */
@@ -232,10 +230,7 @@ public final class CinematicEditorTopComponent extends TopComponent {
         
     }
 
-   // @Override
-   // public Lookup getLookup() {
-     //   return lookup;
-  //  }
+    
 
     public void loadCinematicData(CinematicClip data, CinematicDataObject context, ProjectAssetManager assetManager) {
         JOptionPane.showMessageDialog(null,"LOADING CINEMATIC DATA");
