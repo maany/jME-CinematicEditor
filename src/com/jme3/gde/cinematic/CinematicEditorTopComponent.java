@@ -234,6 +234,10 @@ public final class CinematicEditorTopComponent extends TopComponent {
 
     public void loadCinematicData(CinematicClip data, CinematicDataObject context, ProjectAssetManager assetManager) {
         JOptionPane.showMessageDialog(null,"LOADING CINEMATIC DATA");
+        CinematicEditorManager.getInstance().setCurrentClip(data);
+        CinematicEditorManager.getInstance().setCurrentDataObject(context);
+        CinematicEditorManager.getInstance().loadCinematicData();
+        
     }
     
 

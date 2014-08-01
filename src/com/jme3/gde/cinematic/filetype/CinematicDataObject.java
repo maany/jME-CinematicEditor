@@ -5,9 +5,9 @@
 package com.jme3.gde.cinematic.filetype;
 
 import com.jme3.gde.cinematic.core.CinematicClip;
+import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import java.io.IOException;
-import javax.swing.JOptionPane;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectManager;
 import org.openide.awt.ActionID;
@@ -110,6 +110,9 @@ public class CinematicDataObject extends MultiDataObject {
         this.modified = false;
         this.saver = new CinematicSaver(this);
         this.cinematicClip = new CinematicClip();
+        cinematicClip.setName(getPrimaryFile().getName());
+        Layer root = new Layer(getPrimaryFile().getName(),null);
+        cinematicClip.setRoot(root);
         lookupContents = new InstanceContent();
         contentLookup = new AbstractLookup(lookupContents);
         findAssetManager();

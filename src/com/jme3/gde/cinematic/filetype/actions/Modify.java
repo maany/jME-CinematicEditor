@@ -4,6 +4,8 @@
  */
 package com.jme3.gde.cinematic.filetype.actions;
 
+import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +32,10 @@ public final class Modify implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         // TODO use context
-        context.getCinematicClip().setName("CHANGED");
+        Layer root = context.getCinematicClip().getRoot();
+        SpatialLayer child = new SpatialLayer("child",root);
+        child.setPath("\\Models\\myTeapot.j3o");
+        context.getCinematicClip().getRoot().getChildren();
         context.setModified(true);
     }
 }

@@ -6,12 +6,13 @@ package com.jme3.gde.cinematic.gui;
 
 import com.jme3.gde.cinematic.core.Layer;
 import java.awt.Color;
+import java.io.Serializable;
 
 /**
  *
  * @author MAYANK
  */
-public class LayerLAF {
+public class LayerLAF implements Serializable{
     private Color color;
     private boolean enabled = true;
     private boolean collapsed = true;

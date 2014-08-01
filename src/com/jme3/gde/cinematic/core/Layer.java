@@ -29,7 +29,11 @@ public class Layer implements Serializable {
     private List<Integer> index;
     private boolean showChildren = false;
     private boolean tempLeaf = false;
+    private LayerType type;
     
+    public Layer(){
+        
+    }
     /**
      * Use for creating a Child
      * @param name
@@ -40,34 +44,37 @@ public class Layer implements Serializable {
     public Layer(String name,Layer parent) {
         this.name = name;
         this.parent = parent;
+        this.type = LayerType.UNDEFINED;
         children = new ArrayList<>();
         descendants = new ArrayList<>();
         visibleDescendants = new ArrayList<>();
         
         events = new ArrayList<>();
-        laf = new LayerLAF(GuiManager.DEFAULT_LAYER_COLOR,GuiManager.DEFAULT_LAYER_COLLAPSED_STATE,this);
-        
-        if(parent!=null)
-        {
-            depth = parent.getDepth()+1;
+        laf = new LayerLAF(GuiManager.DEFAULT_LAYER_COLOR, GuiManager.DEFAULT_LAYER_COLLAPSED_STATE, this);
+
+        if (parent != null) {
+            depth = parent.getDepth() + 1;
             parent.addChild(this);
-        }
-        else
-        {
-            depth=0;
-            
+        } else {
+            depth = 0;
         }
     }
 
-    public Layer(String name,Layer parent,Color color,boolean collapsed) {
+    public Layer(String name,Layer parent,LayerType type){
         this(name,parent);
-        laf = new LayerLAF(color,collapsed,this);
+        this.type= type;
     }
-    /**
-     * Avoid direct usage. Used by constructor to establish parent to child link.
+
+    public Layer(String name, Layer parent, LayerType type, Color color, boolean collapsed) {
+        this(name, parent, type);
+        laf = new LayerLAF(color, collapsed, this);
+    }
+   
+   /**
+     * Used by constructor to establish parent to child link.
      * @param child 
      */
-    public void addChild(Layer child)
+    private void addChild(Layer child)
     {
         children.add(child);
     }
@@ -225,6 +232,14 @@ public class Layer implements Serializable {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public LayerType getType() {
+        return type;
+    }
+
+    public void setType(LayerType type) {
+        this.type = type;
     }
     
    

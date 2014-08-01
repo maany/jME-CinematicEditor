@@ -6,6 +6,13 @@ package com.jme3.gde.cinematic;
 
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
+import com.jme3.gde.cinematic.filetype.CinematicDataObject;
+import com.jme3.gde.core.assets.ProjectAssetManager;
+import com.jme3.scene.Spatial;
+import java.util.List;
+import javax.swing.JOptionPane;
 import org.openide.windows.WindowManager;
 
 /**
@@ -16,7 +23,7 @@ public class CinematicEditorManager {
 
     private static CinematicEditorManager instance = null;
     private CinematicClip currentClip;
-    private CinematicEditorTopComponent cinematicEditorTopComponent;
+    private CinematicDataObject currentDataObject = null;
 
     private CinematicEditorManager() {
     }
@@ -54,21 +61,58 @@ public class CinematicEditorManager {
     public void setCurrentClip(CinematicClip currentClip) {
         this.currentClip = currentClip;
     }
+
     /**
      * Return the instance of CinematicEditorTopComponent loaded in Netbeans
-     * Platform's {@link WindowManager}. 
+     * Platform's {@link WindowManager}.
      * @return 
      */
     //TODO modify needs modifications.
- /*   public CinematicEditorTopComponent getCinematicEditorTopComponent() {
-        cinematicEditorTopComponent = (CinematicEditorTopComponent) WindowManager.getDefault().findTopComponent(CinematicEditorTopComponent.PREFFERED_ID);
-        if (cinematicEditorTopComponent == null) {
-            cinematicEditorTopComponent = new CinematicEditorTopComponent();
+    /*   public CinematicEditorTopComponent getCinematicEditorTopComponent() {
+    cinematicEditorTopComponent = (CinematicEditorTopComponent) WindowManager.getDefault().findTopComponent(CinematicEditorTopComponent.PREFFERED_ID);
+    if (cinematicEditorTopComponent == null) {
+    cinematicEditorTopComponent = new CinematicEditorTopComponent();
+    }
+    return cinematicEditorTopComponent;
+    }
+     */
+    public CinematicDataObject getCurrentDataObject() {
+        return currentDataObject;
+    }
+
+    public void setCurrentDataObject(CinematicDataObject currentDataObject) {
+        this.currentDataObject = currentDataObject;
+    }
+
+    /**
+     * Never call directly. Used by {@link CinematicEditorTopComponent}
+     */
+    void loadCinematicData() {
+        assert currentClip!=null ;
+        assert currentDataObject!=null;
+        List<Layer> allDescendants = currentClip.getRoot().findAllDescendants();
+        for(Layer child:allDescendants) {
+            if(child.getType()==LayerType.SPATIAL && child instanceof SpatialLayer)
+            {
+                try{
+                String path = ((SpatialLayer)child).getPath();
+                ProjectAssetManager assetManager = currentDataObject.getContentLookup().lookup(ProjectAssetManager.class);
+                Spatial model = assetManager.loadModel(path);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    JOptionPane.showMessageDialog(null,"if condition satisfied while loading");
+                }
+            }
         }
-        return cinematicEditorTopComponent;
     }
-*/
-    public void setCinematicEditorTopComponent(CinematicEditorTopComponent cinematicEditorTopComponent) {
-        this.cinematicEditorTopComponent = cinematicEditorTopComponent;
-    }
+    
+    public static Layer sampleDataStructure(){
+        Layer root = new Layer("root",null);
+        SpatialLayer child = new SpatialLayer("child",root);
+        child.setPath("C:\\Users\\MAYANK\\Documents\\Jme_MK\\Maany\\assets\\Models\\myTeapot.j3o");
+        return root;
+    } 
+
+    
 }
