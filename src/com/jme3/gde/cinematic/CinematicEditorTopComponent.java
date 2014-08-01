@@ -4,8 +4,12 @@
  */
 package com.jme3.gde.cinematic;
 
+import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.filetype.CinematicDataObject;
+import com.jme3.gde.core.assets.ProjectAssetManager;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javax.swing.JOptionPane;
@@ -19,6 +23,7 @@ import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -43,8 +48,8 @@ import org.openide.util.lookup.InstanceContent;
 })
 public final class CinematicEditorTopComponent extends TopComponent {
 
-    public static String PREFFERED_ID = "CinematicEditorTopComponent";
-    
+    public static String PREFERRED_ID = "CinematicEditorTopComponent";
+    private static CinematicEditorTopComponent instance;
     private CinematicEditorUI cinematicEditor;
     private Lookup lookup;
     private InstanceContent lookupContent;
@@ -203,12 +208,38 @@ public final class CinematicEditorTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-   
+
+    public static synchronized CinematicEditorTopComponent getDefault() {
+        if (instance == null) {
+            instance = new CinematicEditorTopComponent();
+        }
+        return instance;
+    }
+    public static CinematicEditorTopComponent findInstance() {
+        TopComponent findTopComponent = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
+        if(findTopComponent ==null) {
+            Logger.getLogger(CinematicEditorTopComponent.class.getName()).warning(
+                    "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
+            return getDefault();
+        }
+        if (findTopComponent instanceof CinematicEditorTopComponent) {
+            return (CinematicEditorTopComponent) findTopComponent;
+        }
+        Logger.getLogger(CinematicEditorTopComponent.class.getName()).warning(
+                "There seem to be multiple components with the '" + PREFERRED_ID
+                + "' ID. That is a potential source of errors and unexpected behavior.");
+        return getDefault();
+        
+    }
 
    // @Override
    // public Lookup getLookup() {
      //   return lookup;
   //  }
+
+    public void loadCinematicData(CinematicClip data, CinematicDataObject context, ProjectAssetManager assetManager) {
+        JOptionPane.showMessageDialog(null,"LOADING CINEMATIC DATA");
+    }
     
 
     

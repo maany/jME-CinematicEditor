@@ -6,11 +6,8 @@ package com.jme3.gde.cinematic.filetype;
 
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.core.assets.ProjectAssetManager;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import javax.swing.JOptionPane;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectManager;
 import org.openide.awt.ActionID;
@@ -18,7 +15,6 @@ import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.cookies.SaveCookie;
 import org.openide.filesystems.FileObject;
-import org.openide.filesystems.FileUtil;
 import org.openide.filesystems.MIMEResolver;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
@@ -117,6 +113,7 @@ public class CinematicDataObject extends MultiDataObject {
         lookupContents = new InstanceContent();
         contentLookup = new AbstractLookup(lookupContents);
         findAssetManager();
+        
         //registerEditor("application/jme3cinematic", false);
     }
 
