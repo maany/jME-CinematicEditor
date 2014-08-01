@@ -9,10 +9,21 @@ import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
 import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
+import com.jme3.gde.core.assets.AssetDataObject;
 import com.jme3.gde.core.assets.ProjectAssetManager;
+import com.jme3.gde.core.scene.SceneApplication;
+import com.jme3.gde.core.scene.SceneRequest;
+import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
+import com.jme3.gde.core.sceneexplorer.nodes.NodeUtility;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.io.File;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.netbeans.api.project.Project;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataObject;
 import org.openide.windows.WindowManager;
 
 /**
@@ -24,7 +35,7 @@ public class CinematicEditorManager {
     private static CinematicEditorManager instance = null;
     private CinematicClip currentClip;
     private CinematicDataObject currentDataObject = null;
-
+    private SceneRequest sentRequest;
     private CinematicEditorManager() {
     }
 
@@ -97,13 +108,40 @@ public class CinematicEditorManager {
                 try{
                 String path = ((SpatialLayer)child).getPath();
                 ProjectAssetManager assetManager = currentDataObject.getContentLookup().lookup(ProjectAssetManager.class);
-                Spatial model = assetManager.loadModel(path);
+                Spatial spat = assetManager.loadModel(path);
+                Project project = currentDataObject.getContentLookup().lookup(Project.class);
+                String absolutePath = assetManager.getAssetFolder().getPath() + path;
+                    System.out.println("ABSOLUTE PATH : " + absolutePath);
+                File file = new File(absolutePath);
+                FileObject fileObject = FileUtil.toFileObject(file);
+                AssetDataObject dataObject = (AssetDataObject)DataObject.find(fileObject);
+       
+                    Node node;
+                    if (spat instanceof Node) {
+                        node = (Node) spat;
+                    } else {
+                        node = new Node();
+                        node.attachChild(spat);
+                    }
+                    JmeNode jmeNode = NodeUtility.createNode(node, dataObject, false);
+                    
+                    SceneRequest request = new SceneRequest(this, jmeNode, assetManager);
+        request.setDataObject(dataObject);
+       // request.setHelpCtx(ctx);
+        this.sentRequest = request;
+        request.setWindowTitle("Cinematic Editor - " + assetManager.getRelativeAssetPath(dataObject.getPrimaryFile().getPath()));
+        request.setToolNode(new Node("CinematicEditorToolNode"));
+        SceneApplication.getApplication().openScene(request);
+                    
+                    if(dataObject!=null)
+                        JOptionPane.showMessageDialog(null,"SUCCESS. WE ARE  GETTING THE DATA OBJECT");
                 } catch(Exception e) {
                     e.printStackTrace();
                 } finally {
                     JOptionPane.showMessageDialog(null,"if condition satisfied while loading");
                 }
             }
+            // handle audio/gui etc loading appropriately
         }
     }
     
