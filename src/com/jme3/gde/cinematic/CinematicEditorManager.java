@@ -36,6 +36,7 @@ public class CinematicEditorManager {
     private CinematicClip currentClip;
     private CinematicDataObject currentDataObject = null;
     private SceneRequest sentRequest;
+    private SceneRequest currentRequest;
     private CinematicEditorManager() {
     }
 
@@ -152,5 +153,22 @@ public class CinematicEditorManager {
         return root;
     } 
 
+    public SceneRequest getSentRequest() {
+        return sentRequest;
+    }
+
+    public void setSentRequest(SceneRequest sentRequest) {
+        this.sentRequest = sentRequest;
+    }
+
+    public SceneRequest getCurrentRequest() {
+        return currentRequest;
+    }
+
+    public void setCurrentRequest(SceneRequest currentRequest) {
+        this.currentRequest = currentRequest;
+    }
+
+    
     
 }

@@ -8,7 +8,20 @@ import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
+import com.jme3.gde.cinematic.scene.CinematicEditorController;
+import com.jme3.gde.cinematic.scene.CinematicEditorToolController;
 import com.jme3.gde.core.assets.ProjectAssetManager;
+import com.jme3.gde.core.assets.SpatialAssetDataObject;
+import com.jme3.gde.core.scene.PreviewRequest;
+import com.jme3.gde.core.scene.SceneApplication;
+import com.jme3.gde.core.scene.SceneListener;
+import com.jme3.gde.core.scene.SceneRequest;
+import com.jme3.gde.scenecomposer.ComposerCameraController;
+import com.jme3.gde.scenecomposer.SceneComposerTopComponent;
+import com.jme3.gde.scenecomposer.SceneEditorController;
+import com.jme3.gde.scenecomposer.tools.SelectTool;
+import com.jme3.scene.Spatial;
+import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -16,8 +29,12 @@ import javax.swing.JOptionPane;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
+import org.openide.NotifyDescriptor.Confirmation;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
@@ -46,14 +63,17 @@ import org.openide.windows.WindowManager;
     "CTL_CinematicEditorTopComponent=CinematicEditor Window",
     "HINT_CinematicEditorTopComponent=This is a CinematicEditor window"
 })
-public final class CinematicEditorTopComponent extends TopComponent {
+public final class CinematicEditorTopComponent extends TopComponent implements SceneListener{
 
     public static String PREFERRED_ID = "CinematicEditorTopComponent";
     private static CinematicEditorTopComponent instance;
     private CinematicEditorUI cinematicEditor;
     private Lookup lookup;
     private InstanceContent lookupContent;
-    
+    private ComposerCameraController camController;
+    private CinematicEditorToolController toolController;
+    private CinematicEditorController editorController;
+    private ProjectAssetManager.ClassPathChangeListener listener;
     public CinematicEditorTopComponent() {
         ProgressHandle handle = ProgressHandleFactory.createHandle("Starting Cinematic Editor...");
         handle.start();
@@ -238,6 +258,111 @@ public final class CinematicEditorTopComponent extends TopComponent {
         CinematicEditorManager.getInstance().setCurrentDataObject(context);
         CinematicEditorManager.getInstance().loadCinematicData();
         
+    }
+
+    
+    @Override
+    public void sceneOpened(SceneRequest request) {
+      /*  try{
+        if(CinematicEditorManager.getInstance().getSentRequest()==request){
+            CinematicEditorManager.getInstance().setCurrentRequest(request);
+            if (editorController != null) {
+                editorController.cleanup();
+            }
+            editorController = new CinematicEditorController(request.getJmeNode(), request.getDataObject());
+            setActivatedNodes(new org.openide.nodes.Node[]{request.getDataObject().getNodeDelegate()});
+            //setSceneInfo(request.getJmeNode(), editorController.getCurrentFileObject(), true);
+            open();
+            requestActive();
+            if (camController != null) {
+                camController.disable();
+            }
+            if (toolController != null) {
+                toolController.cleanup();
+            }
+            toolController = new CinematicEditorToolController(request.getToolNode(), request.getManager(), request.getJmeNode());
+
+            camController = new ComposerCameraController(SceneApplication.getApplication().getCamera(), request.getJmeNode());
+            toolController.setEditorController(editorController);
+            camController.setToolController(toolController);
+            camController.setMaster(this);
+            camController.enable();
+
+            toolController.setCameraController(camController);
+            SelectTool tool = new SelectTool();
+            toolController.showEditTool(tool);
+            toolController.setShowSelection(true);
+
+            editorController.setToolController(toolController);
+            toolController.refreshNonSpatialMarkers();
+            //toolController.setCamController(camController);
+
+            editorController.setTerrainLodCamera();
+            SceneRequest currentRequest = CinematicEditorManager.getInstance().getCurrentRequest();
+            final SpatialAssetDataObject dobj = ((SpatialAssetDataObject) currentRequest.getDataObject());
+            listener = new ProjectAssetManager.ClassPathChangeListener() {
+
+                public void classPathChanged(final ProjectAssetManager manager) {
+                    if (dobj.isModified()) {
+                        Confirmation msg = new NotifyDescriptor.Confirmation(
+                                "Classes have been changed, save and reload scene?",
+                                NotifyDescriptor.OK_CANCEL_OPTION,
+                                NotifyDescriptor.INFORMATION_MESSAGE);
+                        Object result = DialogDisplayer.getDefault().notify(msg);
+                        if (!NotifyDescriptor.OK_OPTION.equals(result)) {
+                            return;
+                        }
+                        try {
+                            dobj.saveAsset();
+                        } catch (IOException ex) {
+                            Exceptions.printStackTrace(ex);
+                        }
+                    }
+                    Runnable call = new Runnable() {
+
+                        public void run() {
+                            ProgressHandle progressHandle = ProgressHandleFactory.createHandle("Reloading Scene for Cinematic Clip..");
+                            progressHandle.start();
+                            try {
+                                manager.clearCache();
+                                final Spatial asset = dobj.loadAsset();
+                                if (asset != null) {
+                                    java.awt.EventQueue.invokeLater(new Runnable() {
+
+                                        public void run() {
+                                            SceneComposerTopComponent composer = SceneComposerTopComponent.findInstance();
+                                            composer.openScene(asset, dobj, manager);
+                                        }
+                                    });
+                                } else {
+                                    Confirmation msg = new NotifyDescriptor.Confirmation(
+                                            "Error opening " + dobj.getPrimaryFile().getNameExt(),
+                                            NotifyDescriptor.OK_CANCEL_OPTION,
+                                            NotifyDescriptor.ERROR_MESSAGE);
+                                    DialogDisplayer.getDefault().notify(msg);
+                                }
+                            } finally {
+                                progressHandle.finish();
+                            }
+                        }
+                    };
+                    new Thread(call).start();
+                }
+            };
+        }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        } */
+    }
+
+    @Override
+    public void sceneClosed(SceneRequest sr) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void previewCreated(PreviewRequest pr) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 
