@@ -99,9 +99,10 @@ public class CinematicEditorManager {
     /**
      * Never call directly. Used by {@link CinematicEditorTopComponent}
      */
-    void loadCinematicData() {
+    void loadCinematicData(CinematicEditorTopComponent tc) {
         assert currentClip!=null ;
         assert currentDataObject!=null;
+        SceneApplication.getApplication().addSceneListener(tc);
         List<Layer> allDescendants = currentClip.getRoot().findAllDescendants();
         for(Layer child:allDescendants) {
             if(child.getType()==LayerType.SPATIAL && child instanceof SpatialLayer)

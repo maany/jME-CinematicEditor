@@ -18,8 +18,7 @@ import com.jme3.gde.core.scene.SceneListener;
 import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.gde.scenecomposer.ComposerCameraController;
 import com.jme3.gde.scenecomposer.SceneComposerTopComponent;
-import com.jme3.gde.scenecomposer.SceneEditorController;
-import com.jme3.gde.scenecomposer.tools.SelectTool;
+//import com.jme3.gde.scenecomposer.tools.SelectTool;
 import com.jme3.scene.Spatial;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -256,15 +255,16 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         JOptionPane.showMessageDialog(null,"LOADING CINEMATIC DATA");
         CinematicEditorManager.getInstance().setCurrentClip(data);
         CinematicEditorManager.getInstance().setCurrentDataObject(context);
-        CinematicEditorManager.getInstance().loadCinematicData();
+        CinematicEditorManager.getInstance().loadCinematicData(this);
         
     }
 
     
     @Override
     public void sceneOpened(SceneRequest request) {
-      /*  try{
-        if(CinematicEditorManager.getInstance().getSentRequest()==request){
+        try{
+            JOptionPane.showMessageDialog(null, "Scene Opened Listener invoked");
+            if(CinematicEditorManager.getInstance().getSentRequest()==request){
             CinematicEditorManager.getInstance().setCurrentRequest(request);
             if (editorController != null) {
                 editorController.cleanup();
@@ -289,8 +289,8 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             camController.enable();
 
             toolController.setCameraController(camController);
-            SelectTool tool = new SelectTool();
-            toolController.showEditTool(tool);
+           // SelectTool tool = new SelectTool();
+            //toolController.showEditTool(tool);
             toolController.setShowSelection(true);
 
             editorController.setToolController(toolController);
@@ -351,8 +351,9 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             };
         }
         } catch(Exception ex) {
+            JOptionPane.showMessageDialog(null,"Exception in opening scene");
             ex.printStackTrace();
-        } */
+        } 
     }
 
     @Override
