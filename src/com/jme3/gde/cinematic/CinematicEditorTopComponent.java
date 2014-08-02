@@ -10,6 +10,7 @@ import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.cinematic.scene.CinematicEditorToolController;
+import com.jme3.gde.cinematic.scene.tools.MoveTool;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.assets.SpatialAssetDataObject;
 import com.jme3.gde.core.scene.PreviewRequest;
@@ -17,7 +18,6 @@ import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.SceneListener;
 import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.gde.scenecomposer.ComposerCameraController;
-import com.jme3.gde.scenecomposer.SceneComposerTopComponent;
 //import com.jme3.gde.scenecomposer.tools.SelectTool;
 import com.jme3.scene.Spatial;
 import java.io.IOException;
@@ -189,7 +189,8 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+            MoveTool tool = new MoveTool();
+            toolController.showEditTool(tool);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -330,8 +331,12 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                                     java.awt.EventQueue.invokeLater(new Runnable() {
 
                                         public void run() {
-                                            SceneComposerTopComponent composer = SceneComposerTopComponent.findInstance();
-                                            composer.openScene(asset, dobj, manager);
+                                            /* handle appropriately */
+                                            //CinematicEditorTopComponent editor = CinematicEditorTopComponent.findInstance();
+                                            //CinematicEditorManager.getInstance().setCurrentDataObject(dobj);
+                                            //CinematicEditorManager.getInstance().setCurrentDataObject(dobj);
+                                            //CinematicEditorManager.getInstance().loadCinematicData(editor);
+                                            //(asset, dobj, manager);
                                         }
                                     });
                                 } else {
