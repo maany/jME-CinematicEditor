@@ -4,9 +4,12 @@
  */
 package com.jme3.gde.cinematic;
 
+import com.jme3.audio.AudioData;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.core.eventtype.AudioEvent;
+import com.jme3.gde.cinematic.core.layertype.SoundLayer;
 import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
@@ -23,7 +26,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import org.netbeans.api.project.Project;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
@@ -197,6 +199,16 @@ public class CinematicEditorManager {
         SceneApplication.getApplication().openScene(request);
     }
     
+    public void loadSound(SoundLayer layer)
+    {
+        List<AudioEvent> audioEvents = layer.getAudioEvents();
+        for(AudioEvent event: audioEvents){
+            String path = event.getPath();
+            AudioData loadAudio = assetManager.loadAudio("");
+        }
+     
+        
+    }
     /**
      * Sample parent-child tree for testing the editor.
      * @return 

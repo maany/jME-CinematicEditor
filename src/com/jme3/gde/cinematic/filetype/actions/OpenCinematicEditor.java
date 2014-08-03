@@ -9,9 +9,10 @@ import com.jme3.gde.cinematic.CinematicEditorTopComponent;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import com.jme3.gde.core.assets.ProjectAssetManager;
+import com.sun.istack.internal.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
+import java.util.logging.Level;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
@@ -47,7 +48,7 @@ public final class OpenCinematicEditor implements ActionListener {
         // TODO use context
         final ProjectAssetManager assetManager = context.getContentLookup().lookup(ProjectAssetManager.class);
         if (assetManager == null) {
-            JOptionPane.showMessageDialog(null,"AssetManager not found in lookup");
+            Logger.getLogger(OpenCinematicEditor.class).log(Level.WARNING,"AssetManager not found in lookup. Unable to open .j3c");
             return;
         }
         
