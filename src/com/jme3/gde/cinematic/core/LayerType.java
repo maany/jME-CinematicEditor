@@ -9,7 +9,7 @@ package com.jme3.gde.cinematic.core;
  * @author MAYANK
  */
 public enum LayerType {
-    SPATIAL,AUDIO,GUI,SECONDARY,UNDEFINED;
+    AUDIO,SPATIAL,CHARACTER,MOTION_PATH,ROOT,GUI,TRANSITION,SECONDARY,UNDEFINED;
     /**
      * Stores the path of assets for primary layers and the type for secondary layers
      */

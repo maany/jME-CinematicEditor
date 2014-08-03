@@ -11,6 +11,7 @@ import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.cinematic.scene.CinematicEditorToolController;
 import com.jme3.gde.cinematic.scene.tools.MoveTool;
+import com.jme3.gde.cinematic.scene.tools.SelectTool;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.assets.SpatialAssetDataObject;
 import com.jme3.gde.core.scene.PreviewRequest;
@@ -73,10 +74,11 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     private CinematicEditorToolController toolController;
     private CinematicEditorController editorController;
     private ProjectAssetManager.ClassPathChangeListener listener;
+    
     public CinematicEditorTopComponent() {
         ProgressHandle handle = ProgressHandleFactory.createHandle("Starting Cinematic Editor...");
         handle.start();
-
+        
         initComponents();
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
@@ -134,38 +136,18 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     private void initComponents() {
 
         cinematicJFXPanel = new javafx.embed.swing.JFXPanel();
-        jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        jFXPanel1 = new javafx.embed.swing.JFXPanel();
+        jFXPanel2 = new javafx.embed.swing.JFXPanel();
 
+        setBackground(new java.awt.Color(0, 0, 0));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setForeground(new java.awt.Color(153, 153, 153));
 
-        cinematicJFXPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        cinematicJFXPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
 
-        jToolBar1.setRollover(true);
+        jFXPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(CinematicEditorTopComponent.class, "CinematicEditorTopComponent.jButton1.text")); // NOI18N
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButton1);
-
-        jTextField1.setText(org.openide.util.NbBundle.getMessage(CinematicEditorTopComponent.class, "CinematicEditorTopComponent.jTextField1.text")); // NOI18N
-        jToolBar1.add(jTextField1);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(CinematicEditorTopComponent.class, "CinematicEditorTopComponent.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButton2);
+        jFXPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -173,37 +155,31 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(455, 455, 455))
+                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jFXPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                    .addComponent(jFXPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jFXPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jFXPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-            MoveTool tool = new MoveTool();
-            toolController.showEditTool(tool);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javafx.embed.swing.JFXPanel cinematicJFXPanel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JToolBar jToolBar1;
+    private javafx.embed.swing.JFXPanel jFXPanel1;
+    private javafx.embed.swing.JFXPanel jFXPanel2;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -254,6 +230,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
     public void loadCinematicData(CinematicClip data, CinematicDataObject context, ProjectAssetManager assetManager) {
         JOptionPane.showMessageDialog(null,"LOADING CINEMATIC DATA");
+        CinematicEditorManager.getInstance().initManager(data,context);
         CinematicEditorManager.getInstance().setCurrentClip(data);
         CinematicEditorManager.getInstance().setCurrentDataObject(context);
         CinematicEditorManager.getInstance().loadCinematicData(this);
@@ -290,8 +267,8 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             camController.enable();
 
             toolController.setCameraController(camController);
-           // SelectTool tool = new SelectTool();
-            //toolController.showEditTool(tool);
+            SelectTool tool = new SelectTool();
+            toolController.showEditTool(tool);
             toolController.setShowSelection(true);
 
             editorController.setToolController(toolController);
@@ -369,6 +346,14 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     @Override
     public void previewCreated(PreviewRequest pr) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    protected CinematicEditorToolController getToolController() {
+        return toolController;
+    }
+
+    protected CinematicEditorController getEditorController() {
+        return editorController;
     }
     
 

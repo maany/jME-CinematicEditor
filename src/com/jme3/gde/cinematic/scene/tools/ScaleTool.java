@@ -19,7 +19,7 @@ import org.openide.loaders.DataObject;
 /**
  * As the package com.jme3.gde.scenecomposer.tools is not a public package of
  * the SceneComposer module, the classes contained in this package in SDK 3.0
- * are duplicated and acccordingly modified in com.jme3.gde.cinematic.scene.tools.
+ * are ported to com.jme3.gde.cinematic.scene.tools.
  * @author sploreg, MAYANK
  */
 public class ScaleTool extends SceneEditTool {

@@ -22,7 +22,7 @@ import org.openide.util.lookup.ServiceProvider;
 /**
  * As the package com.jme3.gde.scenecomposer.tools is not a public package of
  * the SceneComposer module, the classes contained in this package in SDK 3.0
- * are duplicated and modified accordingly in com.jme3.gde.cinematic.scene.tools
+ * are ported to com.jme3.gde.cinematic.scene.tools
  *
  * @author Nehon, Mayank
  */
