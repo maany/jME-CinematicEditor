@@ -4,14 +4,15 @@
  */
 package com.jme3.gde.cinematic;
 
-import com.jme3.audio.AudioData;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
-import com.jme3.gde.cinematic.core.eventtype.AudioEvent;
-import com.jme3.gde.cinematic.core.layertype.SoundLayer;
+import com.jme3.gde.cinematic.core.layertype.CharacterLayer;
 import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
+import com.jme3.gde.cinematic.filetype.actions.OpenCinematicEditor;
+import com.jme3.gde.cinematic.gui.GuiManager;
+import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.core.assets.AssetDataObject;
 import com.jme3.gde.core.assets.ProjectAssetManager;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.Scene;
 import javax.swing.JOptionPane;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
@@ -107,19 +109,22 @@ public class CinematicEditorManager {
     }
 
     /**
-     * Never call directly. Used by {@link CinematicEditorTopComponent}
+     * This method loads all the graphical/viewable 3d content of the currently
+     * loaded cinematic in the OGLWindow Never call directly. Used by
+     * {@link CinematicEditorTopComponent}
      */
-    void loadCinematicData(CinematicEditorTopComponent tc) {
-        assert currentClip!=null ;
-        assert currentDataObject!=null;
+    void loadViewableCinematicData() {
+        assert currentClip != null;
+        assert currentDataObject != null;
+        int viewableCount = 0;
         getAssetManager();
-        SceneApplication.getApplication().addSceneListener(tc);
         List<Layer> allDescendants = currentClip.getRoot().findAllDescendants();
-        for(Layer child:allDescendants) {
+        for (Layer child : allDescendants) {
             if (child.getType() == LayerType.SPATIAL && child instanceof SpatialLayer) {
                 try {
                     SpatialLayer layer = ((SpatialLayer) child);
                     loadSpatial(layer);
+                    viewableCount++;
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -128,12 +133,17 @@ public class CinematicEditorManager {
             }
             // handle audio/gui etc loading appropriately
         }
+        if (viewableCount == 0) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "No viewable OGL data found in {0}", getCurrentDataObject().getName());
+            CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
+            cinematicEditor.open();
+            cinematicEditor.requestActive();
+        }
     }
     /**
-     * Loads a spatial into the OGL window and creates a layer space in the
-     * Cinematic Editor. If the TopComponent/ OGL Window are not open, it
+     * Loads a spatial into the OGL window. If the TopComponent/ OGL Window are not open, it
      * internally calls {@link CinematicEditorManager#initSceneViewerWithSpatial(com.jme3.scene.Spatial, java.lang.String)
-     * }
+     * }. This method can be used to load both Characters and normal Spatials
      *
      * @param layer
      */
@@ -176,7 +186,7 @@ public class CinematicEditorManager {
      * @param path
      * @throws DataObjectNotFoundException
      */
-    public void initSceneViewerWithSpatial(Spatial spat,String path) throws DataObjectNotFoundException {
+    private void initSceneViewerWithSpatial(Spatial spat,String path) throws DataObjectNotFoundException {
         String absolutePath = assetManager.getAssetFolder().getPath() + path;
         File file = new File(absolutePath);
         FileObject fileObject = FileUtil.toFileObject(file);
@@ -199,26 +209,7 @@ public class CinematicEditorManager {
         SceneApplication.getApplication().openScene(request);
     }
     
-    public void loadSound(SoundLayer layer)
-    {
-        List<AudioEvent> audioEvents = layer.getAudioEvents();
-        for(AudioEvent event: audioEvents){
-            String path = event.getPath();
-            AudioData loadAudio = assetManager.loadAudio("");
-        }
-     
-        
-    }
-    /**
-     * Sample parent-child tree for testing the editor.
-     * @return 
-     */
-    public static Layer getSampleDataStructure(){
-        Layer root = new Layer("root",null);
-        SpatialLayer child = new SpatialLayer("child",root);
-        child.setPath("C:\\Users\\MAYANK\\Documents\\Jme_MK\\Maany\\assets\\Models\\myTeapot.j3o");
-        return root;
-    } 
+
 
     public void initManager(CinematicClip data, CinematicDataObject context) {
         this.currentClip = data;
@@ -251,6 +242,8 @@ public class CinematicEditorManager {
     public void setCurrentRequest(SceneRequest currentRequest) {
         this.currentRequest = currentRequest;
     }
+
+    
      
     
     

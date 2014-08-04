@@ -8,6 +8,7 @@ import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
+import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.cinematic.scene.CinematicEditorToolController;
 import com.jme3.gde.cinematic.scene.tools.MoveTool;
@@ -86,10 +87,10 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
          * set up lookup
          */
         lookupContent = new InstanceContent();
-        //InstanceContent is available through getLookup().lookup(InstanceContent.class);
-        lookup = new AbstractLookup(lookupContent);
+        lookup = new AbstractLookup(lookupContent); //InstanceContent is available through getLookup().lookup(InstanceContent.class);
         associateLookup(lookup);
         lookupContent.add(lookupContent);
+//      lookupContent.add(cinematicEditor); // null coz initialized in different thread. check solultion?? 
         /*
          * Very important. Relaods Javafx context which would otherwise close whenever JFXPanel resizes.
          */
@@ -100,30 +101,9 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-
-                cinematicEditor = new CinematicEditorUI();
-                Scene scene = new Scene(cinematicEditor, 880, 220);
-                scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_container.css").toExternalForm());
-                cinematicJFXPanel.setScene(scene);
-                cinematicJFXPanel.setVisible(true);
-                cinematicEditor.initCinematicEditorUI();
-                cinematicEditor.initView(new Layer("Root-Test", null));
-                lookupContent.add(cinematicEditor);
+                loadCinematicEditorUI(null);
             }
         });
-        // null coz initialized in different thread. check solultion?? 
-        cinematicEditor = getLookup().lookup(CinematicEditorUI.class);
-
-        if (cinematicEditor != null) {
-            JOptionPane.showMessageDialog(null, "Yipee yayayya");
-        } else {
-            JOptionPane.showMessageDialog(null, "Cinematic Editor UI in top comp is null");
-        }
-        /*
-         * Create Blank Scene Request, launch Viewer
-         */
-       // CinematicApplication cinematicApplication = CinematicApplication.getInstance();
-      //  cinematicApplication.launch();
         handle.finish();
     }
 
@@ -225,15 +205,34 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         return getDefault();
         
     }
-
     
-
-    public void loadCinematicData(CinematicClip data, CinematicDataObject context, ProjectAssetManager assetManager) {
-        JOptionPane.showMessageDialog(null,"LOADING CINEMATIC DATA");
+    /**
+     * Initializes the JavaFX based CinematicEditorUI with the contents of the
+     * {@link CinematicClip}. Always run in the JavaFX Runtime Environment using
+     * by enquing in the thread {@link Platform#runLater(java.lang.Runnable) }
+     *
+     * @param clip
+     */
+    public void loadCinematicEditorUI(CinematicClip clip) {
+        cinematicEditor = new CinematicEditorUI();
+        Scene scene = new Scene(cinematicEditor, 880, 220);
+        scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_container.css").toExternalForm());
+        cinematicJFXPanel.setScene(scene);
+        cinematicJFXPanel.setVisible(true);
+        cinematicEditor.initCinematicEditorUI();
+        Layer root;
+        if (clip != null) {
+            root = clip.getRoot();
+        } else {
+            root = new Layer(GuiManager.DEFAULT_NAME, null);
+        }
+        cinematicEditor.initView(root);
+    }
+    public void loadViewableCinematicData(CinematicClip data, CinematicDataObject context, ProjectAssetManager assetManager) {
+        JOptionPane.showMessageDialog(null,"LOADING VIEWABLE CINEMATIC DATA");
         CinematicEditorManager.getInstance().initManager(data,context);
-        CinematicEditorManager.getInstance().setCurrentClip(data);
-        CinematicEditorManager.getInstance().setCurrentDataObject(context);
-        CinematicEditorManager.getInstance().loadCinematicData(this);
+        SceneApplication.getApplication().addSceneListener(this);
+        CinematicEditorManager.getInstance().loadViewableCinematicData();
         
     }
 

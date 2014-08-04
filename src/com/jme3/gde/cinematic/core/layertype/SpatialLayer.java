@@ -16,7 +16,7 @@ public class SpatialLayer extends Layer{
     private String path;
 
     public SpatialLayer(String name, Layer parent) {
-        super(name, parent, LayerType.SPATIAL);
+        super(name,parent,LayerType.SPATIAL);
     }
 
     public String getPath() {

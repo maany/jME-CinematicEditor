@@ -4,6 +4,7 @@
  */
 package com.jme3.gde.cinematic.filetype;
 
+import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.core.assets.ProjectAssetManager;
@@ -16,6 +17,7 @@ import org.openide.awt.ActionReferences;
 import org.openide.cookies.SaveCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.MIMEResolver;
+import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
@@ -172,7 +174,25 @@ public class CinematicDataObject extends MultiDataObject {
             getCookieSet().assign(SaveCookie.class);
         }
     }
+    /**
+     * Whenever a new j3c is created this method will initialize it with a sample cinematic clip
+     * with root layer named same as the j3c name.
+     *
+     * @param df
+     * @param name
+     * @return
+     * @throws IOException
+     */
+    @Override
+    protected DataObject handleCreateFromTemplate(DataFolder df, String name) throws IOException {
+        CinematicDataObject cinematicDataObject = (CinematicDataObject)super.handleCreateFromTemplate(df, name); //To change body of generated methods, choose Tools | Templates.
+        Layer root = new Layer(null,null);
+        root.setName(cinematicDataObject.getName());
+        cinematicDataObject.getCinematicClip().setRoot(root);
+        return cinematicDataObject;
+    }
 
+    
     /*
      * Getters and Setters
      */
