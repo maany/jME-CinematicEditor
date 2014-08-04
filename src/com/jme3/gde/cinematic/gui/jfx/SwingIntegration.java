@@ -8,6 +8,7 @@ import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.core.LayerType;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -50,13 +51,13 @@ Layer root;
         CinematicClip clip = new CinematicClip("MyClip");
         clip.setDuration(30);
         CinematicEditorManager.getInstance().setCurrentClip(clip);
-        root = new Layer("Root",null);
+        root = new Layer("Root",null,LayerType.ROOT);
         clip.setRoot(root);
         
-        Layer child = new Layer("Child",root);
-        Layer sibling = new Layer("Sibling",root);
-        Layer grandChild = new Layer("GrandChild",child);
-        Layer grandChildCousin = new Layer("GrandChildCousin",sibling);
+        Layer child = new Layer("Child",root,LayerType.SPATIAL);
+        Layer sibling = new Layer("Sibling",root,LayerType.SPATIAL);
+        Layer grandChild = new Layer("GrandChild",child,LayerType.SPATIAL);
+        Layer grandChildCousin = new Layer("GrandChildCousin",sibling,LayerType.SPATIAL);
         
         Event event = new Event("E1", child, 5, 5);
         Event eventA = new Event("E2", sibling, 17, 7);

@@ -41,7 +41,7 @@ public class Layer implements Serializable {
      */
    
     
-    public Layer(String name,Layer parent) {
+    private Layer(String name,Layer parent) {
         this.name = name;
         this.parent = parent;
         this.type = LayerType.UNDEFINED;
@@ -184,8 +184,18 @@ public class Layer implements Serializable {
     public void setChildren(List<Layer> children) {
         this.children = children;
     }
+    /**
+     * returns the parent of the layer. If layer is {@link LayerType#ROOT , it returns the layer itself
+     * @return 
+     */
     public Layer getParent() {
-        return parent;
+        if (parent == null && type == LayerType.ROOT) {
+           // System.out.println("Parent is Null for " + name);
+            return this;
+        } else {
+           // System.out.println("Parent is not null for " + name);
+            return parent;
+        }
     }
 
     public void setParent(Layer parent) {

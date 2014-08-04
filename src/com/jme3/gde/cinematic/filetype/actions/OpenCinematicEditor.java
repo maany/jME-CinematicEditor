@@ -60,15 +60,19 @@ public final class OpenCinematicEditor implements ActionListener {
                 ProgressHandle handle = ProgressHandleFactory.createHandle("Loading UI elements contents in Cinematic Editor");
                 handle.start();
                 try {
-                    final CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
-                    Platform.runLater(new Runnable(){
-
+                    java.awt.EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            cinematicEditor.loadCinematicEditorUI(cinematicClip);
+                            final CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    cinematicEditor.loadCinematicEditorUI(cinematicClip);
+                                }
+                            });
                         }
-                    
                     });
+                    
                     
                 } catch (Exception ex) {
                     Logger.getLogger(OpenCinematicEditor.class.getName()).log(Level.SEVERE, "Cannot open CinematicEditorUI as an exception occured - "

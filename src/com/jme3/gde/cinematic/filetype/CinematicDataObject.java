@@ -7,6 +7,7 @@ package com.jme3.gde.cinematic.filetype;
 import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.core.LayerType;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import java.io.IOException;
 import org.netbeans.api.project.Project;
@@ -113,7 +114,7 @@ public class CinematicDataObject extends MultiDataObject {
         this.saver = new CinematicSaver(this);
         this.cinematicClip = new CinematicClip();
         cinematicClip.setName(getPrimaryFile().getName());
-        Layer root = new Layer(getPrimaryFile().getName(),null);
+        Layer root = new Layer(getPrimaryFile().getName(),null,LayerType.ROOT);
         cinematicClip.setRoot(root);
         lookupContents = new InstanceContent();
         contentLookup = new AbstractLookup(lookupContents);
@@ -186,7 +187,7 @@ public class CinematicDataObject extends MultiDataObject {
     @Override
     protected DataObject handleCreateFromTemplate(DataFolder df, String name) throws IOException {
         CinematicDataObject cinematicDataObject = (CinematicDataObject)super.handleCreateFromTemplate(df, name); //To change body of generated methods, choose Tools | Templates.
-        Layer root = new Layer(null,null);
+        Layer root = new Layer(null,null,LayerType.ROOT);
         root.setName(cinematicDataObject.getName());
         cinematicDataObject.getCinematicClip().setRoot(root);
         return cinematicDataObject;

@@ -8,6 +8,7 @@ package com.jme3.gde.cinematic.gui.jfx;
 
 
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.core.LayerType;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -107,22 +108,29 @@ public class CinematicEditorUI extends AnchorPane{
     }
 
     /**
-     * Creates a new layer, attached it to root and renders the layer view if the parent is not collapsed.
+     * Renders the layer view if the parent is not collapsed.
      * @param layer 
      */
-    public void addNewLayer(Layer layer){
+    public void addNewLayer(Layer layer) {
         Layer parent = null;
-        
+
         parent = layer.getParent();
-            System.out.println("PARENT : " + parent.getName());
-        
-        if(!parent.getLaf().isCollapsed()) {
+        System.out.println("PARENT : " + parent.getName());
+        if (!parent.getLaf().isCollapsed()) {
             int index = getIndex(parent);
-            index+= parent.getVisibleDescendants().size();
+            index += parent.getVisibleDescendants().size();
             index++;
             addLayerView(index, layer);
+        } else if (parent.getType() == LayerType.ROOT && parent.getChildren().size() == 1) { // if size==1, parent(type : root) was leaf before adding the layer and no children can be added :/
+
+            System.out.println("Parent is empty. ");
+            int index = getIndex(parent);
+            System.out.println("Parent's index : " + index);
+            index++;
+            parent.getLaf().setCollapsed(false);
+            addLayerView(index, layer);
         }
-        
+
     }
     /**
      * deletes the layer and removes layer view + descendant layer view.

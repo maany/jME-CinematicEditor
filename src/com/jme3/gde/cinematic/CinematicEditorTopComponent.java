@@ -7,6 +7,7 @@ package com.jme3.gde.cinematic;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.core.LayerType;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
@@ -224,7 +225,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         if (clip != null) {
             root = clip.getRoot();
         } else {
-            root = new Layer(GuiManager.DEFAULT_NAME, null);
+            root = new Layer(GuiManager.DEFAULT_NAME, null,LayerType.ROOT);
         }
         cinematicEditor.initView(root);
     }

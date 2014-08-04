@@ -8,7 +8,10 @@ import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.core.LayerType;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -164,13 +167,27 @@ public class LayerContainerControl extends AnchorPane{
      * initialize the finctions of toolbar buttons/controls in the layerContainer
      */
     private void initActions() {
+        /**
+         * If the selected layer is a Root layer, we create a child. IMP feature
+         */
         addLayerButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent t) {
-                Layer root = CinematicEditorManager.getInstance().getCurrentClip().getRoot();
-                Layer child = new Layer("New Child",root);
-                cinematicEditor.addNewLayer(child);
+                Layer selectedLayer = (Layer) layerContainer.getSelectionModel().getSelectedItem();
+                //Layer root = CinematicEditorManager.getInstance().getCurrentClip().getRoot();
+                Layer parent = selectedLayer.getParent();
+                if(parent ==null) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Parent is null for layer{0}Cannot add Spatial Layer.", selectedLayer.getName());
+                    return;
+                }
+                if (parent.getType() == LayerType.ROOT) {
+                    Layer child = new Layer("New Child", parent,LayerType.SPATIAL);
+                    cinematicEditor.addNewLayer(child);
+                } else {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Cannot create a new layer as the selected layer"
+                            + " cannot have any additional children. Please select a root layer.");
+                }
             }
         });
         removeLayerButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -207,7 +224,7 @@ public class LayerContainerControl extends AnchorPane{
             }
         });
     }
-    private void initTestRoot() {
+    /*private void initTestRoot() {
         CinematicClip clip = new CinematicClip("MyClip");
         CinematicEditorManager.getInstance().setCurrentClip(clip);
         root = new Layer("MyClip-root",null);
@@ -224,7 +241,7 @@ public class LayerContainerControl extends AnchorPane{
        // scrollBarH.setVisible(false);
 
     }
-
+*/
     private void seedTable() {
         ObservableList<Layer> data = FXCollections.observableArrayList(root);
         for(Layer child:root.getChildren())

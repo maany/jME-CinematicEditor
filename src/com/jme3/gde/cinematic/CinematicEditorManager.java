@@ -68,8 +68,8 @@ public class CinematicEditorManager {
      */
     public CinematicClip getCurrentClip() {
         if (currentClip == null) {
-            Layer root = new Layer("Root", null);
-            currentClip = new CinematicClip("Untitled", root);
+            Layer root = new Layer(GuiManager.DEFAULT_NAME, null,LayerType.ROOT);
+            currentClip = new CinematicClip(GuiManager.DEFAULT_NAME, root);
         }
         return currentClip;
     }
