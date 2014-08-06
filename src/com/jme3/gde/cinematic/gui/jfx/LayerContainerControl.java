@@ -4,15 +4,14 @@
  */
 package com.jme3.gde.cinematic.gui.jfx;
 
-import com.jme3.gde.cinematic.CinematicEditorManager;
-import com.jme3.gde.cinematic.core.CinematicClip;
+import com.jme3.gde.cinematic.CinematicEditorTopComponent;
 import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import java.util.Collection;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -33,6 +32,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.util.Callback;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.Lookups;
 
 /**
  *
@@ -221,6 +222,37 @@ public class LayerContainerControl extends AnchorPane{
                 Layer layer = (Layer)layerContainer.getSelectionModel().getSelectedItem();
                 Event event = new Event(name, layer, start, duration);
                 cinematicEditor.getTimeline().addEvent(event, layer);
+            }
+        });
+        initListeners();
+    }
+    private void initListeners(){
+        layerContainer.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ObservableValue ov, Object t, final Object t1) {
+                //final Lookup selected = Lookups.singleton((Layer)t1);
+                //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Selected Layer : {0}", ((Layer)t1).getName());
+                System.out.println("Selected Layer : " + ((Layer)t1).getName());
+                java.awt.EventQueue.invokeLater(new Runnable(){
+
+                    @Override
+                    public void run() {
+                        System.out.println("Sending selection to Top Componwnt");   
+                        CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
+                        Collection<? extends Layer> layers = cinematicEditor.getCinematicLookup().lookupAll(Layer.class);
+                        for (Layer layer : layers) {
+                            System.out.println("Shit in Lookup : " + layer.getName());
+                            cinematicEditor.getLookupContent().remove(layer);
+                            
+                        }
+                        System.out.println("Removed all stuff : " + cinematicEditor.getCinematicLookup().lookupAll(Layer.class).size());
+                        ((Layer)t1).getLaf().setSelected(true);
+                        cinematicEditor.getLookupContent().add((Layer)t1);
+                    }
+                
+                });
+                
             }
         });
     }

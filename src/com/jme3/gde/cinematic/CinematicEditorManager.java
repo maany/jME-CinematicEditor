@@ -124,6 +124,7 @@ public class CinematicEditorManager {
             // handle audio/gui etc loading appropriately
         }
         if (viewableCount == 0) {
+            if(currentDataObject!=null)
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "No viewable OGL data found in {0}", getCurrentDataObject().getName());
             CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
             cinematicEditor.open();

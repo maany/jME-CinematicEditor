@@ -7,13 +7,8 @@ package com.jme3.gde.cinematic;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
-import com.jme3.gde.cinematic.core.LayerType;
-import com.jme3.gde.cinematic.filetype.CinematicDataObject;
-import com.jme3.gde.cinematic.gui.CinematicLayerNode;
-import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.cinematic.scene.CinematicEditorToolController;
-import com.jme3.gde.cinematic.scene.tools.MoveTool;
 import com.jme3.gde.cinematic.scene.tools.SelectTool;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.assets.SpatialAssetDataObject;
@@ -24,7 +19,9 @@ import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.gde.scenecomposer.ComposerCameraController;
 //import com.jme3.gde.scenecomposer.tools.SelectTool;
 import com.jme3.scene.Spatial;
+import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -38,12 +35,18 @@ import org.openide.NotifyDescriptor.Confirmation;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
+import org.openide.explorer.ExplorerUtils;
+import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
+import org.openide.util.lookup.Lookups;
+import org.openide.util.lookup.ProxyLookup;
 import org.openide.windows.WindowManager;
 
 /**
@@ -72,14 +75,16 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     public static String PREFERRED_ID = "CinematicEditorTopComponent";
     private static CinematicEditorTopComponent instance;
     private CinematicEditorUI cinematicEditor;
-    private Lookup lookup;
+    private ProxyLookup lookup;
+    private AbstractLookup cinematicLookup;
     private InstanceContent lookupContent;
+    private Lookup selectedLayerLookup;
     private ComposerCameraController camController;
     private CinematicEditorToolController toolController;
     private CinematicEditorController editorController;
     private ProjectAssetManager.ClassPathChangeListener listener;
     private ExplorerManager explorerManager;
-    
+    private Lookup.Result<Layer> selectionResult;
     public CinematicEditorTopComponent() {
         ProgressHandle handle = ProgressHandleFactory.createHandle("Starting Cinematic Editor...");
         handle.start();
@@ -87,14 +92,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         initComponents();
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
-        /*
-         * set up lookup
-         */
-        lookupContent = new InstanceContent();
-        lookup = new AbstractLookup(lookupContent); //InstanceContent is available through getLookup().lookup(InstanceContent.class);
-        associateLookup(lookup);
-        lookupContent.add(lookupContent);
-//      lookupContent.add(cinematicEditor); // null coz initialized in different thread. check solultion?? 
+        
         /*
          * Very important. Relaods Javafx context which would otherwise close whenever JFXPanel resizes.
          */
@@ -111,9 +109,40 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         });
         /*
          * set up ExplorerManager
-         */
+         */ 
         explorerManager = new ExplorerManager();
-        explorerManager.setRootContext(new CinematicLayerNode());
+        explorerManager.setRootContext(CinematicEditorManager.getInstance().getCurrentClip().getRoot().getNodeDelegate());
+        /*
+         * set up lookup
+         */
+        lookupContent = new InstanceContent();
+        cinematicLookup = new AbstractLookup(lookupContent); //InstanceContent is available through getLookup().lookup(InstanceContent.class);
+        //selectedLayerLookup = Lookups.singleton(CinematicEditorManager.getInstance().getCurrentClip().getRoot());
+        lookup = new ProxyLookup(cinematicLookup, ExplorerUtils.createLookup(explorerManager,getActionMap()));
+        associateLookup(lookup);
+        lookupContent.add(lookupContent);
+        
+        selectionResult = cinematicLookup.lookupResult(Layer.class);
+        selectionResult.addLookupListener(new LookupListener(){
+
+            @Override
+            public void resultChanged(LookupEvent ev) {
+                Layer selectedLayer = cinematicLookup.lookup(Layer.class);
+                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Change in selection lookup detected : New selected Layer : {0}", selectedLayer.getName());
+                try {
+                    explorerManager.setSelectedNodes(new Node[]{selectedLayer.getNodeDelegate()});
+                } catch (PropertyVetoException ex) {
+                    Exceptions.printStackTrace(ex);
+                } finally {
+                setActivatedNodes(new Node[]{selectedLayer.getNodeDelegate()});
+                    System.out.println("Selected Node in lookup change listener : " + selectedLayer.getNodeDelegate().getDisplayName() );
+                }
+            }
+            
+        
+        });
+//      lookupContent.add(cinematicEditor); // null coz initialized in different thread. check solultion?? 
+        
         handle.finish();
     }
 
@@ -373,6 +402,28 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     public ExplorerManager getExplorerManager() {
         return explorerManager;
     }
+
+    public InstanceContent getLookupContent() {
+        return lookupContent;
+    }
+
+    public void setLookupContent(InstanceContent lookupContent) {
+        this.lookupContent = lookupContent;
+    }
+
+    public Lookup getSelectedLayerLookup() {
+        return selectedLayerLookup;
+    }
+
+    public void setSelectedLayerLookup(Lookup selectedLayerLookup) {
+        this.selectedLayerLookup = selectedLayerLookup;
+    }
+
+    public AbstractLookup getCinematicLookup() {
+        return cinematicLookup;
+    }
+
+    
     
 
     

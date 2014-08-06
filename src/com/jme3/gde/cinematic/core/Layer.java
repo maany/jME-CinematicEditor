@@ -4,13 +4,14 @@
  */
 package com.jme3.gde.cinematic.core;
 
-import com.jme3.gde.cinematic.gui.jfx.EventStrip;
+import com.jme3.gde.cinematic.gui.CinematicLayerNode;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.gui.LayerLAF;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.openide.nodes.Node;
 
 
 /**
@@ -30,6 +31,7 @@ public class Layer implements Serializable {
     private boolean showChildren = false;
     private boolean tempLeaf = false;
     private LayerType type;
+    private Node nodeDelegate;
     
     public Layer(){
         
@@ -58,6 +60,7 @@ public class Layer implements Serializable {
         } else {
             depth = 0;
         }
+        nodeDelegate = new CinematicLayerNode(this);
     }
 
     public Layer(String name,Layer parent,LayerType type){
@@ -250,6 +253,14 @@ public class Layer implements Serializable {
 
     public void setType(LayerType type) {
         this.type = type;
+    }
+
+    public Node getNodeDelegate() {
+        return nodeDelegate;
+    }
+
+    public void setNodeDelegate(Node nodeDelegate) {
+        this.nodeDelegate = nodeDelegate;
     }
     
    

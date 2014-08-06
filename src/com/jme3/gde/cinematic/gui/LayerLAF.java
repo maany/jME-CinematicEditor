@@ -17,6 +17,7 @@ public class LayerLAF implements Serializable{
     private boolean enabled = true;
     private boolean collapsed = true;
     private Layer layer;
+    private boolean selected;
     /**
      * Used by LayerContainer's enabled column
      */
@@ -32,6 +33,7 @@ public class LayerLAF implements Serializable{
         this.color = color;
         this.collapsed = collapsed;
         this.layer = layer;
+        selected = false;
     }
     public Color getColor() {
         return color;
@@ -72,6 +74,14 @@ public class LayerLAF implements Serializable{
 
     public void setLayer(Layer layer) {
         this.layer = layer;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
     
 }
