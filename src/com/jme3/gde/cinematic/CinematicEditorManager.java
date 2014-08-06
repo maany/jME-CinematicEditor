@@ -59,55 +59,44 @@ public class CinematicEditorManager {
         return instance;
     }
 
+    
     /**
-     * Shortcut way to get hold of currently loaded cinematic clip in the
-     * editor. Longer method involves getting reference of the currentDataObject
-     * from TopComponent. Then obtaining its cinematicClip
+     * This method is to be called whenever 1)CinematicEditorTopComponent is
+     * opened for the first time with no clip loaded 2) New CinematicDataObject
+     * is created 3) Existing CinematicDataObject is loaded. This method will
+     * assign values to currentDataObject and currentCinematicClip accordingly
      *
-     * @return
+     * @param cinematicDataObject
      */
-    public CinematicClip getCurrentClip() {
-        if (currentClip == null) {
-            Layer root = new Layer(GuiManager.DEFAULT_NAME, null,LayerType.ROOT);
-            currentClip = new CinematicClip(GuiManager.DEFAULT_NAME, root);
+    public void init(CinematicDataObject cinematicDataObject){
+        setCurrentDataObject(cinematicDataObject);
+        try{
+            currentClip = currentDataObject.getCinematicClip();
+        } catch(NullPointerException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING,"No CinematicDataObject loaded. Please save the clip to a data object before exiting.");
+            createNewCinematicClip();
+            getAssetManager();
+        } finally {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO,"Initialized Cinematic Editor with\n"
+                    + "Current Data Object: {0}\n"
+                    + "Current Cinematic Clip: {1}",new Object[]{currentDataObject.getName(),currentClip.getName()});
         }
-        return currentClip;
     }
     /**
-     * Whenever loading a new CinematicDataObject into the editor, this method
-     * updates the currentClip in CinematicEditorManager so that
-     * {@link #getCurrentClip()} can be used to quickly access
-     * the currently loaded {@link CinematicClip}.
-     *
-     * @param currentClip the currently loaded cinematic clip in the cinematic
-     * editor
+     * This method is used to create a standalone cinematic clip which does not
+     * belong to any data object. use case : when no j3c is loaded and user
+     * creates a cinematic. i.e cinematic editor is openend for the first time/
+     * or no data object is loaded in the editor
+     * TODO : on saving, save it to a
+     * new j3c using wizard.
      */
-    public void setCurrentClip(CinematicClip currentClip) {
-        this.currentClip = currentClip;
+    private void createNewCinematicClip(){
+        Layer root = new Layer(GuiManager.DEFAULT_NAME, null, LayerType.ROOT);
+        CinematicClip clip = new CinematicClip(GuiManager.DEFAULT_NAME, root, (int) GuiManager.DEFAULT_DURATION);
+        CinematicEditorManager.getInstance().setCurrentDataObject(null);
+        CinematicEditorManager.getInstance().setCurrentClip(clip);
     }
-
-    /**
-     * Return the instance of CinematicEditorTopComponent loaded in Netbeans
-     * Platform's {@link WindowManager}.
-     * @return 
-     */
-    //TODO modify needs modifications.
-    /*   public CinematicEditorTopComponent getCinematicEditorTopComponent() {
-    cinematicEditorTopComponent = (CinematicEditorTopComponent) WindowManager.getDefault().findTopComponent(CinematicEditorTopComponent.PREFFERED_ID);
-    if (cinematicEditorTopComponent == null) {
-    cinematicEditorTopComponent = new CinematicEditorTopComponent();
-    }
-    return cinematicEditorTopComponent;
-    }
-     */
-    public CinematicDataObject getCurrentDataObject() {
-        return currentDataObject;
-    }
-
-    public void setCurrentDataObject(CinematicDataObject currentDataObject) {
-        this.currentDataObject = currentDataObject;
-    }
-
+    
     /**
      * This method loads all the graphical/viewable 3d content of the currently
      * loaded cinematic in the OGLWindow Never call directly. Used by
@@ -115,11 +104,12 @@ public class CinematicEditorManager {
      */
     void loadViewableCinematicData() {
         assert currentClip != null;
-        assert currentDataObject != null;
+        //assert currentDataObject != null;
         int viewableCount = 0;
         getAssetManager();
         List<Layer> allDescendants = currentClip.getRoot().findAllDescendants();
         for (Layer child : allDescendants) {
+            System.out.println("CURRENT CHILD : " + child.getName());
             if (child.getType() == LayerType.SPATIAL && child instanceof SpatialLayer) {
                 try {
                     SpatialLayer layer = ((SpatialLayer) child);
@@ -211,12 +201,52 @@ public class CinematicEditorManager {
     
 
 
-    public void initManager(CinematicClip data, CinematicDataObject context) {
-        this.currentClip = data;
-        this.currentDataObject = context;
-        getAssetManager();
+    
+   
+    /*
+     * Getters and Setters
+     */
+    
+    
+    /**
+     * Shortcut way to get hold of currently loaded cinematic clip in the
+     * editor. Longer method involves getting reference of the currentDataObject
+     * from TopComponent. Then obtaining its cinematicClip
+     *
+     * @return
+     */
+    public CinematicClip getCurrentClip() {
+        if (currentClip == null) {
+            Layer root = new Layer(GuiManager.DEFAULT_NAME, null,LayerType.ROOT);
+            currentClip = new CinematicClip(GuiManager.DEFAULT_NAME, root);
+        }
+        return currentClip;
+    }
+    private void setCurrentClip(CinematicClip currentClip) {
+        this.currentClip = currentClip;
     }
 
+    /**
+     * Return the instance of CinematicEditorTopComponent loaded in Netbeans
+     * Platform's {@link WindowManager}.
+     * @return 
+     */
+    //TODO modify needs modifications.
+    /*   public CinematicEditorTopComponent getCinematicEditorTopComponent() {
+    cinematicEditorTopComponent = (CinematicEditorTopComponent) WindowManager.getDefault().findTopComponent(CinematicEditorTopComponent.PREFFERED_ID);
+    if (cinematicEditorTopComponent == null) {
+    cinematicEditorTopComponent = new CinematicEditorTopComponent();
+    }
+    return cinematicEditorTopComponent;
+    }
+     */
+    public CinematicDataObject getCurrentDataObject() {
+        return currentDataObject;
+    }
+
+    private void setCurrentDataObject(CinematicDataObject currentDataObject) {
+        this.currentDataObject = currentDataObject;
+    }
     private ProjectAssetManager getAssetManager() {
         if (currentDataObject == null) {
             return null;

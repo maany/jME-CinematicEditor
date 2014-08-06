@@ -48,9 +48,10 @@ public class StartHere extends Application{
      * Initialize the content of Cinematic Editor
      */
     public void initRoot() {
-        CinematicClip clip = new CinematicClip("MyClip");
+        CinematicClip clip ;
+        CinematicEditorManager.getInstance().init(null);
+        clip = CinematicEditorManager.getInstance().getCurrentClip();
         clip.setDuration(30);
-        CinematicEditorManager.getInstance().setCurrentClip(clip);
         root = new Layer("Root",null,LayerType.ROOT);
         clip.setRoot(root);
         

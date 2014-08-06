@@ -52,7 +52,8 @@ public final class OpenCinematicEditor implements ActionListener {
             Logger.getLogger(OpenCinematicEditor.class.getName()).log(Level.WARNING,"AssetManager not found in lookup. Unable to open .j3c");
             return;
         }
-        final CinematicClip cinematicClip = context.getCinematicClip();
+        CinematicEditorManager.getInstance().init(context);
+        final CinematicClip cinematicClip = CinematicEditorManager.getInstance().getCurrentClip();
         
         Runnable cinematicEditorUILaunchThread = new Runnable() {
             @Override
@@ -67,7 +68,7 @@ public final class OpenCinematicEditor implements ActionListener {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cinematicEditor.loadCinematicEditorUI(cinematicClip);
+                                    cinematicEditor.loadCinematicEditorUI();
                                 }
                             });
                         }
@@ -92,14 +93,15 @@ public final class OpenCinematicEditor implements ActionListener {
                 progressHandle.start();
                 try {
                     assetManager.clearCache();
-                    final CinematicClip data = context.getCinematicClip();
-                    CinematicEditorManager.getInstance().setCurrentClip(data);
+                    final CinematicClip data = CinematicEditorManager.getInstance().getCurrentClip();
+                    
+                    
                     if (data != null) {
                         java.awt.EventQueue.invokeLater(new Runnable() {
 
                             public void run() {
                                 CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
-                                cinematicEditor.loadViewableCinematicData(data,context, assetManager);
+                                cinematicEditor.loadViewableCinematicData();
                             }
                         });
                     } else {

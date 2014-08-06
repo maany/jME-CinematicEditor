@@ -9,6 +9,7 @@ import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
+import com.jme3.gde.cinematic.gui.CinematicLayerNode;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.cinematic.scene.CinematicEditorToolController;
@@ -36,6 +37,7 @@ import org.openide.NotifyDescriptor;
 import org.openide.NotifyDescriptor.Confirmation;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.explorer.ExplorerManager;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
@@ -65,7 +67,7 @@ import org.openide.windows.WindowManager;
     "CTL_CinematicEditorTopComponent=CinematicEditor Window",
     "HINT_CinematicEditorTopComponent=This is a CinematicEditor window"
 })
-public final class CinematicEditorTopComponent extends TopComponent implements SceneListener{
+public final class CinematicEditorTopComponent extends TopComponent implements SceneListener,ExplorerManager.Provider{
 
     public static String PREFERRED_ID = "CinematicEditorTopComponent";
     private static CinematicEditorTopComponent instance;
@@ -76,6 +78,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     private CinematicEditorToolController toolController;
     private CinematicEditorController editorController;
     private ProjectAssetManager.ClassPathChangeListener listener;
+    private ExplorerManager explorerManager;
     
     public CinematicEditorTopComponent() {
         ProgressHandle handle = ProgressHandleFactory.createHandle("Starting Cinematic Editor...");
@@ -102,9 +105,15 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                loadCinematicEditorUI(null);
+                loadCinematicEditorUI();
+                loadViewableCinematicData();
             }
         });
+        /*
+         * set up ExplorerManager
+         */
+        explorerManager = new ExplorerManager();
+        explorerManager.setRootContext(new CinematicLayerNode());
         handle.finish();
     }
 
@@ -119,8 +128,6 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         cinematicJFXPanel = new javafx.embed.swing.JFXPanel();
         jFXPanel3 = new javafx.embed.swing.JFXPanel();
         jFXPanel1 = new javafx.embed.swing.JFXPanel();
-        jFXPanel2 = new javafx.embed.swing.JFXPanel();
-        jFXPanel4 = new javafx.embed.swing.JFXPanel();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -132,40 +139,25 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
         jFXPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
 
-        jFXPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
-
-        jFXPanel4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jFXPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                    .addComponent(jFXPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                        .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFXPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jFXPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .addComponent(jFXPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                    .addComponent(jFXPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jFXPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFXPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFXPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(jFXPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                     .addComponent(jFXPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -176,15 +168,15 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javafx.embed.swing.JFXPanel cinematicJFXPanel;
     private javafx.embed.swing.JFXPanel jFXPanel1;
-    private javafx.embed.swing.JFXPanel jFXPanel2;
     private javafx.embed.swing.JFXPanel jFXPanel3;
-    private javafx.embed.swing.JFXPanel jFXPanel4;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
-
+/**
+ * Unload the cinematic clip and associated data object
+ */
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
@@ -229,27 +221,30 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
      * Initializes the JavaFX based CinematicEditorUI with the contents of the
      * {@link CinematicClip}. Always run in the JavaFX Runtime Environment using
      * by enquing in the thread {@link Platform#runLater(java.lang.Runnable) }
-     *
+     * 
      * @param clip
      */
-    public void loadCinematicEditorUI(CinematicClip clip) {
+    public void loadCinematicEditorUI() {
         cinematicEditor = new CinematicEditorUI();
         Scene scene = new Scene(cinematicEditor, 880, 220);
         scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_container.css").toExternalForm());
         cinematicJFXPanel.setScene(scene);
         cinematicJFXPanel.setVisible(true);
         cinematicEditor.initCinematicEditorUI();
-        Layer root;
-        if (clip != null) {
-            root = clip.getRoot();
-        } else {
-            root = new Layer(GuiManager.DEFAULT_NAME, null,LayerType.ROOT);
+        Layer root ;
+        CinematicClip clip = CinematicEditorManager.getInstance().getCurrentClip();
+        if(clip==null){
+            CinematicEditorManager.getInstance().init(null);
+            clip = CinematicEditorManager.getInstance().getCurrentClip();
         }
+        root = clip.getRoot();
         cinematicEditor.initView(root);
     }
-    public void loadViewableCinematicData(CinematicClip data, CinematicDataObject context, ProjectAssetManager assetManager) {
+    /**
+     * loads the OGL content of the cinematic clip.
+     */
+    public void loadViewableCinematicData() {
         JOptionPane.showMessageDialog(null,"LOADING VIEWABLE CINEMATIC DATA");
-        CinematicEditorManager.getInstance().initManager(data,context);
         SceneApplication.getApplication().addSceneListener(this);
         CinematicEditorManager.getInstance().loadViewableCinematicData();
         
@@ -372,6 +367,11 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
     protected CinematicEditorController getEditorController() {
         return editorController;
+    }
+
+    @Override
+    public ExplorerManager getExplorerManager() {
+        return explorerManager;
     }
     
 

@@ -23,6 +23,7 @@ import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.MultiFileLoader;
+import org.openide.nodes.Node;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
@@ -118,7 +119,7 @@ public class CinematicDataObject extends MultiDataObject {
         cinematicClip.setRoot(root);
         lookupContents = new InstanceContent();
         contentLookup = new AbstractLookup(lookupContents);
-        findAssetManager();
+        findAssetManager(); 
         
         //registerEditor("application/jme3cinematic", false);
     }
@@ -192,6 +193,8 @@ public class CinematicDataObject extends MultiDataObject {
         cinematicDataObject.getCinematicClip().setRoot(root);
         return cinematicDataObject;
     }
+
+   
 
     
     /*

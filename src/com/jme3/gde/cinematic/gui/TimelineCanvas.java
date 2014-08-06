@@ -148,7 +148,7 @@ public class TimelineCanvas extends JPanel implements Scrollable{
     {
         JFrame frame = new JFrame();
         CinematicClip clip = new CinematicClip("MyClip");
-        CinematicEditorManager.getInstance().setCurrentClip(clip);
+     //   CinematicEditorManager.getInstance().setCurrentClip(clip);
         Layer root = new Layer("MyClip-root",null,LayerType.ROOT);
         clip.setRoot(root);
         Layer child = new Layer("Child",root,LayerType.SPATIAL);
