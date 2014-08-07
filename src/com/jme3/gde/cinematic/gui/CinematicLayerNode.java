@@ -29,6 +29,7 @@ public class CinematicLayerNode extends AbstractNode{
 
     @Override
     protected Sheet createSheet() {
+        System.out.println("Fetching Property sheet bro");
         return layer.createSheet(); 
     }
 

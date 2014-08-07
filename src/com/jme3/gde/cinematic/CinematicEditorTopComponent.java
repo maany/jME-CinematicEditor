@@ -128,16 +128,12 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             @Override
             public void resultChanged(LookupEvent ev) {
                 Layer selectedLayer = cinematicLookup.lookup(Layer.class);
-                Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Change in selection lookup detected : New selected Layer : {0}", selectedLayer.getName());
-                try {
-                    explorerManager.setSelectedNodes(new Node[]{selectedLayer.getNodeDelegate()});
-                } catch (PropertyVetoException ex) {
-                    Exceptions.printStackTrace(ex);
-                } finally {
+              //  Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Change in selection lookup detected : New selected Layer : {0}", selectedLayer.getName());
+              
                 setActivatedNodes(new Node[]{selectedLayer.getNodeDelegate()});
                     System.out.println("Selected Node in lookup change listener : " + selectedLayer.getNodeDelegate().getDisplayName() );
                 }
-            }
+            
             
         
         });

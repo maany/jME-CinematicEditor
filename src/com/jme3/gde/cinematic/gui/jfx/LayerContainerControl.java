@@ -8,6 +8,7 @@ import com.jme3.gde.cinematic.CinematicEditorTopComponent;
 import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import java.util.Collection;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -32,8 +33,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.util.Callback;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.Lookups;
 
 /**
  *
@@ -183,7 +182,7 @@ public class LayerContainerControl extends AnchorPane{
                     return;
                 }
                 if (parent.getType() == LayerType.ROOT) {
-                    Layer child = new Layer("New Child", parent,LayerType.SPATIAL);
+                    Layer child = new SpatialLayer("New Child", parent);
                     cinematicEditor.addNewLayer(child);
                 } else {
                     Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Cannot create a new layer as the selected layer"

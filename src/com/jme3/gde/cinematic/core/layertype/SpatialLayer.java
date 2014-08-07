@@ -6,6 +6,7 @@ package com.jme3.gde.cinematic.core.layertype;
 
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import org.openide.nodes.Sheet;
 
 /**
  *
@@ -26,6 +27,11 @@ public class SpatialLayer extends Layer{
     public void setPath(String path) {
         this.path = path;
     }
+    @Override
+    public Sheet createSheet(){
+        System.out.println("SPATIAL __________---------------______________");
+        return super.createSheet();
 
+}
      
 }
