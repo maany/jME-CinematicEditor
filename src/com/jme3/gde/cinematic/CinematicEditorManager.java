@@ -126,9 +126,17 @@ public class CinematicEditorManager {
         if (viewableCount == 0) {
             if(currentDataObject!=null)
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "No viewable OGL data found in {0}", getCurrentDataObject().getName());
-            CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
-            cinematicEditor.open();
-            cinematicEditor.requestActive();
+            java.awt.EventQueue.invokeLater(new Runnable(){
+
+                @Override
+                public void run() {
+                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
+                    cinematicEditor.open();
+                    cinematicEditor.requestActive();
+                }
+            });
+            
         }
     }
     /**
@@ -142,7 +150,7 @@ public class CinematicEditorManager {
         try {
             String path = layer.getPath();
             getAssetManager();
-            Spatial spat = assetManager.loadModel(path);
+            final Spatial spat = assetManager.loadModel(path);
             if (spat == null) {
                 logger.log(Level.SEVERE, "Cannot load Spatial for SpatialLayer {0}" + ".\n"
                         + " Please verify the path {1} exists and is a valid .j3o binary", new Object[]{layer.getName(), path});
@@ -150,17 +158,23 @@ public class CinematicEditorManager {
             }
             if (sentRequest == currentRequest && sentRequest != null) {
 
-                CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
-                CinematicEditorController editorController = cinematicEditor.getEditorController();
-                if (editorController != null) {
-                    cinematicEditor.getEditorController().addModel(spat);
-                    return;
-                }
-            }
-
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                        CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
+                        CinematicEditorController editorController = cinematicEditor.getEditorController();
+                        if (editorController != null) {
+                            cinematicEditor.getEditorController().addModel(spat);
+                            
+                        } 
+                    }
+               
+               });
+            } else {
             /* No Scene Opened. Create scene request*/
             initSceneViewerWithSpatial(spat, path);
-            
+            } 
         } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
         } catch (NullPointerException ex) {

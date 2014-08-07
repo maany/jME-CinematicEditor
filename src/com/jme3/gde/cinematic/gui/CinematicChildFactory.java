@@ -27,7 +27,7 @@ public class CinematicChildFactory extends ChildFactory<Layer>{
     @Override
     protected boolean createKeys(List<Layer> toPopulate) {
         // get selected layer from lookup.. then add its children to toPopulate
-        Layer selectedLayer = CinematicEditorTopComponent.findInstance().getSelectedLayerLookup().lookup(Layer.class);
+        Layer selectedLayer = CinematicEditorTopComponent.findInstance().getCinematicLookup().lookup(Layer.class);
         toPopulate.addAll(selectedLayer.getChildren());
         return true;
     }
