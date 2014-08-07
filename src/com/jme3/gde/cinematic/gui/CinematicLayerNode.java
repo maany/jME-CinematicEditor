@@ -18,7 +18,7 @@ public class CinematicLayerNode extends AbstractNode{
     Layer layer;
     
     public CinematicLayerNode(Layer layer){
-        super(Children.create(new CinematicChildFactory(),true));
+        super(Children.create(new CinematicChildFactory(layer),true));
         this.layer = layer;
         setDisplayName(layer.getName());
     }

@@ -78,7 +78,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     private ProxyLookup lookup;
     private AbstractLookup cinematicLookup;
     private InstanceContent lookupContent;
-    private Lookup selectedLayerLookup;
+    
     private ComposerCameraController camController;
     private CinematicEditorToolController toolController;
     private CinematicEditorController editorController;
@@ -422,13 +422,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         this.lookupContent = lookupContent;
     }
 
-    public Lookup getSelectedLayerLookup() {
-        return selectedLayerLookup;
-    }
 
-    public void setSelectedLayerLookup(Lookup selectedLayerLookup) {
-        this.selectedLayerLookup = selectedLayerLookup;
-    }
 
     public AbstractLookup getCinematicLookup() {
         return cinematicLookup;
