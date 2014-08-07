@@ -7,6 +7,12 @@ package com.jme3.gde.cinematic.gui;
 import com.jme3.gde.cinematic.core.Layer;
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.openide.ErrorManager;
+import org.openide.nodes.Node.Property;
+import org.openide.nodes.PropertySupport;
+import org.openide.nodes.Sheet;
 
 /**
  *
@@ -35,6 +41,7 @@ public class LayerLAF implements Serializable{
         this.layer = layer;
         selected = false;
     }
+   
     public Color getColor() {
         return color;
     }
@@ -42,6 +49,7 @@ public class LayerLAF implements Serializable{
     public void setColor(Color color) {
         this.color = color;
     }
+    
 /**
  * Returns the collapsed state of the layer. If layer has no children, it gets collapsed automatically
  * @return 

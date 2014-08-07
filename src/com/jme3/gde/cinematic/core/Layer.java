@@ -11,7 +11,12 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.openide.ErrorManager;
 import org.openide.nodes.Node;
+import org.openide.nodes.PropertySupport;
+import org.openide.nodes.Sheet;
 
 
 /**
@@ -164,6 +169,24 @@ public class Layer implements Serializable {
             visibleDescendants = new ArrayList<>(); //just a precaution;
         }
         return getVisibleDescendants();
+    }
+     /**
+     * returns the Sheet used by the Property Inspector of Netbeans Platform.
+     * @return 
+     */
+    public Sheet createSheet(){
+        Sheet sheet =  Sheet.createDefault();
+        Sheet.Set set = Sheet.createPropertiesSet();
+        try{
+            Node.Property nameProp = new PropertySupport.Reflection(this,String.class,"getName","setName");
+            nameProp.setName("Layer Name");
+            set.put(nameProp);
+        }catch(NoSuchMethodException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Failed to load properties for layer : {0}", getName());
+            ErrorManager.getDefault();
+        }
+        sheet.put(set);
+        return sheet;
     }
     @Override 
     public String toString() {
