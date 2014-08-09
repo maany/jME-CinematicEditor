@@ -170,17 +170,27 @@ public class Layer implements Serializable {
         }
         return getVisibleDescendants();
     }
-     /**
+    /**
      * returns the Sheet used by the Property Inspector of Netbeans Platform.
-     * @return 
+     * set's name is set to name of the class (Layer in this case), so
+     * subclasses can use this name to get the this set.
+     *
+     * @return
      */
     public Sheet createSheet(){
         Sheet sheet =  Sheet.createDefault();
         Sheet.Set set = Sheet.createPropertiesSet();
+        set.setDisplayName("Layer");
+        set.setName("Layer");
         try{
             Node.Property nameProp = new PropertySupport.Reflection(this,String.class,"getName","setName");
             nameProp.setName("Layer Name");
             set.put(nameProp);
+            
+            Node.Property typeProp = new PropertySupport.Reflection(this,LayerType.class,"getType",null);
+            typeProp.setName("Layer Type");
+            set.put(typeProp);
+            
         }catch(NoSuchMethodException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Failed to load properties for layer : {0}", getName());
             ErrorManager.getDefault();

@@ -4,10 +4,10 @@
  */
 package com.jme3.gde.cinematic.filetype;
 
-import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.library.CinematicLibrary;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import java.io.IOException;
 import org.netbeans.api.project.Project;
@@ -23,7 +23,6 @@ import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.MultiFileLoader;
-import org.openide.nodes.Node;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
@@ -99,6 +98,7 @@ public class CinematicDataObject extends MultiDataObject {
     private InstanceContent lookupContents;
     private AbstractLookup contentLookup;
     private transient CinematicSaver saver;
+    private CinematicLibrary library;
     //ProjectAssetManager mgr = null;
 
     /**
@@ -114,6 +114,7 @@ public class CinematicDataObject extends MultiDataObject {
         this.modified = false;
         this.saver = new CinematicSaver(this);
         this.cinematicClip = new CinematicClip();
+        this.library = new CinematicLibrary();
         cinematicClip.setName(getPrimaryFile().getName());
         Layer root = new Layer(getPrimaryFile().getName(),null,LayerType.ROOT);
         cinematicClip.setRoot(root);
@@ -231,6 +232,14 @@ public class CinematicDataObject extends MultiDataObject {
         this.contentLookup = contentLookup;
     }
 
+    public CinematicLibrary getLibrary() {
+        return library;
+    }
+
+    public void setLibrary(CinematicLibrary library) {
+        this.library = library;
+    }
+    
   
     
     

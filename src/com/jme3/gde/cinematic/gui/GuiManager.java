@@ -31,6 +31,7 @@ public class GuiManager {
     public static final double DEFAULT_DURATION = 30;
     private static GuiManager instance = null;
     public static final String DEFAULT_NAME= "Untitled Cinematic Clip";
+    public static final String SECONDARY_TRANSLATION = "translation";
     
     private GuiManager(){}
     public static GuiManager getInstance()

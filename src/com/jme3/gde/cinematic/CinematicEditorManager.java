@@ -13,6 +13,7 @@ import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import com.jme3.gde.cinematic.filetype.actions.OpenCinematicEditor;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
+import com.jme3.gde.cinematic.library.CinematicLibrary;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.core.assets.AssetDataObject;
 import com.jme3.gde.core.assets.ProjectAssetManager;
@@ -142,15 +143,17 @@ public class CinematicEditorManager {
     /**
      * Loads a spatial into the OGL window. If the TopComponent/ OGL Window are not open, it
      * internally calls {@link CinematicEditorManager#initSceneViewerWithSpatial(com.jme3.scene.Spatial, java.lang.String)
-     * }. This method can be used to load both Characters and normal Spatials
+     * }. This method can be used to load both Characters and normal Spatials. On successful loading, the spatial is registered with the library{@link CinematicLibrary} of the DataObject;
      *
      * @param layer
      */
     public void loadSpatial(SpatialLayer layer) {
+        String path = null;
+        final Spatial spat;
         try {
-            String path = layer.getPath();
+            path = layer.getPath();
             getAssetManager();
-            final Spatial spat = assetManager.loadModel(path);
+            spat = assetManager.loadModel(path);
             if (spat == null) {
                 logger.log(Level.SEVERE, "Cannot load Spatial for SpatialLayer {0}" + ".\n"
                         + " Please verify the path {1} exists and is a valid .j3o binary", new Object[]{layer.getName(), path});
@@ -182,6 +185,7 @@ public class CinematicEditorManager {
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
+        currentDataObject.getLibrary().getSpatialMap().put(path,assetManager.loadModel(path));
     }
     /**
      * Creates a new {@link SceneRequest} and launches the OGL Window loaded

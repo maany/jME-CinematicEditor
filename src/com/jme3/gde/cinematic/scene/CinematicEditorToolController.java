@@ -6,6 +6,7 @@ package com.jme3.gde.cinematic.scene;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
+import com.jme3.gde.scenecomposer.ComposerCameraController;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.scene.Node;
 
@@ -21,5 +22,9 @@ public class CinematicEditorToolController extends SceneComposerToolController{
    public void refreshNonSpatialMarkers(){
        super.refreshNonSpatialMarkers();
    } 
+
+    public void setCamController(ComposerCameraController camController) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
    
 }

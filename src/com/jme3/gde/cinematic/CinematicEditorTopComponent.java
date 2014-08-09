@@ -350,7 +350,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
      * loads the OGL content of the cinematic clip.
      */
     public void loadViewableCinematicData() {
-        JOptionPane.showMessageDialog(null,"LOADING VIEWABLE CINEMATIC DATA");
+        //JOptionPane.showMessageDialog(null,"LOADING VIEWABLE CINEMATIC DATA");
         SceneApplication.getApplication().addSceneListener(this);
         CinematicEditorManager.getInstance().loadViewableCinematicData();
         
