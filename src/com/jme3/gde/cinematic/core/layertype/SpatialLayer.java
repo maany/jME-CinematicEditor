@@ -10,6 +10,10 @@ import com.jme3.gde.cinematic.core.LayerType;
 import com.jme3.gde.cinematic.core.layertype.secondary.TranslationLayer;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
+import java.beans.PropertyChangeListener;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import org.openide.nodes.Node.Property;
 import org.openide.nodes.PropertySupport;
@@ -22,26 +26,13 @@ import org.openide.util.Exceptions;
  */
 public class SpatialLayer extends Layer{
     private String path;
+    
     private TranslationLayer translation;
     public SpatialLayer(String name, Layer parent) {
         super(name,parent,LayerType.SPATIAL);
         /* Create Secondary Layers */
         translation = new TranslationLayer("Translation",this);
         initSecondaryLayers();
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        if(!this.path.equals(path)){
-            Map<String, Spatial> spatialMap = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap();
-            spatialMap.remove(path);
-            this.path = path;
-            CinematicEditorManager.getInstance().loadSpatial(this);
-            initSecondaryLayers();
-        }
     }
     private void initSecondaryLayers(){
         try {
@@ -86,5 +77,22 @@ public class SpatialLayer extends Layer{
         return sheet;
 
 }
-     
+    
+    
+     /**
+      * Getters and Setters
+      */
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        if(!this.path.equals(path)){
+            Map<String, Spatial> spatialMap = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap();
+            spatialMap.remove(path);
+            this.path = path;
+            CinematicEditorManager.getInstance().loadSpatial(this);
+            initSecondaryLayers();
+        }
+    }
 }

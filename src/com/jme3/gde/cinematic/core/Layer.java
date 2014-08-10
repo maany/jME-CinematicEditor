@@ -8,8 +8,12 @@ import com.jme3.gde.cinematic.gui.CinematicLayerNode;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.gui.LayerLAF;
 import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,13 +21,14 @@ import org.openide.ErrorManager;
 import org.openide.nodes.Node;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
+import org.openide.util.WeakListeners;
 
 
 /**
  *
  * @author MAYANK
  */
-public class Layer implements Serializable {
+public class Layer implements Serializable,PropertyChangeListener {
     private int depth=0;
     private String name;
     private List<Layer> children;
@@ -37,7 +42,7 @@ public class Layer implements Serializable {
     private boolean tempLeaf = false;
     private LayerType type;
     private Node nodeDelegate;
-    
+    private List<PropertyChangeListener> listeners = Collections.synchronizedList(new LinkedList());
     public Layer(){
         
     }
@@ -66,6 +71,7 @@ public class Layer implements Serializable {
             depth = 0;
         }
         nodeDelegate = new CinematicLayerNode(this);
+        addPropertyChangeListener(WeakListeners.propertyChange(this,this));
     }
 
     public Layer(String name,Layer parent,LayerType type){
@@ -94,6 +100,7 @@ public class Layer implements Serializable {
         else
             return false;
     }
+   
     /**
      * layer.findAllDescendents(Layer) seems not right, but it is needed as this is recursive function.
      * @param layer
@@ -183,7 +190,7 @@ public class Layer implements Serializable {
         set.setDisplayName("Layer");
         set.setName("Layer");
         try{
-            Node.Property nameProp = new PropertySupport.Reflection(this,String.class,"getName","setName");
+            Node.Property nameProp = new PropertySupport.Reflection(this,String.class,"name");
             nameProp.setName("Layer Name");
             set.put(nameProp);
             
@@ -198,6 +205,24 @@ public class Layer implements Serializable {
         sheet.put(set);
         return sheet;
     }
+    public void addPropertyChangeListener (PropertyChangeListener listener){
+        listeners.add(listener);
+    }
+    public void removePropertyChangeListener(PropertyChangeListener listener){
+        listeners.remove(listener);
+    }
+    protected void firePropertyChange(String propertyName,Object oldValue,Object newValue){
+        for(PropertyChangeListener listener: listeners){
+            listener.propertyChange(new PropertyChangeEvent(this,propertyName,oldValue,newValue));
+        }
+    }
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if(evt.getPropertyName().equals("name")) {
+            // update javaFx UI/ Node name
+            System.out.println("Changing Name for : " + evt.getOldValue());
+        }
+    }
     @Override 
     public String toString() {
         return "Name : " + getName() + " depth : " + getDepth();
@@ -210,7 +235,9 @@ public class Layer implements Serializable {
     }
 
     public void setName(String name) {
+        String oldName = this.name;
         this.name = name;
+        firePropertyChange("name",oldName,name);
     }
 
     public List<Layer> getChildren() {
@@ -295,6 +322,8 @@ public class Layer implements Serializable {
     public void setNodeDelegate(Node nodeDelegate) {
         this.nodeDelegate = nodeDelegate;
     }
+
+    
     
    
 }
