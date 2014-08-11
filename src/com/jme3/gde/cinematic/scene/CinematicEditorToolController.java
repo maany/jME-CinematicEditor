@@ -24,7 +24,7 @@ public class CinematicEditorToolController extends SceneComposerToolController{
    } 
 
     public void setCamController(ComposerCameraController camController) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       
     }
    
 }

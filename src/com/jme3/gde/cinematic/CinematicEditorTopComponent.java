@@ -74,7 +74,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
     public static String PREFERRED_ID = "CinematicEditorTopComponent";
     private static CinematicEditorTopComponent instance;
-    private CinematicEditorUI cinematicEditor;
+    private CinematicEditorUI cinematicEditorUI;
     private ProxyLookup lookup;
     private AbstractLookup cinematicLookup;
     private InstanceContent lookupContent;
@@ -104,9 +104,17 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             @Override
             public void run() {
                 loadCinematicEditorUI();
-                loadViewableCinematicData();
             }
         });
+        java.awt.EventQueue.invokeLater(new Runnable(){
+
+            @Override
+            public void run() {
+                loadViewableCinematicData();
+            }
+        
+        });
+        
         /*
          * set up ExplorerManager
          */ 
@@ -331,12 +339,12 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
      * @param clip
      */
     public void loadCinematicEditorUI() {
-        cinematicEditor = new CinematicEditorUI();
-        Scene scene = new Scene(cinematicEditor, 880, 220);
+        cinematicEditorUI = new CinematicEditorUI();
+        Scene scene = new Scene(cinematicEditorUI, 880, 220);
         scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_container.css").toExternalForm());
         cinematicJFXPanel.setScene(scene);
         cinematicJFXPanel.setVisible(true);
-        cinematicEditor.initCinematicEditorUI();
+        cinematicEditorUI.initCinematicEditorUI();
         Layer root ;
         CinematicClip clip = CinematicEditorManager.getInstance().getCurrentClip();
         if(clip==null){
@@ -344,7 +352,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             clip = CinematicEditorManager.getInstance().getCurrentClip();
         }
         root = clip.getRoot();
-        cinematicEditor.initView(root);
+        cinematicEditorUI.initView(root);
     }
     /**
      * loads the OGL content of the cinematic clip.
@@ -392,7 +400,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
             editorController.setToolController(toolController);
             toolController.refreshNonSpatialMarkers();
-            //toolController.setCamController(camController);
+            toolController.setCamController(camController);
 
             editorController.setTerrainLodCamera();
             SceneRequest currentRequest = CinematicEditorManager.getInstance().getCurrentRequest();
@@ -492,6 +500,14 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
     public AbstractLookup getCinematicLookup() {
         return cinematicLookup;
+    }
+
+    public CinematicEditorUI getCinematicEditorUI() {
+        return cinematicEditorUI;
+    }
+
+    public void setCinematicEditorUI(CinematicEditorUI cinematicEditorUI) {
+        this.cinematicEditorUI = cinematicEditorUI;
     }
 
     

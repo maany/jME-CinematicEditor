@@ -50,13 +50,13 @@ public class CinematicEditorManager {
     private SceneRequest currentRequest;
     private Logger logger;
     private CinematicEditorManager() {
-        logger = Logger.getLogger(CinematicEditorManager.class.getName());
+        logger = Logger.getLogger(CinematicEditorManager.class.getName()); 
     }
 
     public static CinematicEditorManager getInstance() {
         if (instance == null) {
-            instance = new CinematicEditorManager();
-        }
+            instance = new CinematicEditorManager(); 
+        } 
         return instance;
     }
 
@@ -119,7 +119,7 @@ public class CinematicEditorManager {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    JOptionPane.showMessageDialog(null, "if condition satisfied while loading");
+                   // JOptionPane.showMessageDialog(null, "if condition satisfied while loading");
                 }
             }
             // handle audio/gui etc loading appropriately
@@ -217,7 +217,20 @@ public class CinematicEditorManager {
         request.setToolNode(new Node("CinematicEditorToolNode"));
         SceneApplication.getApplication().openScene(request);
     }
-    
+    private void cleanupControllers() {
+        if (camController != null) {
+            camController.disable();
+            camController = null;
+        }
+        if (toolController != null) {
+            toolController.cleanup();
+            toolController = null;
+        }
+        if (editorController != null) {
+            editorController.cleanup();
+            editorController = null;
+        }
+    }
 
 
     

@@ -4,9 +4,11 @@
  */
 package com.jme3.gde.cinematic.core;
 
+import com.jme3.gde.cinematic.CinematicEditorTopComponent;
 import com.jme3.gde.cinematic.gui.CinematicLayerNode;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.gui.LayerLAF;
+import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import org.openide.ErrorManager;
 import org.openide.nodes.Node;
 import org.openide.nodes.PropertySupport;
@@ -72,6 +75,7 @@ public class Layer implements Serializable,PropertyChangeListener {
         }
         nodeDelegate = new CinematicLayerNode(this);
         addPropertyChangeListener(WeakListeners.propertyChange(this,this));
+        
     }
 
     public Layer(String name,Layer parent,LayerType type){
@@ -216,11 +220,33 @@ public class Layer implements Serializable,PropertyChangeListener {
             listener.propertyChange(new PropertyChangeEvent(this,propertyName,oldValue,newValue));
         }
     }
+    /**
+     * Use this method to sync the javaFX UI and the Nodes whenever visible properties of layer change.
+     * @param evt 
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equals("name")) {
             // update javaFx UI/ Node name
-            System.out.println("Changing Name for : " + evt.getOldValue());
+            
+            Platform.runLater(new Runnable(){
+                CinematicEditorUI cinematicEditorUI;
+                @Override
+                public void run() {
+                    java.awt.EventQueue.invokeLater(new Runnable(){
+
+                        @Override
+                        public void run() {
+                            CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
+                            cinematicEditorUI = cinematicEditor.getCinematicEditorUI();
+                        }
+                    
+                    });
+                    
+                }
+                
+            });
+        
         }
     }
     @Override 
