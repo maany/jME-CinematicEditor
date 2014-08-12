@@ -26,5 +26,11 @@ public class CinematicEditorToolController extends SceneComposerToolController{
     public void setCamController(ComposerCameraController camController) {
        
     }
+
+    @Override
+    public void selectedSpatialTransformed() {
+        super.selectedSpatialTransformed(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
    
 }

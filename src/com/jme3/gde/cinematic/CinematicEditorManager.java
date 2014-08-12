@@ -49,6 +49,7 @@ public class CinematicEditorManager {
     private SceneRequest sentRequest;
     private SceneRequest currentRequest;
     private Logger logger;
+    private boolean loaded = false;
     private CinematicEditorManager() {
         logger = Logger.getLogger(CinematicEditorManager.class.getName()); 
     }
@@ -139,6 +140,7 @@ public class CinematicEditorManager {
             });
             
         }
+        loaded = true;
     }
     /**
      * Loads a spatial into the OGL window. If the TopComponent/ OGL Window are not open, it
@@ -217,20 +219,7 @@ public class CinematicEditorManager {
         request.setToolNode(new Node("CinematicEditorToolNode"));
         SceneApplication.getApplication().openScene(request);
     }
-    private void cleanupControllers() {
-        if (camController != null) {
-            camController.disable();
-            camController = null;
-        }
-        if (toolController != null) {
-            toolController.cleanup();
-            toolController = null;
-        }
-        if (editorController != null) {
-            editorController.cleanup();
-            editorController = null;
-        }
-    }
+
 
 
     
@@ -303,6 +292,14 @@ public class CinematicEditorManager {
 
     public void setCurrentRequest(SceneRequest currentRequest) {
         this.currentRequest = currentRequest;
+    }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
     }
 
     

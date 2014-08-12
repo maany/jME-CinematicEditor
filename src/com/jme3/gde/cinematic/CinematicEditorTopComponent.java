@@ -368,7 +368,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     @Override
     public void sceneOpened(SceneRequest request) {
         try{
-            JOptionPane.showMessageDialog(null, "Scene Opened Listener invoked");
+          //  JOptionPane.showMessageDialog(null, "Scene Opened Listener invoked");
             if(CinematicEditorManager.getInstance().getSentRequest()==request){
             CinematicEditorManager.getInstance().setCurrentRequest(request);
             if (editorController != null) {

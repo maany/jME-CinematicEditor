@@ -81,6 +81,7 @@ public class SpatialLayer extends Layer{
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        
         super.propertyChange(evt);
         if(evt.getPropertyName().equals("path")){
             Map<String, Spatial> spatialMap = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap();
@@ -99,14 +100,6 @@ public class SpatialLayer extends Layer{
     }
 
     public void setPath(String path) {
-        if(!this.path.equals(path)){
-            String oldPath = this.path;
-            this.path = path;
-            firePropertyChange("path", oldPath, path);
-            
-            
-            
-            
-        }
+        this.path = path;
     }
 }
