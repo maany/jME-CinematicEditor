@@ -7,12 +7,9 @@ package com.jme3.gde.cinematic;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
-import com.jme3.gde.cinematic.core.layertype.CharacterLayer;
 import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
-import com.jme3.gde.cinematic.filetype.actions.OpenCinematicEditor;
 import com.jme3.gde.cinematic.gui.GuiManager;
-import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.library.CinematicLibrary;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.core.assets.AssetDataObject;
@@ -27,8 +24,6 @@ import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.Scene;
-import javax.swing.JOptionPane;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
@@ -51,7 +46,9 @@ public class CinematicEditorManager {
     private Logger logger;
     private boolean loaded = false;
     private CinematicEditorManager() {
-        logger = Logger.getLogger(CinematicEditorManager.class.getName()); 
+        logger = Logger.getLogger(CinematicEditorManager.class.getName());
+        //TODO init a blank data object. (This would make the assetManager available to the cinematicEditor.) Then save the data object in the end.
+        
     }
 
     public static CinematicEditorManager getInstance() {
@@ -153,7 +150,7 @@ public class CinematicEditorManager {
         String path = null;
         final Spatial spat;
         try {
-            path = layer.getPath();
+            path = layer.getFile().getPath();
             getAssetManager();
             spat = assetManager.loadModel(path);
             if (spat == null) {
@@ -187,7 +184,7 @@ public class CinematicEditorManager {
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
-        currentDataObject.getLibrary().getSpatialMap().put(path,assetManager.loadModel(path));
+        currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),assetManager.loadModel(path));
     }
     /**
      * Creates a new {@link SceneRequest} and launches the OGL Window loaded

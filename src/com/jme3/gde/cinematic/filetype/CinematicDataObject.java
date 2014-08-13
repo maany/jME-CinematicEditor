@@ -110,7 +110,7 @@ public class CinematicDataObject extends MultiDataObject {
      * @throws IOException
      */
     public CinematicDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
-        super(pf, loader);
+        super(pf, loader); 
         this.modified = false;
         this.saver = new CinematicSaver(this);
         this.cinematicClip = new CinematicClip();

@@ -9,6 +9,7 @@ import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
@@ -34,7 +35,7 @@ public final class Modify implements ActionListener {
         // TODO use context
         Layer root = context.getCinematicClip().getRoot();
         SpatialLayer child = new SpatialLayer("child",root);
-        child.setPath("\\Models\\myTeapot.j3o");
+        child.setFile(new File("\\Models\\myTeapot.j3o"));
         context.getCinematicClip().getRoot().getChildren();
         context.setModified(true);
     }

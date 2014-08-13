@@ -8,25 +8,27 @@ import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
 import com.jme3.gde.cinematic.core.layertype.secondary.TranslationLayer;
-import com.jme3.math.Vector3f;
+import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.scene.Spatial;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.File;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.openide.nodes.Node.Property;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
+
 
 /**
  *
  * @author MAYANK
  */
 public class SpatialLayer extends Layer{
-    private String path;
+    private File file;
+    private ProjectAssetManager assetManager;
     
     private TranslationLayer translationLayer;
     public SpatialLayer(String name, Layer parent) {
@@ -37,10 +39,11 @@ public class SpatialLayer extends Layer{
     }
     private void initSecondaryLayers(){
         try {
-        Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(path);
+        Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(file);
         translationLayer.setTranslationValue(spat.getLocalTranslation());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Spatial Layer : {0} has no spatial attached to it.", getName());
+            //ex.printStackTrace();
         }
         
     }
@@ -51,11 +54,11 @@ public class SpatialLayer extends Layer{
         spatialSet.setDisplayName("Spatial");
         spatialSet.setName("SpatialLayer");
         try {
-            Property pathProp = new PropertySupport.Reflection(this,String.class,"getPath","setPath");
+            Property pathProp = new PropertySupport.Reflection(this,java.io.File.class,"getFile","setFile");
             pathProp.setDisplayName("Path");
             spatialSet.put(pathProp);
             
-            Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(path); 
+/*            Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(file); 
             if (spat != null) {
                 Property localTranslationProp = new PropertySupport.Reflection(spat, Vector3f.class, "getLocalTranslation",null );
                 Property localRotationProp = new PropertySupport.Reflection(spat, Vector3f.class, "getLocalRotation", null);
@@ -68,7 +71,7 @@ public class SpatialLayer extends Layer{
                 spatialSet.put(localTranslationProp);
                 spatialSet.put(localRotationProp);
                 spatialSet.put(localScaleProp);
-            }
+            } */
         } catch (NoSuchMethodException ex) {
             Exceptions.printStackTrace(ex);
         } catch(Exception ex){
@@ -81,25 +84,60 @@ public class SpatialLayer extends Layer{
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+       //JOptionPane.showMessageDialog(null,"Property Change Detected for : " + evt.getPropertyName());
         
-        super.propertyChange(evt);
-        if(evt.getPropertyName().equals("path")){
-            Map<String, Spatial> spatialMap = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap();
-            spatialMap.remove(evt.getOldValue());
-            CinematicEditorManager.getInstance().loadSpatial(this);
-            initSecondaryLayers(); 
-        }
-    }
-    
-    
-     /**
-      * Getters and Setters
-      */
-    public String getPath() {
-        return path;
+            super.propertyChange(evt);
+            if (evt.getPropertyName().equals("path")) {
+                JOptionPane.showMessageDialog(null,"PATH CHANGED"); 
+                System.out.println("PATH CHANGED");
+                Map<File, Spatial> spatialMap = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap();
+                if (spatialMap.containsKey(evt.getOldValue())) {
+                    spatialMap.remove(evt.getOldValue());
+                }
+                CinematicEditorManager.getInstance().loadSpatial(this);
+                initSecondaryLayers();
+            }
+        
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    /**
+     * Getters and Setters
+     */
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        System.out.println("**********************haha***********************");
+        try {
+        File oldFile = this.file;
+        this.file = file;
+        assetManager = CinematicEditorManager.getInstance().getCurrentDataObject().getLookup().lookup(ProjectAssetManager.class);
+        String relativeAssetPath = assetManager.getRelativeAssetPath(file.getAbsolutePath());
+        
+        /*String path = assetManager.getAssetFolder().getPath();
+        System.out.println("AssetFolderPath : " + path);
+        Path assetFolderPath = Paths.get(path);
+        Path relativeToAssetFolder = assetFolderPath.relativize(Paths.get(file.getPath()));
+        System.out.println("Relative Path : " + relativeToAssetFolder.toUri()); */
+        String ext = getExtension(relativeAssetPath.toString());
+        if (ext.toLowerCase().equals("j3o")) {
+            this.file = new File(relativeAssetPath);
+            System.out.println("Firing path change");
+            firePropertyChange("path", oldFile, this.file);
+        }
+        } catch(Exception ex) {
+            System.out.println("EXCEPTION HERE");
+            ex.printStackTrace();
+        }
+    }
+    private String getExtension(String fileName) {
+        String extension = "";
+
+        int i = fileName.lastIndexOf('.');
+        if (i > 0) {
+            extension = fileName.substring(i + 1);
+        }
+        return extension;
     }
 }

@@ -5,6 +5,7 @@
 package com.jme3.gde.cinematic.library;
 
 import com.jme3.scene.Spatial;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,18 +14,20 @@ import java.util.Map;
  * @author MAYANK
  */
 public class CinematicLibrary {
-    private Map<String,Spatial> spatialMap;
+    private Map<File,Spatial> spatialMap;
 
     public CinematicLibrary() {
         spatialMap = new HashMap<>();
     }
 
-    public Map<String, Spatial> getSpatialMap() {
+    public Map<File, Spatial> getSpatialMap() {
         return spatialMap;
     }
 
-    public void setSpatialMap(Map<String, Spatial> spatialMap) {
+    public void setSpatialMap(Map<File, Spatial> spatialMap) {
         this.spatialMap = spatialMap;
     }
+
+    
    
 }
