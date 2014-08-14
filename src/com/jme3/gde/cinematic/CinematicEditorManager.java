@@ -4,6 +4,7 @@
  */
 package com.jme3.gde.cinematic;
 
+import com.jme3.export.Savable;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
@@ -17,6 +18,7 @@ import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
+import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.sceneexplorer.nodes.NodeUtility;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -146,7 +148,7 @@ public class CinematicEditorManager {
      *
      * @param layer
      */
-    public void loadSpatial(SpatialLayer layer) {
+    public void loadSpatial(final SpatialLayer layer) {
         String path = null;
         final Spatial spat;
         try {
@@ -168,14 +170,15 @@ public class CinematicEditorManager {
                         CinematicEditorController editorController = cinematicEditor.getEditorController();
                         if (editorController != null) {
                             cinematicEditor.getEditorController().addModel(spat);
-                            
-                        } 
+                            currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),spat);
+                        }
                     }
                
                });
             } else {
             /* No Scene Opened. Create scene request*/
             initSceneViewerWithSpatial(spat, path);
+            currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),spat);
             } 
         } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
@@ -184,7 +187,9 @@ public class CinematicEditorManager {
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
-        currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),assetManager.loadModel(path));
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Adding {0} to spatial map", layer.getFile().getPath());
+        
+        
     }
     /**
      * Creates a new {@link SceneRequest} and launches the OGL Window loaded
@@ -205,9 +210,10 @@ public class CinematicEditorManager {
         } else {
             node = new Node();
             node.attachChild(spat);
+            
         }
         JmeNode jmeNode = NodeUtility.createNode(node, dataObject, false);
-
+        assert jmeNode!=null:"see CinematicEditorManager#initSceneViewerWithSpatial";
         SceneRequest request = new SceneRequest(this, jmeNode, assetManager);
         request.setDataObject(dataObject);
         // request.setHelpCtx(ctx);
@@ -215,6 +221,7 @@ public class CinematicEditorManager {
         request.setWindowTitle("Cinematic Editor - " + currentDataObject.getName());
         request.setToolNode(new Node("CinematicEditorToolNode"));
         SceneApplication.getApplication().openScene(request);
+        
     }
 
 

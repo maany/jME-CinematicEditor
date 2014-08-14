@@ -32,6 +32,8 @@ public class GuiManager {
     private static GuiManager instance = null;
     public static final String DEFAULT_NAME= "Untitled Cinematic Clip";
     public static final String SECONDARY_TRANSLATION = "translation";
+    public static final String SECONDARY_ROTATION = "rotation";
+    public static final String SECONDARY_SCALE = "scale";
     
     private GuiManager(){}
     public static GuiManager getInstance()

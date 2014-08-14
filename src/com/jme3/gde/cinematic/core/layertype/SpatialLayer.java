@@ -7,13 +7,13 @@ package com.jme3.gde.cinematic.core.layertype;
 import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.core.layertype.secondary.RotationLayer;
+import com.jme3.gde.cinematic.core.layertype.secondary.ScaleLayer;
 import com.jme3.gde.cinematic.core.layertype.secondary.TranslationLayer;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.scene.Spatial;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,12 +31,15 @@ import org.openide.util.Exceptions;
 public class SpatialLayer extends Layer{
     private File file;
     private ProjectAssetManager assetManager;
-    
     private TranslationLayer translationLayer;
+    private RotationLayer rotationLayer;
+    private ScaleLayer scaleLayer;
     public SpatialLayer(String name, Layer parent) {
         super(name,parent,LayerType.SPATIAL);
         /* Create Secondary Layers */
         translationLayer = new TranslationLayer("Translation",this);
+        rotationLayer = new RotationLayer("Rotation",this);
+        scaleLayer = new ScaleLayer("Scale",this);
         initSecondaryLayers();
     }
     private void initSecondaryLayers(){
@@ -60,7 +63,7 @@ public class SpatialLayer extends Layer{
             pathProp.setDisplayName("Path");
             spatialSet.put(pathProp);
             
-/*            Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(file); 
+           /* Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(file); 
             if (spat != null) {
                 Property localTranslationProp = new PropertySupport.Reflection(spat, Vector3f.class, "getLocalTranslation",null );
                 Property localRotationProp = new PropertySupport.Reflection(spat, Vector3f.class, "getLocalRotation", null);
@@ -110,7 +113,7 @@ public class SpatialLayer extends Layer{
     }
 
     public void setFile(File file) {
-        System.out.println("**********************haha***********************");
+      //  System.out.println("**********************haha***********************");
         try {
         File oldFile = this.file;
         this.file = file;
@@ -132,7 +135,7 @@ public class SpatialLayer extends Layer{
             firePropertyChange("path", oldFile, this.file);
         }
         } catch(Exception ex) {
-            System.out.println("EXCEPTION HERE");
+           // System.out.println("EXCEPTION HERE");
             ex.printStackTrace();
         }
     }
@@ -155,11 +158,11 @@ public class SpatialLayer extends Layer{
      * @return
      */
     private boolean setRelativePath(String path,String assetFolderPath){
-        System.out.println("********************Setting Relative Path************************");
+        //System.out.println("********************Setting Relative Path************************");
         String[] pathArray = path.split("\\\\");
-        System.out.println("path : "+ path + "     pathArray : " + pathArray.length);
+        //System.out.println("path : "+ path + "     pathArray : " + pathArray.length);
         String[] assetFolderPathArray = assetFolderPath.split("/");
-        System.out.println("assetFolderPath : " + assetFolderPath+"     assetFolderArray : " + assetFolderPathArray.length);
+        //System.out.println("assetFolderPath : " + assetFolderPath+"     assetFolderArray : " + assetFolderPathArray.length);
         int i=0;
         String relativePath = "";
         for(String piece:assetFolderPathArray){
