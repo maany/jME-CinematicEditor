@@ -12,6 +12,8 @@ import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.scene.Spatial;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -112,17 +114,20 @@ public class SpatialLayer extends Layer{
         try {
         File oldFile = this.file;
         this.file = file;
-        assetManager = CinematicEditorManager.getInstance().getCurrentDataObject().getLookup().lookup(ProjectAssetManager.class);
-        String relativeAssetPath = assetManager.getRelativeAssetPath(file.getAbsolutePath());
-        
+        if(assetManager==null)
+            assetManager = CinematicEditorManager.getInstance().getCurrentDataObject().getContentLookup().lookup(ProjectAssetManager.class);
+            System.out.println("Absolute Asset Path : " + file.getAbsolutePath());
+            String relativeAssetPath = assetManager.getRelativeAssetPath(file.getAbsolutePath());
+            System.out.println("Relative Asset Path : " + relativeAssetPath); 
         /*String path = assetManager.getAssetFolder().getPath();
         System.out.println("AssetFolderPath : " + path);
         Path assetFolderPath = Paths.get(path);
-        Path relativeToAssetFolder = assetFolderPath.relativize(Paths.get(file.getPath()));
-        System.out.println("Relative Path : " + relativeToAssetFolder.toUri()); */
-        String ext = getExtension(relativeAssetPath.toString());
+        Path relativeAssetPath = assetFolderPath.relativize(Paths.get(file.getPath()));
+        System.out.println("Relative Path : " + relativeAssetPath.toUri()); */
+        String ext = getExtension(relativeAssetPath);
         if (ext.toLowerCase().equals("j3o")) {
-            this.file = new File(relativeAssetPath);
+            boolean test = setRelativePath(file.getAbsolutePath(),assetManager.getAssetFolder().getPath());
+            System.out.println("Test : " + test);
             System.out.println("Firing path change");
             firePropertyChange("path", oldFile, this.file);
         }
@@ -139,5 +144,36 @@ public class SpatialLayer extends Layer{
             extension = fileName.substring(i + 1);
         }
         return extension;
+    }
+    /**
+     * Method to return relative path for the Asset. for eg :
+     * C:\Users\MAYANK\Documents\Jme_MK\Maany\assets\Models\myTeapot.j3o should
+     * return Models\myTeapot.j3o Find a better algorithm. Already tried using
+     * assetManager.getRelativeAssetPath() + using java.io.file.Path
+     *
+     * @param path
+     * @return
+     */
+    private boolean setRelativePath(String path,String assetFolderPath){
+        System.out.println("********************Setting Relative Path************************");
+        String[] pathArray = path.split("\\\\");
+        System.out.println("path : "+ path + "     pathArray : " + pathArray.length);
+        String[] assetFolderPathArray = assetFolderPath.split("/");
+        System.out.println("assetFolderPath : " + assetFolderPath+"     assetFolderArray : " + assetFolderPathArray.length);
+        int i=0;
+        String relativePath = "";
+        for(String piece:assetFolderPathArray){
+            if(!piece.equals(pathArray[i])){
+                return false;
+            } else if(pathArray[i].equals("assets")) {
+                for(int j=i+1;j<pathArray.length;j++)
+                    relativePath+="\\"+ pathArray[j];
+                file = new java.io.File(relativePath);
+                return true;
+            }
+            System.out.println("Final Relative Path : " + relativePath);
+            i++;
+        }
+        return false;   
     }
 }

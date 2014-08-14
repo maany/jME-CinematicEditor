@@ -99,7 +99,7 @@ public class CinematicDataObject extends MultiDataObject {
     private AbstractLookup contentLookup;
     private transient CinematicSaver saver;
     private CinematicLibrary library;
-    //ProjectAssetManager mgr = null;
+    private ProjectAssetManager mgr = null;
 
     /**
      * Constructor
@@ -139,7 +139,7 @@ public class CinematicDataObject extends MultiDataObject {
                     project = ProjectManager.getDefault().findProject(primaryFile);
                     if (project != null) {
                         lookupContents.add(project);
-                        ProjectAssetManager mgr = project.getLookup().lookup(ProjectAssetManager.class);
+                        mgr = project.getLookup().lookup(ProjectAssetManager.class);
                         if (mgr != null) {
                             lookupContents.add(mgr);
                             System.out.println("FOUND ASSETMANAGER.. ! null and added to lookupCOntents");
@@ -239,6 +239,10 @@ public class CinematicDataObject extends MultiDataObject {
     public void setLibrary(CinematicLibrary library) {
         this.library = library;
     }
+
+
+
+    
     
   
     
