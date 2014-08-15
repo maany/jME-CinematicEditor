@@ -14,9 +14,11 @@ import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.scene.Spatial;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Button;
 import javax.swing.JOptionPane;
 import org.openide.nodes.Node.Property;
 import org.openide.nodes.PropertySupport;
@@ -52,6 +54,14 @@ public class SpatialLayer extends Layer{
         }
         
     }
+
+    @Override
+    public Map<String, ArrayList<Button>> createTabsAndEvents() {
+        return super.createTabsAndEvents(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+  
+    
     @Override
     public Sheet createSheet() {
         Sheet sheet = super.createSheet();

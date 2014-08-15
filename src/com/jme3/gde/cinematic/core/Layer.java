@@ -15,11 +15,14 @@ import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.scene.control.Button;
 import org.openide.ErrorManager;
 import org.openide.nodes.Node;
 import org.openide.nodes.PropertySupport;
@@ -180,6 +183,16 @@ public class Layer implements Serializable,PropertyChangeListener {
             visibleDescendants = new ArrayList<>(); //just a precaution;
         }
         return getVisibleDescendants();
+    }
+
+    /**
+     * Override this method in subclasses and define the layout of
+     * {@link com.jme3.gde.cinematic.gui.jfx.LayerActionController}
+     */
+    public Map<String,ArrayList<Button>> createTabsAndEvents(){
+        Map<String,ArrayList<Button>> tabsAndEvents = new HashMap<>();
+        return tabsAndEvents;
+        
     }
     /**
      * returns the Sheet used by the Property Inspector of Netbeans Platform.
