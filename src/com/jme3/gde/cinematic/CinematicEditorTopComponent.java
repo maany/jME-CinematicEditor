@@ -105,6 +105,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 loadCinematicEditorUI();
                 loadLayerTabsAndEvents();
                 layerTabsAndEvents.setContent(null);
+                
             }
         });
         java.awt.EventQueue.invokeLater(new Runnable(){
@@ -112,6 +113,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             @Override
             public void run() {
                 loadViewableCinematicData();
+                
             }
         
         });
@@ -136,7 +138,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
             @Override
             public void resultChanged(LookupEvent ev) {
-                Layer selectedLayer = cinematicLookup.lookup(Layer.class);
+                final Layer selectedLayer = cinematicLookup.lookup(Layer.class);
                 //  Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Change in selection lookup detected : New selected Layer : {0}", selectedLayer.getName());
                 setActivatedNodes(new Node[]{selectedLayer.getNodeDelegate()});
                 System.out.println("Selected Node in lookup change listener : " + selectedLayer.getNodeDelegate().getDisplayName());
@@ -144,7 +146,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        
+                        layerTabsAndEvents.setContent(selectedLayer.createTabsAndEvents());
                     }
                 });
             }

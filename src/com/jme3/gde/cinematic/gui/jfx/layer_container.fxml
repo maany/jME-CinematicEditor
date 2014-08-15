@@ -11,7 +11,8 @@
     <TableView fx:id="layerContainer" editable="true" layoutX="0.0" layoutY="0.0" prefHeight="185.0" prefWidth="220.0" tableMenuButtonVisible="true" />
     <ToolBar layoutX="0.0" layoutY="185.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="220.0">
       <items>
-        <Button id="addLayer" fx:id="addLayerButton" minWidth="25.0" mnemonicParsing="false" prefWidth="36.0" text="L+" />
+        <Button id="addLayer" fx:id="addLayerButton" minWidth="25.0" mnemonicParsing="false" prefWidth="36.0" text="S+" />
+        <Button id="addLayer" fx:id="addCharacterLayerButton" minWidth="25.0" mnemonicParsing="false" prefWidth="36.0" text="C+" />
         <Button fx:id="removeLayerButton" cancelButton="false" mnemonicParsing="false" prefWidth="36.0" text="L-" />
         <Separator orientation="VERTICAL" prefHeight="200.0" />
         <Button fx:id="addEventButton" mnemonicParsing="false" prefWidth="36.0" text="E+" />

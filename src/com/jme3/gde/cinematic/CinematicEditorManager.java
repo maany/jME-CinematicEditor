@@ -4,10 +4,11 @@
  */
 package com.jme3.gde.cinematic;
 
-import com.jme3.export.Savable;
+import com.jme3.animation.AnimControl;
 import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.core.layertype.CharacterLayer;
 import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import com.jme3.gde.cinematic.filetype.CinematicDataObject;
 import com.jme3.gde.cinematic.gui.GuiManager;
@@ -18,12 +19,13 @@ import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.sceneexplorer.nodes.NodeUtility;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openide.filesystems.FileObject;
@@ -31,7 +33,6 @@ import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.Exceptions;
-import org.openide.windows.WindowManager;
 
 /**
  *  
@@ -111,9 +112,14 @@ public class CinematicEditorManager {
         List<Layer> allDescendants = currentClip.getRoot().findAllDescendants();
         for (Layer child : allDescendants) {
             System.out.println("CURRENT CHILD : " + child.getName());
-            if (child.getType() == LayerType.SPATIAL && child instanceof SpatialLayer) {
+            if (child.getType() == LayerType.SPATIAL || child instanceof SpatialLayer) {
                 try {
-                    SpatialLayer layer = ((SpatialLayer) child);
+                    SpatialLayer layer;
+                    if (child.getType() == LayerType.CHARACTER) {
+                        layer = (CharacterLayer) child;
+                    } else {
+                        layer = (SpatialLayer) child;
+                    }
                     loadSpatial(layer);
                     viewableCount++;
                 } catch (Exception e) {
@@ -121,7 +127,7 @@ public class CinematicEditorManager {
                 } finally {
                    // JOptionPane.showMessageDialog(null, "if condition satisfied while loading");
                 }
-            }
+            
             // handle audio/gui etc loading appropriately
         }
         if (viewableCount == 0) {
@@ -137,9 +143,10 @@ public class CinematicEditorManager {
                     cinematicEditor.requestActive();
                 }
             });
-            
+  
+            }
+            loaded = true;
         }
-        loaded = true;
     }
     /**
      * Loads a spatial into the OGL window. If the TopComponent/ OGL Window are not open, it
@@ -160,17 +167,32 @@ public class CinematicEditorManager {
                         + " Please verify the path {1} exists and is a valid .j3o binary", new Object[]{layer.getName(), path});
                 return;
             }
+            if(layer.getType()==LayerType.CHARACTER){
+                System.out.println("CHARACTER LAYER FOUND " + layer.getName());
+                Collection<String> animationNames = spat.getControl(AnimControl.class).getAnimationNames();
+                for (String name : animationNames) {
+                    System.out.println("CHANNEL : " + name);
+                }
+            }
             if (sentRequest == currentRequest && sentRequest != null) {
 
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
                         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                        CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
+                        final CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         CinematicEditorController editorController = cinematicEditor.getEditorController();
                         if (editorController != null) {
-                            cinematicEditor.getEditorController().addModel(spat);
-                            currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),spat);
+                            SceneApplication.getApplication().enqueue(new Callable<Integer>() {
+
+                                @Override
+                                public Integer call() throws Exception {
+                                    cinematicEditor.getEditorController().addModel(spat);
+                                    currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),spat);
+                                    return 1;
+                                }
+                            });
+                            
                         }
                     }
                
@@ -221,6 +243,7 @@ public class CinematicEditorManager {
         request.setWindowTitle("Cinematic Editor - " + currentDataObject.getName());
         request.setToolNode(new Node("CinematicEditorToolNode"));
         SceneApplication.getApplication().openScene(request);
+        
         
     }
 

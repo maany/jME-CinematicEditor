@@ -24,6 +24,7 @@ import javafx.stage.Stage;
  * @author MAYANK
  */
 public class CinematicEditorUI extends AnchorPane{
+    private static CinematicEditorUI instance;
     @FXML
     private TimelineControl timeline ;
     @FXML
@@ -45,7 +46,7 @@ public class CinematicEditorUI extends AnchorPane{
         {
             System.out.println("Failed to load CinematicEditorUI.fxml");
         }
-        
+        instance = this;
     }
 
     
@@ -264,7 +265,9 @@ public class CinematicEditorUI extends AnchorPane{
     public void setTimeline(TimelineControl timeline) {
         this.timeline = timeline;
     }
-    
+    public static CinematicEditorUI getInstance(){
+        return instance;
+    }
     
     
 }

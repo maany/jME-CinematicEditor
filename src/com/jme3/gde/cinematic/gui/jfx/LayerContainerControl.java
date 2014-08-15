@@ -8,6 +8,7 @@ import com.jme3.gde.cinematic.CinematicEditorTopComponent;
 import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.core.layertype.CharacterLayer;
 import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import java.util.Collection;
 import java.util.Scanner;
@@ -49,6 +50,8 @@ public class LayerContainerControl extends AnchorPane{
     private Button addEventButton;
     @FXML
     private Button removeEventButton;
+    @FXML
+    private Button addCharacterLayerButton;
     private Layer root;//TODO remove, only testing
     private TableColumn<Layer,Boolean> childVisibility,enabled;
     private TableColumn<Layer,String> layerName;
@@ -190,6 +193,27 @@ public class LayerContainerControl extends AnchorPane{
                 }
             }
         });
+        
+        addCharacterLayerButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                Layer selectedLayer = (Layer) layerContainer.getSelectionModel().getSelectedItem();
+                //Layer root = CinematicEditorManager.getInstance().getCurrentClip().getRoot();
+                Layer parent = selectedLayer.getParent();
+                if (parent == null) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Parent is null for layer{0}Cannot add Character Layer.", selectedLayer.getName());
+                    return;
+                }
+                if (parent.getType() == LayerType.ROOT) {
+                    Layer child = new CharacterLayer("New Character", parent);
+                    cinematicEditor.addNewLayer(child);
+                } else {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Cannot create a new layer as the selected layer"
+                            + " cannot have any additional children. Please select a root layer.");
+                }
+            }
+        });
+        
         removeLayerButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override

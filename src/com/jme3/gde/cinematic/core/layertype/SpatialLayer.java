@@ -138,7 +138,8 @@ public class SpatialLayer extends Layer{
         Path relativeAssetPath = assetFolderPath.relativize(Paths.get(file.getPath()));
         System.out.println("Relative Path : " + relativeAssetPath.toUri()); */
         String ext = getExtension(relativeAssetPath);
-        if (ext.toLowerCase().equals("j3o")) {
+        ext = ext.toLowerCase();
+        if (ext.equals("j3o") || ext.equals("xml") || ext.equals("scene") || ext.equals("obj")) {
             boolean test = setRelativePath(file.getAbsolutePath(),assetManager.getAssetFolder().getPath());
             System.out.println("Test : " + test);
             System.out.println("Firing path change");

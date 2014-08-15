@@ -8,6 +8,7 @@ import com.jme3.animation.AnimControl;
 import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,10 +41,17 @@ public class CharacterLayer extends SpatialLayer{
 
                 @Override
                 public void handle(ActionEvent t) {
-                    
+                    CinematicEditorUI cinematicEditorUI = CinematicEditorUI.getInstance();
+                    if(cinematicEditorUI!=null){
+                        System.out.println("CINEMATICEDITORUI not null in CharacterLayer#createTabsAndEvents");
+                    } else {
+                        System.out.println("CINEMATICEDITORUI IS NULL in CharacterLayer#createTabsAndEvents");
+                    }
                 }
             });
+            animationEvents.add(btn);
         }
+        tabsAndEvents.put(tab, animationEvents);
         return tabsAndEvents;
     }
 

@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<fx:root type="javafx.scene.layout.AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="180.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" >
+<fx:root type="javafx.scene.layout.AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="180.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <children>
-    <TabPane fx:id="tabs" layoutX="0.0" layoutY="0.0" prefHeight="180.0" prefWidth="180.0" tabClosingPolicy="UNAVAILABLE" />
+    <TabPane id="tabs" fx:id="tabPane" layoutX="0.0" layoutY="0.0" prefHeight="180.0" prefWidth="180.0" tabClosingPolicy="UNAVAILABLE" />
   </children>
 </fx:root>
