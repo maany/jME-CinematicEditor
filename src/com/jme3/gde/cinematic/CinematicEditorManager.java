@@ -180,23 +180,15 @@ public class CinematicEditorManager {
                     @Override
                     public void run() {
                         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                        
                         final CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         CinematicEditorController editorController = cinematicEditor.getEditorController();
                         if (editorController != null) {
-                            SceneApplication.getApplication().enqueue(new Callable<Integer>() {
-
-                                @Override
-                                public Integer call() throws Exception {
-                                    cinematicEditor.getEditorController().addModel(spat);
-                                    currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),spat);
-                                    return 1;
-                                }
-                            });
-                            
+                            cinematicEditor.getEditorController().addModel(spat);
+                            currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(), spat);
                         }
                     }
-               
-               });
+                });
             } else {
             /* No Scene Opened. Create scene request*/
             initSceneViewerWithSpatial(spat, path);

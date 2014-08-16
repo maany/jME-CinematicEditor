@@ -1,0 +1,10 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+.tab-pane {
+    -fx-tab-min-height:35px;
+}

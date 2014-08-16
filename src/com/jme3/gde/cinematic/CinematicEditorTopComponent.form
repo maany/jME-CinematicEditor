@@ -30,13 +30,12 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jFXPanel2" pref="180" max="32767" attributes="0"/>
-                  <Component id="jFXPanel4" alignment="0" max="32767" attributes="0"/>
                   <Component id="tabsJfxPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="cinematicJFXPanel" pref="880" max="32767" attributes="0"/>
                   <Component id="jFXPanel1" max="32767" attributes="0"/>
@@ -55,12 +54,8 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="jFXPanel4" min="-2" pref="31" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tabsJfxPanel" min="-2" pref="180" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="cinematicJFXPanel" min="-2" pref="220" max="-2" attributes="0"/>
+                  <Component id="cinematicJFXPanel" pref="220" max="32767" attributes="0"/>
+                  <Component id="tabsJfxPanel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="55" max="32767" attributes="0"/>
           </Group>
@@ -114,21 +109,6 @@
       </Layout>
     </Container>
     <Container class="javafx.embed.swing.JFXPanel" name="jFXPanel2">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder roundedCorners="true">
-              <Color PropertyName="color" blue="ff" green="ff" red="ff" type="rgb"/>
-            </LineBorder>
-          </Border>
-        </Property>
-      </Properties>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
-        <Property name="useNullLayout" type="boolean" value="true"/>
-      </Layout>
-    </Container>
-    <Container class="javafx.embed.swing.JFXPanel" name="jFXPanel4">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">

@@ -31,12 +31,12 @@ public class CharacterLayer extends SpatialLayer{
     public Map<String, ArrayList<Button>> createTabsAndEvents() {
         Map<String, ArrayList<Button>> tabsAndEvents = super.createTabsAndEvents(); //To change body of generated methods, choose Tools | Templates.
         String tab = "Animation Events";
-        ArrayList<Button> animationEvents = new ArrayList<>();
+        ArrayList<Button> animationChannels = new ArrayList<>();
         Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(getFile());
         Collection<String> animationNames = spat.getControl(AnimControl.class).getAnimationNames();
         for (String animationName : animationNames) {
             Button btn = new Button(animationName);
-            animationEvents.add(btn);
+            animationChannels.add(btn);
             btn.setOnAction(new EventHandler<ActionEvent>() {
 
                 @Override
@@ -49,9 +49,9 @@ public class CharacterLayer extends SpatialLayer{
                     }
                 }
             });
-            animationEvents.add(btn);
+            animationChannels.add(btn);
         }
-        tabsAndEvents.put(tab, animationEvents);
+        tabsAndEvents.put(tab, animationChannels);
         return tabsAndEvents;
     }
 
