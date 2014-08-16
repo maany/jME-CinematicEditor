@@ -5,14 +5,19 @@
 package com.jme3.gde.cinematic.gui.jfx;
 
 import com.jme3.gde.cinematic.CinematicEditorManager;
+import com.jme3.gde.cinematic.CinematicEditorTopComponent;
 import com.jme3.gde.cinematic.core.DurationChangeListener;
 import com.jme3.gde.cinematic.core.Event;
+import java.util.Collection;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 
 /**
  * Provides the graphical representation of {@link com.jme3.gde.cinematic.core.Event}. 
@@ -75,7 +80,11 @@ public class EventControl extends Button implements DurationChangeListener{
         setPrefWidth(width);
         setTranslateX(startPoint);
     }
-
+/**
+ * Adds the following EventHandlers : 
+ * 1) Pressing delete will remove the event form the timeline and data structure
+ * 2) Mouse Click will make the current event a Selected Node in TopComponent{@link org.openide.nodes.Node} and hence property
+ */
     private void initActions() {
         setOnKeyReleased(new EventHandler<KeyEvent>() {
 
@@ -86,6 +95,25 @@ public class EventControl extends Button implements DurationChangeListener{
                     eventStrip.getTimeline().removeEvent(getEvent());
                 }
                     
+            }
+        });
+        setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                java.awt.EventQueue.invokeLater(new Runnable(){
+                    @Override
+                    public void run() {
+                        CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
+                        AbstractLookup cinematicLookup = cinematicEditor.getCinematicLookup();
+                        InstanceContent lookupContent = cinematicEditor.getLookupContent();
+                        Collection<? extends Event> lookupAll = cinematicLookup.lookupAll(Event.class);
+                        for (Event event1 : lookupAll) {
+                            lookupContent.remove(event1);
+                        }
+                        lookupContent.add(EventControl.this.getEvent());
+                    }
+                });
             }
         });
     }

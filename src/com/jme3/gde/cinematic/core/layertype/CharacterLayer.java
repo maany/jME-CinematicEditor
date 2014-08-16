@@ -8,7 +8,9 @@ import com.jme3.animation.AnimControl;
 import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
+import com.jme3.gde.cinematic.core.eventtype.AnimationEvent;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
+import com.jme3.gde.cinematic.gui.jfx.LayerActionControl;
 import com.jme3.scene.Spatial;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,15 +28,18 @@ public class CharacterLayer extends SpatialLayer{
         super(name,parent);
         setType(LayerType.CHARACTER);
     }
-
+/**
+ * Creates a Map for displaying tabs and tabContent through {@link LayerActionControl}
+ * @return 
+ */
     @Override
     public Map<String, ArrayList<Button>> createTabsAndEvents() {
         Map<String, ArrayList<Button>> tabsAndEvents = super.createTabsAndEvents(); //To change body of generated methods, choose Tools | Templates.
         String tab = "Animation Events";
         ArrayList<Button> animationChannels = new ArrayList<>();
-        Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(getFile());
+        final Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(getFile());
         Collection<String> animationNames = spat.getControl(AnimControl.class).getAnimationNames();
-        for (String animationName : animationNames) {
+        for (final String animationName : animationNames) {
             Button btn = new Button(animationName);
             animationChannels.add(btn);
             btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -44,8 +49,10 @@ public class CharacterLayer extends SpatialLayer{
                     CinematicEditorUI cinematicEditorUI = CinematicEditorUI.getInstance();
                     if(cinematicEditorUI!=null){
                         System.out.println("CINEMATICEDITORUI not null in CharacterLayer#createTabsAndEvents");
-                    } else {
-                        System.out.println("CINEMATICEDITORUI IS NULL in CharacterLayer#createTabsAndEvents");
+                        float currentTime = cinematicEditorUI.getTimeline().getCurrentTime().floatValue();
+                        float duration = spat.getControl(AnimControl.class).getAnimationLength(animationName);
+                        AnimationEvent event = new AnimationEvent(animationName,CharacterLayer.this,currentTime,duration);
+                        cinematicEditorUI.getTimeline().addEvent(event,CharacterLayer.this);
                     }
                 }
             });

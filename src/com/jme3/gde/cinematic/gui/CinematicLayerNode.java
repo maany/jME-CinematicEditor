@@ -11,6 +11,8 @@ import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
 
 /**
+ * The Node representation of a Layer. This class and acts as a bridge b/w
+ * javafx/dataStructure/Netbeans PropertySheet and Explorer Api
  *
  * @author MAYANK
  */

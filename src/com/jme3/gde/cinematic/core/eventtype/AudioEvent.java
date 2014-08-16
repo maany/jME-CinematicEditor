@@ -17,12 +17,12 @@ public class AudioEvent extends Event{
     private SoundEvent soundEvent;
     private String path;
     private boolean isStream;
-    public AudioEvent(String path,boolean isStream,float duration,LoopMode loopMode){
+    public AudioEvent(String path,boolean isStream,double duration,LoopMode loopMode){
         super();
         this.path = path;
         this.isStream = isStream;
         super.setDuration(duration);
-        soundEvent = new SoundEvent(path,isStream,duration,loopMode);
+        soundEvent = new SoundEvent(path,isStream,(float)duration,loopMode);
     }
 
     public String getPath() {

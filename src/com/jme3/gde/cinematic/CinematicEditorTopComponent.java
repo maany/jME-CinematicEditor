@@ -5,6 +5,7 @@
 package com.jme3.gde.cinematic;
 
 import com.jme3.gde.cinematic.core.CinematicClip;
+import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.gui.jfx.LayerActionControl;
@@ -83,7 +84,11 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     private CinematicEditorController editorController;
     private ProjectAssetManager.ClassPathChangeListener listener;
     private ExplorerManager explorerManager;
-    private Lookup.Result<Layer> selectionResult;
+    private Lookup.Result<Layer> layerSelectionResult;
+    private Lookup.Result<Event> eventSelectionResult;
+    /**
+     * Contructor
+     */
     public CinematicEditorTopComponent() {
         ProgressHandle handle = ProgressHandleFactory.createHandle("Starting Cinematic Editor...");
         handle.start();
@@ -108,17 +113,17 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 
             }
         });
+        /**
+         * Load OGL data if any
+         */
         java.awt.EventQueue.invokeLater(new Runnable(){
 
             @Override
             public void run() {
                 loadViewableCinematicData();
-                
             }
-        
-        });
-        
-        /*
+         });
+         /*
          * set up ExplorerManager
          */ 
         explorerManager = new ExplorerManager();
@@ -132,16 +137,19 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         lookup = new ProxyLookup(cinematicLookup, ExplorerUtils.createLookup(explorerManager,getActionMap()));
         associateLookup(lookup);
         lookupContent.add(lookupContent);
-        
-        selectionResult = cinematicLookup.lookupResult(Layer.class);
-        selectionResult.addLookupListener(new LookupListener(){
+        /*
+         * Layer Selection listener
+         */
+        layerSelectionResult = cinematicLookup.lookupResult(Layer.class);
+        layerSelectionResult.addLookupListener(new LookupListener(){
 
             @Override
             public void resultChanged(LookupEvent ev) {
                 final Layer selectedLayer = cinematicLookup.lookup(Layer.class);
                 //  Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Change in selection lookup detected : New selected Layer : {0}", selectedLayer.getName());
+                explorerManager.setRootContext(CinematicEditorManager.getInstance().getCurrentClip().getRoot().getNodeDelegate());
                 setActivatedNodes(new Node[]{selectedLayer.getNodeDelegate()});
-                System.out.println("Selected Node in lookup change listener : " + selectedLayer.getNodeDelegate().getDisplayName());
+                //System.out.println("Selected Node in lookup change listener : " + selectedLayer.getNodeDelegate().getDisplayName());
                 // update LayerTabAndEvents in LayerActionController.java (jfx package)
                 Platform.runLater(new Runnable() {
                     @Override
@@ -151,8 +159,25 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 });
             }
         });
-//      lookupContent.add(cinematicEditor); // null coz initialized in different thread. check solultion?? 
-        
+        /*
+         * Event Selection Listener
+         */
+        eventSelectionResult = cinematicLookup.lookupResult(Event.class);
+        eventSelectionResult.addLookupListener(new LookupListener() {
+
+            @Override
+            public void resultChanged(LookupEvent ev) {
+                final Event selectedEvent = cinematicLookup.lookup(Event.class);
+                if (selectedEvent != null) {
+                    System.out.println("*************Event Selected in Lookup Listener : " + selectedEvent.getName());
+                    getExplorerManager().setRootContext(selectedEvent.getNodeDelegate());
+                    setActivatedNodes(new Node[]{selectedEvent.getNodeDelegate()});
+                } else {
+                    System.out.println("Event Selection changed but no event in lookup");
+                }
+            }
+        });
+
         handle.finish();
     }
 

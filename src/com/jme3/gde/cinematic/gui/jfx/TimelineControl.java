@@ -508,4 +508,13 @@ public class TimelineControl extends VBox implements DurationChangeListener {
     public void setCinematicEditor(CinematicEditorUI cinematicEditor) {
         this.cinematicEditor = cinematicEditor;
     }
+
+    public DoubleProperty getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(DoubleProperty currentTime) {
+        this.currentTime = currentTime;
+    }
+    
 }

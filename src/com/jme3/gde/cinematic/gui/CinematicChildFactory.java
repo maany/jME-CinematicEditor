@@ -40,7 +40,7 @@ public class CinematicChildFactory extends ChildFactory<Layer>{
             public void run() {
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                // Layer selectedLayer = CinematicEditorTopComponent.findInstance().getCinematicLookup().lookup(Layer.class);
-                System.out.println("selectedLayer inside ChildFactory : " + layer);
+              //  System.out.println("selectedLayer inside ChildFactory : " + layer);
             //    toPopulate.addAll(layer.getChildren());
             }
         
