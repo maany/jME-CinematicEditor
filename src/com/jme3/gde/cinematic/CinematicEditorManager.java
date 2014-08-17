@@ -214,6 +214,7 @@ public class CinematicEditorManager {
      * @throws DataObjectNotFoundException
      */
     private void initSceneViewerWithSpatial(Spatial spat,String path) throws DataObjectNotFoundException {
+        System.out.println("**** Thread Name " + Thread.currentThread().getName());
         String absolutePath = assetManager.getAssetFolder().getPath() + path;
         File file = new File(absolutePath);
         FileObject fileObject = FileUtil.toFileObject(file);
@@ -227,7 +228,7 @@ public class CinematicEditorManager {
             
         }
         JmeNode jmeNode = NodeUtility.createNode(node, dataObject, false);
-        assert jmeNode!=null:"see CinematicEditorManager#initSceneViewerWithSpatial";
+        //assert jmeNode!=null:"see CinematicEditorManager#initSceneViewerWithSpatial";
         SceneRequest request = new SceneRequest(this, jmeNode, assetManager);
         request.setDataObject(dataObject);
         // request.setHelpCtx(ctx);

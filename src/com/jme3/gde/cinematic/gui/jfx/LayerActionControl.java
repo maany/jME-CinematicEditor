@@ -43,6 +43,7 @@ public class LayerActionControl extends AnchorPane{
     }
 
     public void setContent(Map<String,ArrayList<Button>> data) {
+        cleanup();
         if(data==null || data.size()==0) {
            Logger.getLogger(this.getClass().getName()).log(Level.INFO,"No content found to display in LayerActionControl");
             TilePane tabContent = createEmptyTab("Events");
@@ -53,7 +54,7 @@ public class LayerActionControl extends AnchorPane{
             tabContent.getChildren().add(label);
            return;
         }
-        cleanup();
+        
         try {
             for (Map.Entry<String, ArrayList<Button>> entry : data.entrySet()) {
                 String tabName = entry.getKey();

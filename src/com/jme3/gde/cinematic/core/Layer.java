@@ -77,7 +77,7 @@ public class Layer implements Serializable,PropertyChangeListener {
             depth = 0;
         }
         nodeDelegate = new CinematicLayerNode(this);
-        addPropertyChangeListener(WeakListeners.propertyChange(this,this));
+        initListeners();
         
     }
 
@@ -91,6 +91,9 @@ public class Layer implements Serializable,PropertyChangeListener {
         laf = new LayerLAF(color, collapsed, this);
     }
    
+    private void initListeners() {
+       addPropertyChangeListener(this);
+    }
    /**
      * Used by constructor to establish parent to child link.
      * @param child 
@@ -361,6 +364,8 @@ public class Layer implements Serializable,PropertyChangeListener {
     public void setNodeDelegate(Node nodeDelegate) {
         this.nodeDelegate = nodeDelegate;
     }
+
+   
 
     
     
