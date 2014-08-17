@@ -8,6 +8,7 @@ import com.jme3.gde.cinematic.core.CinematicClip;
 import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.gui.jfx.CinematicEditorUI;
 import com.jme3.gde.cinematic.core.Layer;
+import com.jme3.gde.cinematic.gui.jfx.LHSToolbarControl;
 import com.jme3.gde.cinematic.gui.jfx.LayerActionControl;
 import com.jme3.gde.cinematic.gui.jfx.MainToolbarControl;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
@@ -88,6 +89,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     private ExplorerManager explorerManager;
     private Lookup.Result<Layer> layerSelectionResult;
     private Lookup.Result<Event> eventSelectionResult;
+    private LHSToolbarControl lhsToolbar;
     /**
      * Contructor
      */
@@ -110,8 +112,6 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             @Override
             public void run() {
                 loadCinematicEditorUI();
-                loadLayerTabsAndEvents();
-                loadToolbars();
                 layerTabsAndEvents.setContent(null);
                 
             }
@@ -193,7 +193,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         cinematicJFXPanel = new javafx.embed.swing.JFXPanel();
         tabsJfxPanel = new javafx.embed.swing.JFXPanel();
         mainToolbarJfxPanel = new javafx.embed.swing.JFXPanel();
-        jFXPanel2 = new javafx.embed.swing.JFXPanel();
+        lhsToolbarJfxPanel = new javafx.embed.swing.JFXPanel();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -205,7 +205,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
         mainToolbarJfxPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
 
-        jFXPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
+        lhsToolbarJfxPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -214,7 +214,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jFXPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                    .addComponent(lhsToolbarJfxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                     .addComponent(tabsJfxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -228,7 +228,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(mainToolbarJfxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFXPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lhsToolbarJfxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cinematicJFXPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
@@ -239,7 +239,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javafx.embed.swing.JFXPanel cinematicJFXPanel;
-    private javafx.embed.swing.JFXPanel jFXPanel2;
+    private javafx.embed.swing.JFXPanel lhsToolbarJfxPanel;
     private javafx.embed.swing.JFXPanel mainToolbarJfxPanel;
     private javafx.embed.swing.JFXPanel tabsJfxPanel;
     // End of variables declaration//GEN-END:variables
@@ -292,9 +292,10 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     
     /**
      * Initializes the JavaFX based CinematicEditorUI with the contents of the
-     * {@link CinematicClip}. Always run in the JavaFX Runtime Environment using
-     * by enquing in the thread {@link Platform#runLater(java.lang.Runnable) }
-     * 
+     * {@link CinematicClip}.Also loads the Toolbars and TabsAndEvents TabPane
+     * Always run in the JavaFX Runtime Environment using by enquing in the
+     * thread {@link Platform#runLater(java.lang.Runnable) }
+     *
      * @param clip
      */
     public void loadCinematicEditorUI() {
@@ -313,6 +314,8 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         }
         root = clip.getRoot();
         cinematicEditorUI.initView(root);
+        loadLayerTabsAndEvents();
+        loadToolbars();
     }
     /**
      * loads the OGL content of the cinematic clip.
@@ -345,6 +348,11 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         Scene scene = new Scene(mainToolbar,880,30);
         mainToolbarJfxPanel.setScene(scene);
         mainToolbarJfxPanel.setVisible(true);
+        
+        lhsToolbar = new LHSToolbarControl();
+        Scene lhsScene = new Scene(lhsToolbar,180,30);
+        lhsToolbarJfxPanel.setScene(lhsScene);
+        lhsToolbarJfxPanel.setVisible(true);
     }
     @Override
     public void sceneOpened(SceneRequest request) {
