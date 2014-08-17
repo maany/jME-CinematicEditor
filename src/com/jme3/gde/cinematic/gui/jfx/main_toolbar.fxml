@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<fx:root type="javafx.scene.layout.HBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="880.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <ToolBar prefWidth="880.0">
+      <items>
+        <Separator orientation="VERTICAL" prefHeight="21.0" />
+        <ToggleButton mnemonicParsing="false" prefWidth="35.0" text="S" />
+        <ToggleButton mnemonicParsing="false" prefWidth="35.0" text="M" />
+        <ToggleButton mnemonicParsing="false" prefWidth="35.0" text="R" />
+        <ToggleButton mnemonicParsing="false" prefWidth="35.0" text="Sc" />
+        <Separator orientation="VERTICAL" prefHeight="21.0" />
+      </items>
+    </ToolBar>
+  </children>
+</fx:root>

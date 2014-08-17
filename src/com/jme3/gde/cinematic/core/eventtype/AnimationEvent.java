@@ -4,6 +4,7 @@
  */
 package com.jme3.gde.cinematic.core.eventtype;
 
+import com.jme3.animation.LoopMode;
 import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.core.EventType;
 import com.jme3.gde.cinematic.core.Layer;
@@ -19,11 +20,13 @@ import org.openide.util.Exceptions;
  */
 public class AnimationEvent extends Event{
     private String channelName;
+    private LoopMode loopMode;
     public AnimationEvent(String channelName,Layer layer,double startPoint, double duration) {
         super(channelName, layer, startPoint, duration);
         // name and channelName are same
         this.channelName = channelName;
         setType(EventType.ANIMATION);
+        loopMode = LoopMode.DontLoop;
     }
 
     @Override
@@ -50,6 +53,14 @@ public class AnimationEvent extends Event{
 
     public void setChannelName(String channelName) {
         this.channelName = channelName;
+    }
+
+    public LoopMode getLoopMode() {
+        return loopMode;
+    }
+
+    public void setLoopMode(LoopMode loopMode) {
+        this.loopMode = loopMode;
     }
     
     
