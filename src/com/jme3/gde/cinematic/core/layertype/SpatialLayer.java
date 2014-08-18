@@ -11,11 +11,13 @@ import com.jme3.gde.cinematic.core.layertype.secondary.RotationLayer;
 import com.jme3.gde.cinematic.core.layertype.secondary.ScaleLayer;
 import com.jme3.gde.cinematic.core.layertype.secondary.TranslationLayer;
 import com.jme3.gde.core.assets.ProjectAssetManager;
+import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.scene.Spatial;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Button;
@@ -46,8 +48,16 @@ public class SpatialLayer extends Layer{
     }
     private void initSecondaryLayers(){
         try {
-        Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(file);
-        translationLayer.setTranslationValue(spat.getLocalTranslation());
+        final Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(file);
+        SceneApplication.getApplication().enqueue(new Callable<Spatial>() {
+
+            @Override
+            public Spatial call() throws Exception {
+                translationLayer.setTranslationValue(spat.getLocalTranslation());
+                return spat;
+            }
+        });
+        
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Spatial Layer : {0} has no spatial attached to it.", getName());
             //ex.printStackTrace();
