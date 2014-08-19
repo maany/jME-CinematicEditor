@@ -96,7 +96,7 @@ public class SpatialLayer extends Layer{
                 spatialSet.put(localTranslationProp);
                 spatialSet.put(localRotationProp);
                 spatialSet.put(localScaleProp);
-            } */
+            } */ 
         } catch (NoSuchMethodException ex) {
             Exceptions.printStackTrace(ex);
         } catch(Exception ex){
@@ -113,7 +113,7 @@ public class SpatialLayer extends Layer{
         
             super.propertyChange(evt);
             if (evt.getPropertyName().equals("path")) {
-                JOptionPane.showMessageDialog(null,"PATH CHANGED"); 
+               // JOptionPane.showMessageDialog(null,"PATH CHANGED"); 
                 System.out.println("PATH CHANGED");
                 Map<File, Spatial> spatialMap = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap();
                 if (spatialMap.containsKey(evt.getOldValue())) {

@@ -9,10 +9,13 @@ import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
 import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
 import com.jme3.gde.cinematic.gui.GuiManager;
+import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.scene.Spatial;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.openide.nodes.Node.Property;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
@@ -54,16 +57,39 @@ public class ScaleLayer extends Layer {
     }
 
     public float getXScale() {
-        Spatial spat = getSpatial();
-        return spat.getLocalScale().x;
+        final Spatial spat = getSpatial();
+        Future<Float> xScale = SceneApplication.getApplication().enqueue(new Callable<Float>() {
+            @Override
+            public Float call() throws Exception {
+                return spat.getLocalScale().x;
+            }
+        });
+        float val = 1;
+        try {
+             val = xScale.get();
+        } catch (InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ExecutionException ex) {
+            Exceptions.printStackTrace(ex);
+        } finally{
+            return val;
+        }
     }
 
-    public void setXScale(java.lang.Float x) {
+    public void setXScale(final java.lang.Float x) {
         
-        Spatial spat = getSpatial();
-        float y =spat.getLocalScale().y;
-        float z = spat.getLocalScale().z;
-        spat.setLocalScale(x, y, z);
+        final Spatial spat = getSpatial();
+        
+        SceneApplication.getApplication().enqueue(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                final float y = spat.getLocalScale().y;
+                final float z = spat.getLocalScale().z;
+                spat.setLocalScale(x, y, z);
+                return true;
+            }
+        });
+        
     }
 
     private Spatial getSpatial() {

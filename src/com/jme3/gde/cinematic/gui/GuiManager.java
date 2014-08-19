@@ -34,6 +34,7 @@ public class GuiManager {
     public static final String SECONDARY_TRANSLATION = "translation";
     public static final String SECONDARY_ROTATION = "rotation";
     public static final String SECONDARY_SCALE = "scale";
+    public static final float BLANK_EVENT_DURATION = 2; // used in CharacterLayer when failed to load animationDuration on clicking the button from AnimationEvents tab
     
     private GuiManager(){}
     public static GuiManager getInstance()

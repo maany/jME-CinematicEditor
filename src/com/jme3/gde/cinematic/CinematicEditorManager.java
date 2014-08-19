@@ -168,11 +168,11 @@ public class CinematicEditorManager {
                 return;
             }
             if(layer.getType()==LayerType.CHARACTER){
-                System.out.println("CHARACTER LAYER FOUND " + layer.getName());
-                Collection<String> animationNames = spat.getControl(AnimControl.class).getAnimationNames();
-                for (String name : animationNames) {
-                    System.out.println("CHANNEL : " + name);
-                }
+                //System.out.println("CHARACTER LAYER FOUND " + layer.getName());
+                //Collection<String> animationNames = spat.getControl(AnimControl.class).getAnimationNames();
+                //for (String name : animationNames) {
+                //    System.out.println("CHANNEL : " + name);
+                //}
             }
             if (sentRequest == currentRequest && sentRequest != null) {
 
@@ -185,11 +185,11 @@ public class CinematicEditorManager {
                         CinematicEditorController editorController = cinematicEditor.getEditorController();
                         if (editorController != null) {
                             cinematicEditor.getEditorController().addModel(spat);
-                            currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(), spat);
                         }
                     }
                 });
-            } else {
+                currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(), spat);
+            } else { 
             /* No Scene Opened. Create scene request*/
             initSceneViewerWithSpatial(spat, path);
             currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),spat);
