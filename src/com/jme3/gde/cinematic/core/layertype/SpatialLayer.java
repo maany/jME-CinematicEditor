@@ -44,7 +44,11 @@ public class SpatialLayer extends Layer{
         translationLayer = new TranslationLayer("Translation",this);
         rotationLayer = new RotationLayer("Rotation",this);
         scaleLayer = new ScaleLayer("Scale",this);
+        try {
         initSecondaryLayers();
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
     private void initSecondaryLayers(){
         try {
@@ -151,7 +155,7 @@ public class SpatialLayer extends Layer{
         ext = ext.toLowerCase();
         if (ext.equals("j3o") || ext.equals("xml") || ext.equals("scene") || ext.equals("obj")) {
             boolean test = setRelativePath(file.getAbsolutePath(),assetManager.getAssetFolder().getPath());
-            System.out.println("Test : " + test);
+            //System.out.println("Test : " + test);
             System.out.println("Firing path change");
             firePropertyChange("path", oldFile, this.file);
         }

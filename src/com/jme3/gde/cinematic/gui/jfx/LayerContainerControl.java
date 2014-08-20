@@ -265,7 +265,7 @@ public class LayerContainerControl extends AnchorPane{
                         CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         Collection<? extends Layer> layers = cinematicEditor.getCinematicLookup().lookupAll(Layer.class);
                         for (Layer layer : layers) {
-                            System.out.println("Shit in Lookup : " + layer.getName());
+                            System.out.println("Stuff in Lookup : " + layer.getName());
                             cinematicEditor.getLookupContent().remove(layer);
                             
                         }

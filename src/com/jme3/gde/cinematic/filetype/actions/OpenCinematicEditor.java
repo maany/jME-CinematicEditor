@@ -53,7 +53,7 @@ public final class OpenCinematicEditor implements ActionListener {
             return;
         }
         CinematicEditorManager.getInstance().init(context);
-        final CinematicClip cinematicClip = CinematicEditorManager.getInstance().getCurrentClip();
+        final CinematicClip data = CinematicEditorManager.getInstance().getCurrentClip();
         
         Runnable cinematicEditorUILaunchThread = new Runnable() {
             @Override
@@ -93,9 +93,6 @@ public final class OpenCinematicEditor implements ActionListener {
                 progressHandle.start();
                 try {
                     assetManager.clearCache();
-                    final CinematicClip data = CinematicEditorManager.getInstance().getCurrentClip();
-                    
-                    
                     if (data != null) {
                         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -116,10 +113,19 @@ public final class OpenCinematicEditor implements ActionListener {
                 }
             }
         };
-        new Thread(oglThread).start();
+       // new Thread(oglThread).start();
         new Thread(cinematicEditorUILaunchThread).start();
     }
     private OpenCinematicEditor getOuterClassObject() {
         return OpenCinematicEditor.this;
+    }
+    private void noOGLActions(){
+        java.awt.EventQueue.invokeLater(new Runnable(){
+
+            @Override
+            public void run() {
+                
+            }
+        });
     }
 }
