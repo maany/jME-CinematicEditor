@@ -123,7 +123,15 @@ public class SpatialLayer extends Layer{
                 if (spatialMap.containsKey(evt.getOldValue())) {
                     spatialMap.remove(evt.getOldValue());
                 }
-                CinematicEditorManager.getInstance().loadSpatial(this);
+                SceneApplication.getApplication().enqueue(new Callable<Integer> () {
+
+                    @Override
+                    public Integer call() throws Exception {
+                        CinematicEditorManager.getInstance().loadSpatial(SpatialLayer.this);
+                        return 1;
+                    }
+                });
+                
                 initSecondaryLayers();
             }
         

@@ -235,7 +235,7 @@ public class CinematicEditorManager {
         this.sentRequest = request;
         request.setWindowTitle("Cinematic Editor - " + currentDataObject.getName());
         request.setToolNode(new Node("CinematicEditorToolNode"));
-        SceneApplication.getApplication().openScene(request);
+       // SceneApplication.getApplication().openScene(request);
         
         
     }

@@ -113,7 +113,7 @@ public final class OpenCinematicEditor implements ActionListener {
                 }
             }
         };
-       // new Thread(oglThread).start();
+        new Thread(oglThread).start();
         new Thread(cinematicEditorUILaunchThread).start();
     }
     private OpenCinematicEditor getOuterClassObject() {
