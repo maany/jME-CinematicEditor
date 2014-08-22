@@ -4,12 +4,17 @@
  */
 package com.jme3.gde.cinematic.gui.jfx;
 
+import com.jme3.cinematic.Cinematic;
+import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.CinematicEditorTopComponent;
+import com.jme3.gde.cinematic.core.CinematicMonkey;
 import com.jme3.gde.cinematic.core.Event;
 import com.jme3.gde.cinematic.core.Layer;
 import com.jme3.gde.cinematic.core.LayerType;
 import com.jme3.gde.cinematic.core.layertype.CharacterLayer;
 import com.jme3.gde.cinematic.core.layertype.SpatialLayer;
+import com.jme3.gde.core.scene.SceneApplication;
+import com.jme3.scene.Node;
 import java.util.Collection;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -31,6 +36,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.util.Callback;
@@ -52,10 +58,16 @@ public class LayerContainerControl extends AnchorPane{
     private Button removeEventButton;
     @FXML
     private Button addCharacterLayerButton;
+    @FXML
+    private Button stopButton;
+    @FXML
+    private ToggleButton playPauseButton;
     private Layer root;//TODO remove, only testing
     private TableColumn<Layer,Boolean> childVisibility,enabled;
     private TableColumn<Layer,String> layerName;
     private CinematicEditorUI cinematicEditor;
+    private boolean playing=false;
+    private Cinematic cinematic;
     public LayerContainerControl(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("layer_container.fxml"));
         loader.setRoot(this);
@@ -245,6 +257,30 @@ public class LayerContainerControl extends AnchorPane{
                 Layer layer = (Layer)layerContainer.getSelectionModel().getSelectedItem();
                 Event event = new Event(name, layer, start, duration);
                 cinematicEditor.getTimeline().addEvent(event, layer);
+            }
+        });
+        playPauseButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                cinematic = new CinematicMonkey().convertToCinematic(CinematicEditorManager.getInstance().getCurrentClip(), (Node)SceneApplication.getApplication().getCurrentSceneRequest().getRootNode());
+                if(!playing){
+                    cinematic.play();
+                    playing = true;
+                }
+                else{
+                cinematic.pause();
+                playing = false;
+                }
+            }
+        });
+        stopButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                if (cinematic != null) {
+                    cinematic.stop();
+                }
             }
         });
         initListeners();

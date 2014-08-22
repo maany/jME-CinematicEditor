@@ -111,7 +111,7 @@ public class CinematicEditorManager {
         getAssetManager();
         List<Layer> allDescendants = currentClip.getRoot().findAllDescendants();
         for (Layer child : allDescendants) {
-            System.out.println("CURRENT CHILD : " + child.getName());
+           // System.out.println("CURRENT CHILD : " + child.getName());
             if (child.getType() == LayerType.SPATIAL || child instanceof SpatialLayer) {
                 try {
                     SpatialLayer layer;
@@ -214,7 +214,7 @@ public class CinematicEditorManager {
      * @throws DataObjectNotFoundException
      */
     private void initSceneViewerWithSpatial(Spatial spat,String path) throws DataObjectNotFoundException {
-        System.out.println("**** Thread Name " + Thread.currentThread().getName());
+        //System.out.println("**** Thread Name " + Thread.currentThread().getName());
         String absolutePath = assetManager.getAssetFolder().getPath() + path;
         File file = new File(absolutePath);
         FileObject fileObject = FileUtil.toFileObject(file);
@@ -235,7 +235,7 @@ public class CinematicEditorManager {
         this.sentRequest = request;
         request.setWindowTitle("Cinematic Editor - " + currentDataObject.getName());
         request.setToolNode(new Node("CinematicEditorToolNode"));
-       // SceneApplication.getApplication().openScene(request);
+        SceneApplication.getApplication().openScene(request);
         
         
     }
