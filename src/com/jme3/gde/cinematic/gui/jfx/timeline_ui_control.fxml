@@ -55,8 +55,6 @@
       <Label fx:id="currentTimeLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="30.0" prefWidth="-1.0" text="0.00" />
       <Label fx:id="durationInput" alignment="CENTER" minWidth="40.0" text="60.00" />
       <Separator orientation="VERTICAL" prefHeight="25.0" prefWidth="3.0" />
-      <ToggleButton fx:id="playPauseButton" mnemonicParsing="false" text="Play/Pause" />
-      <Button fx:id="stopButton" mnemonicParsing="false" text="Stop" />
     </items>
   </ToolBar>
 </fx:root>
