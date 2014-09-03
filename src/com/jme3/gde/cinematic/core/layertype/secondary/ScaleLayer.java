@@ -45,6 +45,9 @@ public class ScaleLayer extends Layer {
             Property xScale = new PropertySupport.Reflection(this, Float.class, "getXScale", "setXScale");
             xScale.setName("X Local Scale");
             scaleSet.put(xScale);
+            Property yScale = new PropertySupport.Reflection(this, Float.class, "getYScale", "setYScale");
+            xScale.setName("Y Local Scale");
+            scaleSet.put(yScale);
 
         } catch (NoSuchMethodException ex) {
             Exceptions.printStackTrace(ex);
@@ -76,6 +79,46 @@ public class ScaleLayer extends Layer {
         }
     }
 
+    public float getYScale(){
+        final Spatial spat = getSpatial();
+        Future<Float> yScale = SceneApplication.getApplication().enqueue(new Callable<Float>() {
+            @Override
+            public Float call() throws Exception {
+                return spat.getLocalScale().y;
+            }
+        });
+        float val = 1;
+        try {
+            val = yScale.get();
+        } catch (InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ExecutionException ex) {
+            Exceptions.printStackTrace(ex);
+        } finally {
+            return val;
+        }
+    }
+    public float getZScale(){
+        final Spatial spat = getSpatial();
+        Future<Float> zScale = SceneApplication.getApplication().enqueue(new Callable<Float>() {
+            @Override
+            public Float call() throws Exception {
+                return spat.getLocalScale().z;
+            }
+        });
+        float val = 1;
+        try {
+            val = zScale.get();
+        } catch (InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ExecutionException ex) {
+            Exceptions.printStackTrace(ex);
+        } finally {
+            return val;
+        }
+    }
+    
+    
     public void setXScale(final java.lang.Float x) {
         
         final Spatial spat = getSpatial();
@@ -91,7 +134,38 @@ public class ScaleLayer extends Layer {
         });
         
     }
-
+  
+    public void setYScale(final java.lang.Float y) {
+        
+        final Spatial spat = getSpatial();
+        
+        SceneApplication.getApplication().enqueue(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                final float x = spat.getLocalScale().x;
+                final float z = spat.getLocalScale().z;
+                spat.setLocalScale(x, y, z);
+                return true;
+            }
+        });
+        
+    }
+    
+    public void setZScale(final java.lang.Float z) {
+        
+        final Spatial spat = getSpatial();
+        
+        SceneApplication.getApplication().enqueue(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                final float y = spat.getLocalScale().y;
+                final float x = spat.getLocalScale().x;
+                spat.setLocalScale(x, y, z);
+                return true;
+            }
+        });
+        
+    }
     private Spatial getSpatial() {
         SpatialLayer parent = (SpatialLayer) getParent();
         Spatial spat = CinematicEditorManager.getInstance().getCurrentDataObject().getLibrary().getSpatialMap().get(parent.getFile());

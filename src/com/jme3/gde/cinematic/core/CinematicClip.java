@@ -14,7 +14,7 @@ import java.util.List;
  * @author MAYANK
  */
 public class CinematicClip implements Serializable{
-    public String test = "Stage 1";
+    
     private double duration= GuiManager.DEFAULT_DURATION;
     private List<DurationChangeListener> durationChangeListeners = new ArrayList<>();
     private String name;

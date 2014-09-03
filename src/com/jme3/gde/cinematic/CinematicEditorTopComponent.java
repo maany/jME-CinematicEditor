@@ -149,10 +149,13 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             @Override
             public void resultChanged(LookupEvent ev) {
                 final Layer selectedLayer = cinematicLookup.lookup(Layer.class);
-                //  Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Change in selection lookup detected : New selected Layer : {0}", selectedLayer.getName());
                 explorerManager.setRootContext(CinematicEditorManager.getInstance().getCurrentClip().getRoot().getNodeDelegate());
+                try {
                 setActivatedNodes(new Node[]{selectedLayer.getNodeDelegate()});
-                //System.out.println("Selected Node in lookup change listener : " + selectedLayer.getNodeDelegate().getDisplayName());
+                } catch (NullPointerException ex) {
+                    /*resultChanged invoked when lookupContent is being emptied i.e it contains no Layer */
+                }
+                
                 // update LayerTabAndEvents in LayerActionController.java (jfx package)
                 Platform.runLater(new Runnable() {
                     @Override
@@ -357,7 +360,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     @Override
     public void sceneOpened(SceneRequest request) {
         try{
-          //  JOptionPane.showMessageDialog(null, "Scene Opened Listener invoked");
+          
             if(CinematicEditorManager.getInstance().getSentRequest()==request){
             CinematicEditorManager.getInstance().setCurrentRequest(request);
             if (editorController != null) {
