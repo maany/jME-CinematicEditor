@@ -57,7 +57,7 @@ public class SpatialLayer extends Layer{
 
             @Override
             public Spatial call() throws Exception {
-                translationLayer.setTranslationValue(spat.getLocalTranslation());
+                //translationLayer.setTranslationValue(spat.getLocalTranslation());
                 return spat;
             }
         });

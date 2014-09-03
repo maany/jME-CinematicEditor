@@ -41,13 +41,17 @@ public class ScaleLayer extends Layer {
         Sheet.Set scaleSet = Sheet.createPropertiesSet();
         scaleSet.setDisplayName("Scale");
         scaleSet.setName("ScaleLayer");
+        
         try {
             Property xScale = new PropertySupport.Reflection(this, Float.class, "getXScale", "setXScale");
             xScale.setName("X Local Scale");
             scaleSet.put(xScale);
             Property yScale = new PropertySupport.Reflection(this, Float.class, "getYScale", "setYScale");
-            xScale.setName("Y Local Scale");
+            yScale.setName("Y Local Scale");
             scaleSet.put(yScale);
+            Property zScale = new PropertySupport.Reflection(this, Float.class, "getZScale", "setZScale");
+            zScale.setName("Z Local Scale");
+            scaleSet.put(zScale);
 
         } catch (NoSuchMethodException ex) {
             Exceptions.printStackTrace(ex);
