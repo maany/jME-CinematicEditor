@@ -378,7 +378,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 toolController.cleanup();
             }
             toolController = new CinematicEditorToolController(request.getToolNode(), request.getManager(), request.getJmeNode());
-
+            lookupContent.add(toolController);
             camController = new ComposerCameraController(SceneApplication.getApplication().getCamera(), request.getJmeNode());
             toolController.setEditorController(editorController);
             camController.setToolController(toolController);

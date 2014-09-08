@@ -45,6 +45,7 @@ public class CinematicEditorUI extends AnchorPane{
         }catch(Exception ex)
         {
             System.out.println("Failed to load CinematicEditorUI.fxml");
+            
         }
         instance = this;
     }

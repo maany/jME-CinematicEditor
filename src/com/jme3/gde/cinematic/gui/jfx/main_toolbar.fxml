@@ -11,11 +11,15 @@
     <ToolBar prefWidth="880.0">
       <items>
         <Separator orientation="VERTICAL" prefHeight="21.0" />
-        <ToggleButton mnemonicParsing="false" prefWidth="35.0" text="S" />
-        <ToggleButton mnemonicParsing="false" prefWidth="35.0" text="M" />
-        <ToggleButton mnemonicParsing="false" prefWidth="35.0" text="R" />
-        <ToggleButton mnemonicParsing="false" prefWidth="35.0" text="Sc" />
+        <ToggleButton id="selectButton" mnemonicParsing="false" prefWidth="35.0" text="S" />
+        <ToggleButton id="moveButton" mnemonicParsing="false" prefWidth="35.0" text="M" />
+        <ToggleButton id="rotateButton" mnemonicParsing="false" prefWidth="35.0" text="R" />
+        <ToggleButton id="scaleButton" mnemonicParsing="false" prefWidth="35.0" text="Sc" />
         <Separator orientation="VERTICAL" prefHeight="21.0" />
+        <Button fx:id="selectButton" mnemonicParsing="false" text="Select" />
+        <Button fx:id="moveButton" mnemonicParsing="false" text="Move" />
+        <Button fx:id="scaleButton" mnemonicParsing="false" text="Scale" />
+        <Button fx:id="rotateButton" mnemonicParsing="false" text="Rotate" />
       </items>
     </ToolBar>
   </children>
