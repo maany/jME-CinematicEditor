@@ -337,6 +337,7 @@ public class TimelineControl extends VBox implements DurationChangeListener {
                     }
                 });
             }
+            
         });
 
 

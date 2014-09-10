@@ -49,7 +49,7 @@ public class EventControl extends Button implements DurationChangeListener{
     public void render(double magnification) {
         double clipDuration = CinematicEditorManager.getInstance().getCurrentClip().getDuration();
         EventStrip eventStrip = (EventStrip)getParent();
-        double editorRefWidth = eventStrip.getTimeline().getPrefWidth()/magnification;
+        double editorRefWidth = eventStrip.getTimeline().getPrefWidth();
         refWidth = event.getDuration()*editorRefWidth/clipDuration;
         refStartX = event.getStartPoint()*editorRefWidth/clipDuration;
         setPrefWidth(refWidth);
