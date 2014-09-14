@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/core/layertype/SpatialLayer.java</file>
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/core/layertype/secondary/ScaleLayer.java</file>
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/core/layertype/secondary/TranslationLayer.java</file>
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/core/layertype/secondary/RotationLayer.java</file>
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/scene/tools/RotateTool.java</file>
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/scene/tools/ScaleTool.java</file>
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/scene/tools/MoveManager.java</file>
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/gui/jfx/TimelineControl.java</file>
-        <file>file:/G:/Languages/GSOC%2014/jme/plugins/jme-plugins/cinematic_editor/src/com/jme3/gde/cinematic/gui/jfx/EventControl.java</file>
-    </open-files>
 </project-private>

@@ -42,25 +42,29 @@ public class MainToolbarControl extends HBox{
         }
         initActions();
     }
-    private void initActions(){
+
+    private void initActions() {
         scaleButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        try {
                         System.out.println("SCALE TOOl");
                         ScaleTool tool = new ScaleTool();
                         CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         CinematicEditorToolController toolController = cinematicEditor.getCinematicLookup().lookup(CinematicEditorToolController.class);
                         toolController.showEditTool(tool);
-
+                        }catch(Exception ex){
+                            ex.printStackTrace();
+                        }
                     }
                 });
             }
         });
-        
-                moveButton.setOnAction(new EventHandler<ActionEvent>() {
+
+        moveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
@@ -68,42 +72,52 @@ public class MainToolbarControl extends HBox{
                     public void run() {
                         System.out.println("***MOVE TOOl");
                         MoveTool tool = new MoveTool();
+                        try {
                         CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         CinematicEditorToolController toolController = cinematicEditor.getCinematicLookup().lookup(CinematicEditorToolController.class);
                         toolController.showEditTool(tool);
+                        } catch(Exception e){
+                            e.printStackTrace();
+                        }
 
                     }
                 });
             }
         });
-                        selectButton.setOnAction(new EventHandler<ActionEvent>() {
+        selectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        try {
                         System.out.println("***Select TOOl");
                         SelectTool tool = new SelectTool();
                         CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         CinematicEditorToolController toolController = cinematicEditor.getCinematicLookup().lookup(CinematicEditorToolController.class);
                         toolController.showEditTool(tool);
-
+                        }catch(Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
             }
         });
-                                rotateButton.setOnAction(new EventHandler<ActionEvent>() {
+        rotateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        try {
                         System.out.println("***ROTATE TOOl");
                         RotateTool tool = new RotateTool();
                         CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         CinematicEditorToolController toolController = cinematicEditor.getCinematicLookup().lookup(CinematicEditorToolController.class);
                         toolController.showEditTool(tool);
-
+                        }catch(Exception ex){
+                            ex.printStackTrace();
+                        }
                     }
                 });
             }
