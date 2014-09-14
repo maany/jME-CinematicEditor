@@ -24,6 +24,7 @@ import com.jme3.gde.scenecomposer.ComposerCameraController;
 //import com.jme3.gde.scenecomposer.tools.SelectTool;
 import com.jme3.scene.Spatial;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -160,7 +161,12 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
+                        try {
                         layerTabsAndEvents.setContent(selectedLayer.createTabsAndEvents());
+                        } catch(Exception ex)
+                        {
+                            Logger.getLogger(this.getClass().getName()).log(Level.INFO,ex.getMessage());
+                        }
                     }
                 });
             }

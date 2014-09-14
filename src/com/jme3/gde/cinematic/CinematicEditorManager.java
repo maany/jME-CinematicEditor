@@ -167,13 +167,7 @@ public class CinematicEditorManager {
                         + " Please verify the path {1} exists and is a valid .j3o binary", new Object[]{layer.getName(), path});
                 return;
             }
-            if(layer.getType()==LayerType.CHARACTER){
-                //System.out.println("CHARACTER LAYER FOUND " + layer.getName());
-                //Collection<String> animationNames = spat.getControl(AnimControl.class).getAnimationNames();
-                //for (String name : animationNames) {
-                //    System.out.println("CHANNEL : " + name);
-                //}
-            }
+
             if (sentRequest == currentRequest && sentRequest != null) {
 
                 java.awt.EventQueue.invokeLater(new Runnable() {
@@ -184,6 +178,7 @@ public class CinematicEditorManager {
                         final CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         CinematicEditorController editorController = cinematicEditor.getEditorController();
                         if (editorController != null) {
+                            System.out.println("*** Add model is being invoked for :" + spat.getName());
                             cinematicEditor.getEditorController().addModel(spat);
                         }
                     }

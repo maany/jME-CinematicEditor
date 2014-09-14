@@ -41,6 +41,9 @@ public class CharacterLayer extends SpatialLayer{
  */
     @Override
     public Map<String, ArrayList<Button>> createTabsAndEvents() {
+        // when a new character later is created and selected, there are no animation names to display
+        if(getFile()==null)
+            return null;
         Map<String, ArrayList<Button>> tabsAndEvents = super.createTabsAndEvents(); //To change body of generated methods, choose Tools | Templates.
         String tab = "Animation Events";
         ArrayList<Button> animationChannels = new ArrayList<>();

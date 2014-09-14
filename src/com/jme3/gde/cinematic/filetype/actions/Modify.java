@@ -37,6 +37,8 @@ public final class Modify implements ActionListener {
         Layer root = context.getCinematicClip().getRoot();
         CharacterLayer child = new CharacterLayer("child",root);
             child.setFile(new File("\\Models\\Jaime\\Jaime.j3o"));
+        CharacterLayer secondLayer = new CharacterLayer("second child",root);
+        secondLayer.setFile(new File("\\Models\\Oto\\Oto.mesh.j3o"));
         //CharacterLayer character = new CharacterLayer("char",root);
         //character.setFile(new File("\\Models\\wobble\\Cylinder001.mesh.xml"));
         context.getCinematicClip().getRoot().getChildren();
