@@ -16,10 +16,12 @@ import com.jme3.gde.cinematic.library.CinematicLibrary;
 import com.jme3.gde.cinematic.scene.CinematicEditorController;
 import com.jme3.gde.core.assets.AssetDataObject;
 import com.jme3.gde.core.assets.ProjectAssetManager;
+import com.jme3.gde.core.assets.SpatialAssetDataObject;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
 import com.jme3.gde.core.sceneexplorer.nodes.NodeUtility;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.io.File;
@@ -180,7 +182,15 @@ public class CinematicEditorManager {
                         CinematicEditorController editorController = cinematicEditor.getEditorController();
                         if (editorController != null) {
                             System.out.println("*** Add model is being invoked for :" + spat.getName());
-                            cinematicEditor.getEditorController().addModel(spat);
+                            AssetDataObject spatialAssetDataObject = null;
+                            try {
+                                spatialAssetDataObject = getSpatialAssetDataObject(layer);
+                                cinematicEditor.getEditorController().addModel((SpatialAssetDataObject) spatialAssetDataObject,new Vector3f(0,0,0));
+                            } catch (DataObjectNotFoundException ex) {
+                                Exceptions.printStackTrace(ex);
+                            }
+                            
+                            
                         }
                     }
                 });
@@ -188,7 +198,7 @@ public class CinematicEditorManager {
             } else { 
             /* No Scene Opened. Create scene request*/
                 System.out.println("INIT for " +layer.getName());
-            initSceneViewerWithSpatial(spat, path);
+            initSceneViewerWithSpatial(spat, layer);
             currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),spat);
             } 
         } catch (DataObjectNotFoundException ex) {
@@ -207,15 +217,13 @@ public class CinematicEditorManager {
      * with {@link Spatial} spat and {@link CinematicEditorTopComponent}
      *
      * @param spat
-     * @param path
+     * @param layer
      * @throws DataObjectNotFoundException
      */
-    private void initSceneViewerWithSpatial(Spatial spat,String path) throws DataObjectNotFoundException {
-        System.out.println("**** Thread Name " + Thread.currentThread().getName());
-        String absolutePath = assetManager.getAssetFolder().getPath() + path;
-        File file = new File(absolutePath);
-        FileObject fileObject = FileUtil.toFileObject(file);
-        AssetDataObject dataObject = (AssetDataObject) DataObject.find(fileObject);
+    private void initSceneViewerWithSpatial(Spatial spat,SpatialLayer layer) throws DataObjectNotFoundException {
+        
+       
+        AssetDataObject dataObject = getSpatialAssetDataObject(layer);
         Node node;
         if (spat instanceof Node) {
             node = (Node) spat;
@@ -318,7 +326,21 @@ public class CinematicEditorManager {
     public void setLoaded(boolean loaded) {
         this.loaded = loaded;
     }
-
+    /**
+     * Method returns the {@link AssetDataObject} of the spatial represented by {@link SpatialLayer}.
+     * Used mainly to load new spatials in the OLG window
+     * @param layer
+     * @return
+     * @throws DataObjectNotFoundException 
+     */
+    private AssetDataObject getSpatialAssetDataObject(SpatialLayer layer) throws DataObjectNotFoundException{
+        
+        String absolutePath = assetManager.getAssetFolder().getPath() + layer.getFile().getPath();
+        File file = new File(absolutePath);
+        FileObject fileObject = FileUtil.toFileObject(file);
+        AssetDataObject dataObject = (AssetDataObject) DataObject.find(fileObject);
+        return dataObject;
+    }
     
      
     
