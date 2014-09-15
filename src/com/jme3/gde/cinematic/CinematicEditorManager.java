@@ -156,6 +156,7 @@ public class CinematicEditorManager {
      * @param layer
      */
     public void loadSpatial(final SpatialLayer layer) {
+        System.out.println("****Load Spatial called for : " + layer.getName());
         String path = null;
         final Spatial spat;
         try {
@@ -186,6 +187,7 @@ public class CinematicEditorManager {
                 currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(), spat);
             } else { 
             /* No Scene Opened. Create scene request*/
+                System.out.println("INIT for " +layer.getName());
             initSceneViewerWithSpatial(spat, path);
             currentDataObject.getLibrary().getSpatialMap().put(layer.getFile(),spat);
             } 
