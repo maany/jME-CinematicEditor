@@ -5,6 +5,7 @@
 package com.jme3.gde.cinematic.gui.jfx;
 
 import com.jme3.gde.cinematic.CinematicEditorTopComponent;
+import com.jme3.gde.cinematic.core.CinematicMonkey;
 import com.jme3.gde.cinematic.gui.GuiManager;
 import com.jme3.gde.cinematic.scene.CinematicEditorToolController;
 import com.jme3.gde.cinematic.scene.tools.MoveTool;
@@ -53,11 +54,11 @@ public class MainToolbarControl extends HBox{
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        initToggleButtonGroups();
+        initPlaybackControl();
         initActions();
     }
 
-   private void initToggleButtonGroups() {
+   private void initPlaybackControl() {
         ToggleGroup playbackControlToolbar = new ToggleGroup();
         playToggleButton.setToggleGroup(playbackControlToolbar);
         stopToggleButton.setToggleGroup(playbackControlToolbar);
@@ -72,12 +73,27 @@ public class MainToolbarControl extends HBox{
             @Override
             public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
                 String action = t1.getUserData().toString();
-                System.out.println("Data : " + action);
+                switch(action){
+                    case GuiManager.PLAYSTATE_PLAY : startPlayback();break;
+                    case GuiManager.PLAYSTATE_PAUSE : pausePlayback();break;
+                    case GuiManager.PLAYSTATE_STOP : stopPlayback();break;
+                }
             }
         
         });
     }
-    private void initActions() {
+   
+   private void startPlayback(){
+       CinematicMonkey monkey = new CinematicMonkey();
+       monkey.startPlayback();
+   }
+   
+   private void pausePlayback(){}
+   
+   private void stopPlayback(){}
+   
+   
+   private void initActions() {
         scaleButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {

@@ -8,9 +8,14 @@ import com.jme3.cinematic.Cinematic;
 import com.jme3.cinematic.events.AnimationEvent;
 import com.jme3.gde.cinematic.CinematicEditorManager;
 import com.jme3.gde.cinematic.core.layertype.CharacterLayer;
+import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import org.openide.util.Exceptions;
 
 /**
  * The Interpreter for {@link CinematicClip}. It constructs a
@@ -27,7 +32,7 @@ public class CinematicMonkey {
         for (Layer layer : layers) {
             LayerType type = layer.getType();
             if(type==LayerType.ROOT){
-                continue;
+                continue; //TODO add recursion
             } else if(type==LayerType.CHARACTER){
                 CharacterLayer characterLayer = (CharacterLayer)layer;
                 processCharacterLayer(characterLayer);
@@ -47,5 +52,25 @@ public class CinematicMonkey {
                 cinematic.addCinematicEvent(event.getStartPoint().floatValue(),new AnimationEvent(character,animationEvent.getChannelName(),animationEvent.getLoopMode()));
             }
         }
+    }
+    public void startPlayback(){
+        Node rootNode = null;
+        Future<Node> futureRootNode = SceneApplication.getApplication().enqueue(new Callable<Node>(){
+
+                                   @Override
+                                   public Node call() throws Exception {
+                                       return (Node) SceneApplication.getApplication().getCurrentSceneRequest().getRootNode();
+                                   }
+                               
+                               });
+        try {
+            rootNode = futureRootNode.get();
+        } catch (InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ExecutionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        Cinematic cinematic = convertToCinematic(CinematicEditorManager.getInstance().getCurrentClip(),rootNode);
+        cinematic.play();
     }
 }
