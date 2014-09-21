@@ -20,6 +20,10 @@
         <Button fx:id="moveButton" mnemonicParsing="false" text="Move" />
         <Button fx:id="scaleButton" mnemonicParsing="false" text="Scale" />
         <Button fx:id="rotateButton" mnemonicParsing="false" text="Rotate" />
+        <Separator orientation="VERTICAL" prefHeight="21.0" />
+        <ToggleButton fx:id="playToggleButton" mnemonicParsing="false" text="Play" />
+        <ToggleButton fx:id="pauseToggleButton" mnemonicParsing="false" text="Pause" />
+        <ToggleButton fx:id="stopToggleButton" mnemonicParsing="false" text="Stop" />
       </items>
     </ToolBar>
   </children>

@@ -165,7 +165,8 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                         layerTabsAndEvents.setContent(selectedLayer.createTabsAndEvents());
                         } catch(Exception ex)
                         {
-                            System.out.println("INFO [com.jme3.gde.cinematic.CinematicEditorTopComponent] : No Tabs and Events Content for Layer : " + selectedLayer.getName());
+                            if(selectedLayer!=null)
+                                System.out.println("INFO [com.jme3.gde.cinematic.CinematicEditorTopComponent] : No Tabs and Events Content for Layer : " + selectedLayer.getName());
                             //ex.printStackTrace();
                             //Logger.getLogger(CinematicEditorTopComponent.this.getClass().getName()).log(Level.INFO,ex.getMessage());
                         }
@@ -183,8 +184,8 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             public void resultChanged(LookupEvent ev) {
                 final Event selectedEvent = cinematicLookup.lookup(Event.class);
                 if (selectedEvent == null) {
-                    return;
-                }
+                    return; 
+               }
                 getExplorerManager().setRootContext(selectedEvent.getNodeDelegate());
                 setActivatedNodes(new Node[]{selectedEvent.getNodeDelegate()});
             }
