@@ -73,13 +73,20 @@ public class MainToolbarControl extends HBox{
             @Override
             public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
                 String action = t1.getUserData().toString();
-                switch(action){
-                    case GuiManager.PLAYSTATE_PLAY : startPlayback();break;
-                    case GuiManager.PLAYSTATE_PAUSE : pausePlayback();break;
-                    case GuiManager.PLAYSTATE_STOP : stopPlayback();break;
+                if (action != null) {
+                    switch (action) {
+                        case GuiManager.PLAYSTATE_PLAY:
+                            startPlayback();
+                            break;
+                        case GuiManager.PLAYSTATE_PAUSE:
+                            pausePlayback();
+                            break;
+                        case GuiManager.PLAYSTATE_STOP:
+                            stopPlayback();
+                            break;
+                    }
                 }
             }
-        
         });
     }
    

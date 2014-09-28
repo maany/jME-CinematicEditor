@@ -20,6 +20,7 @@ import com.jme3.gde.core.assets.SpatialAssetDataObject;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
+import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.sceneexplorer.nodes.NodeUtility;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -35,6 +36,7 @@ import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup.Result;
 
 /**
  *  

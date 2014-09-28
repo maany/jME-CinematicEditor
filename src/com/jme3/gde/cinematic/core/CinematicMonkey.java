@@ -38,7 +38,7 @@ public class CinematicMonkey {
                 processCharacterLayer(characterLayer);
             }
         }
-        return null;
+        return cinematic;
         
     }
 
@@ -55,14 +55,12 @@ public class CinematicMonkey {
     }
     public void startPlayback(){
         Node rootNode = null;
-        Future<Node> futureRootNode = SceneApplication.getApplication().enqueue(new Callable<Node>(){
-
-                                   @Override
-                                   public Node call() throws Exception {
-                                       return (Node) SceneApplication.getApplication().getCurrentSceneRequest().getRootNode();
-                                   }
-                               
-                               });
+        Future<Node> futureRootNode = SceneApplication.getApplication().enqueue(new Callable<Node>() {
+            @Override
+            public Node call() throws Exception {
+                return (Node) SceneApplication.getApplication().getCurrentSceneRequest().getRootNode();
+            }
+        });
         try {
             rootNode = futureRootNode.get();
         } catch (InterruptedException ex) {
