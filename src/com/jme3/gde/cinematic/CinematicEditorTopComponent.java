@@ -20,6 +20,9 @@ import com.jme3.gde.core.scene.PreviewRequest;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.SceneListener;
 import com.jme3.gde.core.scene.SceneRequest;
+import com.jme3.gde.core.sceneexplorer.SceneExplorerTopComponent;
+import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
+import com.jme3.gde.core.sceneviewer.SceneViewerTopComponent;
 import com.jme3.gde.scenecomposer.ComposerCameraController;
 //import com.jme3.gde.scenecomposer.tools.SelectTool;
 import com.jme3.scene.Spatial;
@@ -39,6 +42,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
+import org.openide.filesystems.FileObject;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -72,7 +76,7 @@ import org.openide.windows.WindowManager;
     "CTL_CinematicEditorTopComponent=CinematicEditor Window",
     "HINT_CinematicEditorTopComponent=This is a CinematicEditor window"
 })
-public final class CinematicEditorTopComponent extends TopComponent implements SceneListener,ExplorerManager.Provider{
+public final class CinematicEditorTopComponent extends TopComponent implements SceneListener, ExplorerManager.Provider {
 
     public static String PREFERRED_ID = "CinematicEditorTopComponent";
     private static CinematicEditorTopComponent instance;
@@ -82,7 +86,6 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     private ProxyLookup lookup;
     private AbstractLookup cinematicLookup;
     private InstanceContent lookupContent;
-    
     private ComposerCameraController camController;
     private CinematicEditorToolController toolController;
     private CinematicEditorController editorController;
@@ -91,17 +94,18 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     private Lookup.Result<Layer> layerSelectionResult;
     private Lookup.Result<Event> eventSelectionResult;
     private LHSToolbarControl lhsToolbar;
+
     /**
      * Contructor
      */
     public CinematicEditorTopComponent() {
         ProgressHandle handle = ProgressHandleFactory.createHandle("Starting Cinematic Editor...");
         handle.start();
-        
+
         initComponents();
         setName(Bundle.CTL_CinematicEditorTopComponent());
         setToolTipText(Bundle.HINT_CinematicEditorTopComponent());
-        
+
         /*
          * Very important. Relaods Javafx context which would otherwise close whenever JFXPanel resizes.
          */
@@ -114,22 +118,21 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             public void run() {
                 loadCinematicEditorUI();
                 layerTabsAndEvents.setContent(null);
-                
+
             }
         });
         /**
          * Load OGL data if any
          */
-        java.awt.EventQueue.invokeLater(new Runnable(){
-
+        java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 loadViewableCinematicData();
             }
-         });
-         /*
+        });
+        /*
          * set up ExplorerManager
-         */ 
+         */
         explorerManager = new ExplorerManager();
         explorerManager.setRootContext(CinematicEditorManager.getInstance().getCurrentClip().getRoot().getNodeDelegate());
         /*
@@ -138,35 +141,34 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         lookupContent = new InstanceContent();
         cinematicLookup = new AbstractLookup(lookupContent); //InstanceContent is available through getLookup().lookup(InstanceContent.class);
         //selectedLayerLookup = Lookups.singleton(CinematicEditorManager.getInstance().getCurrentClip().getRoot());
-        lookup = new ProxyLookup(cinematicLookup, ExplorerUtils.createLookup(explorerManager,getActionMap()));
+        lookup = new ProxyLookup(cinematicLookup, ExplorerUtils.createLookup(explorerManager, getActionMap()));
         associateLookup(lookup);
         lookupContent.add(lookupContent);
         /*
          * Layer Selection listener
          */
         layerSelectionResult = cinematicLookup.lookupResult(Layer.class);
-        layerSelectionResult.addLookupListener(new LookupListener(){
-
+        layerSelectionResult.addLookupListener(new LookupListener() {
             @Override
             public void resultChanged(LookupEvent ev) {
                 final Layer selectedLayer = cinematicLookup.lookup(Layer.class);
                 explorerManager.setRootContext(CinematicEditorManager.getInstance().getCurrentClip().getRoot().getNodeDelegate());
                 try {
-                setActivatedNodes(new Node[]{selectedLayer.getNodeDelegate()});
+                    setActivatedNodes(new Node[]{selectedLayer.getNodeDelegate()});
                 } catch (NullPointerException ex) {
                     /*resultChanged invoked when lookupContent is being emptied i.e it contains no Layer */
                 }
-                
+
                 // update LayerTabAndEvents in LayerActionController.java (jfx package)
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                        layerTabsAndEvents.setContent(selectedLayer.createTabsAndEvents());
-                        } catch(Exception ex)
-                        {
-                            if(selectedLayer!=null)
+                            layerTabsAndEvents.setContent(selectedLayer.createTabsAndEvents());
+                        } catch (Exception ex) {
+                            if (selectedLayer != null) {
                                 System.out.println("INFO [com.jme3.gde.cinematic.CinematicEditorTopComponent] : No Tabs and Events Content for Layer : " + selectedLayer.getName());
+                            }
                             //ex.printStackTrace();
                             //Logger.getLogger(CinematicEditorTopComponent.this.getClass().getName()).log(Level.INFO,ex.getMessage());
                         }
@@ -179,13 +181,12 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
          */
         eventSelectionResult = cinematicLookup.lookupResult(Event.class);
         eventSelectionResult.addLookupListener(new LookupListener() {
-
             @Override
             public void resultChanged(LookupEvent ev) {
                 final Event selectedEvent = cinematicLookup.lookup(Event.class);
                 if (selectedEvent == null) {
-                    return; 
-               }
+                    return;
+                }
                 getExplorerManager().setRootContext(selectedEvent.getNodeDelegate());
                 setActivatedNodes(new Node[]{selectedEvent.getNodeDelegate()});
             }
@@ -248,20 +249,21 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 .addGap(10, 10, 10))
         );
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javafx.embed.swing.JFXPanel cinematicJFXPanel;
     private javafx.embed.swing.JFXPanel lhsToolbarJfxPanel;
     private javafx.embed.swing.JFXPanel mainToolbarJfxPanel;
     private javafx.embed.swing.JFXPanel tabsJfxPanel;
     // End of variables declaration//GEN-END:variables
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
     }
-/**
- * Unload the cinematic clip and associated data object
- */
+
+    /**
+     * Unload the cinematic clip and associated data object
+     */
     @Override
     public void componentClosed() {
         // TODO add custom code on component closing
@@ -285,9 +287,10 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         }
         return instance;
     }
+
     public static CinematicEditorTopComponent findInstance() {
         TopComponent findTopComponent = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
-        if(findTopComponent ==null) {
+        if (findTopComponent == null) {
             Logger.getLogger(CinematicEditorTopComponent.class.getName()).warning(
                     "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
             return getDefault();
@@ -299,19 +302,19 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
                 "There seem to be multiple components with the '" + PREFERRED_ID
                 + "' ID. That is a potential source of errors and unexpected behavior.");
         return getDefault();
-        
+
     }
-    
+
     /**
      * Initializes the JavaFX based CinematicEditorUI with the contents of the
      * {@link CinematicClip}.Also loads the Toolbars and TabsAndEvents TabPane
-     * Always run in the JavaFX Runtime Environment using by enquing in the
-     * thread {@link Platform#runLater(java.lang.Runnable) }
+     * Always run in the JavaFX Runtime Environment by using the thread {@link Platform#runLater(java.lang.Runnable)
+     * }
      *
      * @param clip
      */
     public void loadCinematicEditorUI() {
-        
+
         cinematicEditorUI = new CinematicEditorUI();
         Scene scene = new Scene(cinematicEditorUI, 880, 220);
         scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_container.css").toExternalForm());
@@ -329,6 +332,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         loadLayerTabsAndEvents();
         loadToolbars();
     }
+
     /**
      * loads the OGL content of the cinematic clip.
      */
@@ -337,133 +341,134 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         cleanupControllers();
         SceneApplication.getApplication().addSceneListener(this);
         CinematicEditorManager.getInstance().loadViewableCinematicData();
-        
+
     }
+
     /**
      * initializes javafx
      * {@link com.jme3.gde.cinematic.gui.jfx.LayerActionControl} AnchorPane into
      * JfxPanel. To be called by TopComponent's constructor
      */
-    private void loadLayerTabsAndEvents(){
+    private void loadLayerTabsAndEvents() {
         layerTabsAndEvents = new LayerActionControl();
-        Scene scene = new Scene(layerTabsAndEvents,180,180);
+        Scene scene = new Scene(layerTabsAndEvents, 180, 180);
         scene.getStylesheets().add(CinematicEditorUI.class.getResource("layer_action_control.css").toExternalForm());
         tabsJfxPanel.setScene(scene);
         tabsJfxPanel.setVisible(true);
     }
+
     /**
      * initializes javafx based Main toolbar and LHS toolbar
      *
      */
-    private void loadToolbars(){
+    private void loadToolbars() {
         mainToolbar = new MainToolbarControl();
-        Scene scene = new Scene(mainToolbar,880,30);
+        Scene scene = new Scene(mainToolbar, 880, 30);
         mainToolbarJfxPanel.setScene(scene);
         mainToolbarJfxPanel.setVisible(true);
-        
+
         lhsToolbar = new LHSToolbarControl();
-        Scene lhsScene = new Scene(lhsToolbar,180,30);
+        Scene lhsScene = new Scene(lhsToolbar, 180, 30);
         lhsToolbarJfxPanel.setScene(lhsScene);
         lhsToolbarJfxPanel.setVisible(true);
     }
+
     @Override
     public void sceneOpened(SceneRequest request) {
-        try{
-          
-            if(CinematicEditorManager.getInstance().getSentRequest()==request){
-            CinematicEditorManager.getInstance().setCurrentRequest(request);
-            if (editorController != null) {
-                editorController.cleanup();
-            }
-            editorController = new CinematicEditorController(request.getJmeNode(), request.getDataObject());
-            setActivatedNodes(new org.openide.nodes.Node[]{request.getDataObject().getNodeDelegate()});
-            //setSceneInfo(request.getJmeNode(), editorController.getCurrentFileObject(), true);
-            open();
-            requestActive();
-            if (camController != null) {
-                camController.disable();
-            }
-            if (toolController != null) {
-                toolController.cleanup();
-            }
-            toolController = new CinematicEditorToolController(request.getToolNode(), request.getManager(), request.getJmeNode());
-            lookupContent.add(toolController);
-            camController = new ComposerCameraController(SceneApplication.getApplication().getCamera(), request.getJmeNode());
-            toolController.setEditorController(editorController);
-            camController.setToolController(toolController);
-            camController.setMaster(this);
-            camController.enable();
+        try {
 
-            toolController.setCameraController(camController);
-            SelectTool tool = new SelectTool();
-            toolController.showEditTool(tool);
-            toolController.setShowSelection(true);
+            if (CinematicEditorManager.getInstance().getSentRequest().equals(request)) {
+                CinematicEditorManager.getInstance().setCurrentRequest(request);
+                if (editorController != null) {
+                    editorController.cleanup();
+                }
+                editorController = new CinematicEditorController(request.getJmeNode(), request.getDataObject());
+                setActivatedNodes(new org.openide.nodes.Node[]{request.getDataObject().getNodeDelegate()});
+                setSceneInfo(request.getJmeNode(), editorController.getCurrentFileObject(), true);
+                //open();
+                //requestActive();
+                if (camController != null) {
+                    camController.disable();
+                }
+                if (toolController != null) {
+                    toolController.cleanup();
+                }
+                toolController = new CinematicEditorToolController(request.getToolNode(), request.getManager(), request.getJmeNode());
+                lookupContent.add(toolController);
+                
+                camController = new ComposerCameraController(SceneApplication.getApplication().getCamera(), request.getJmeNode());
+                toolController.setEditorController(editorController);
+                camController.setToolController(toolController);
+                camController.setMaster(this);
+                camController.enable();
 
-            editorController.setToolController(toolController);
-            toolController.refreshNonSpatialMarkers();
-            toolController.setCamController(camController);
+                toolController.setCameraController(camController);
+                SelectTool tool = new SelectTool();
+                toolController.showEditTool(tool);
+                toolController.setShowSelection(true);
 
-            editorController.setTerrainLodCamera();
-            SceneRequest currentRequest = CinematicEditorManager.getInstance().getCurrentRequest();
-            final SpatialAssetDataObject dobj = ((SpatialAssetDataObject) currentRequest.getDataObject());
-            listener = new ProjectAssetManager.ClassPathChangeListener() {
+                editorController.setToolController(toolController);
+                toolController.refreshNonSpatialMarkers();
+                toolController.setCamController(camController);
 
-                public void classPathChanged(final ProjectAssetManager manager) {
-                    if (dobj.isModified()) {
-                        Confirmation msg = new NotifyDescriptor.Confirmation(
-                                "Classes have been changed, save and reload scene?",
-                                NotifyDescriptor.OK_CANCEL_OPTION,
-                                NotifyDescriptor.INFORMATION_MESSAGE);
-                        Object result = DialogDisplayer.getDefault().notify(msg);
-                        if (!NotifyDescriptor.OK_OPTION.equals(result)) {
-                            return;
-                        }
-                        try {
-                            dobj.saveAsset();
-                        } catch (IOException ex) {
-                            Exceptions.printStackTrace(ex);
-                        }
-                    }
-                    Runnable call = new Runnable() {
-
-                        public void run() {
-                            ProgressHandle progressHandle = ProgressHandleFactory.createHandle("Reloading Scene for Cinematic Clip..");
-                            progressHandle.start();
+                editorController.setTerrainLodCamera();
+                SceneRequest currentRequest = CinematicEditorManager.getInstance().getCurrentRequest();
+                final SpatialAssetDataObject dobj = ((SpatialAssetDataObject) currentRequest.getDataObject());
+                listener = new ProjectAssetManager.ClassPathChangeListener() {
+                    public void classPathChanged(final ProjectAssetManager manager) {
+                        if (dobj.isModified()) {
+                            Confirmation msg = new NotifyDescriptor.Confirmation(
+                                    "Classes have been changed, save and reload scene?",
+                                    NotifyDescriptor.OK_CANCEL_OPTION,
+                                    NotifyDescriptor.INFORMATION_MESSAGE);
+                            Object result = DialogDisplayer.getDefault().notify(msg);
+                            if (!NotifyDescriptor.OK_OPTION.equals(result)) {
+                                return;
+                            }
                             try {
-                                manager.clearCache();
-                                final Spatial asset = dobj.loadAsset();
-                                if (asset != null) {
-                                    java.awt.EventQueue.invokeLater(new Runnable() {
-
-                                        public void run() {
-                                            /* handle appropriately */
-                                            //CinematicEditorTopComponent editor = CinematicEditorTopComponent.findInstance();
-                                            //CinematicEditorManager.getInstance().setCurrentDataObject(dobj);
-                                            //CinematicEditorManager.getInstance().setCurrentDataObject(dobj);
-                                            //CinematicEditorManager.getInstance().loadCinematicData(editor);
-                                            //(asset, dobj, manager);
-                                        }
-                                    });
-                                } else {
-                                    Confirmation msg = new NotifyDescriptor.Confirmation(
-                                            "Error opening " + dobj.getPrimaryFile().getNameExt(),
-                                            NotifyDescriptor.OK_CANCEL_OPTION,
-                                            NotifyDescriptor.ERROR_MESSAGE);
-                                    DialogDisplayer.getDefault().notify(msg);
-                                }
-                            } finally {
-                                progressHandle.finish();
+                                dobj.saveAsset();
+                            } catch (IOException ex) {
+                                Exceptions.printStackTrace(ex);
                             }
                         }
-                    };
-                    new Thread(call).start();
-                }
-            };
-        }
-        } catch(Exception ex) {
-            JOptionPane.showMessageDialog(null,"Exception in opening scene");
+                        Runnable call = new Runnable() {
+                            public void run() {
+                                ProgressHandle progressHandle = ProgressHandleFactory.createHandle("Reloading Scene for Cinematic Clip..");
+                                progressHandle.start();
+                                try {
+                                    manager.clearCache();
+                                    final Spatial asset = dobj.loadAsset();
+                                    if (asset != null) {
+                                        java.awt.EventQueue.invokeLater(new Runnable() {
+                                            public void run() {
+                                                /* handle appropriately */
+                                                //CinematicEditorTopComponent editor = CinematicEditorTopComponent.findInstance();
+                                                //CinematicEditorManager.getInstance().setCurrentDataObject(dobj);
+                                                //CinematicEditorManager.getInstance().setCurrentDataObject(dobj);
+                                                //CinematicEditorManager.getInstance().loadCinematicData(editor);
+                                                //(asset, dobj, manager);
+                                            }
+                                        });
+                                    } else {
+                                        Confirmation msg = new NotifyDescriptor.Confirmation(
+                                                "Error opening " + dobj.getPrimaryFile().getNameExt(),
+                                                NotifyDescriptor.OK_CANCEL_OPTION,
+                                                NotifyDescriptor.ERROR_MESSAGE);
+                                        DialogDisplayer.getDefault().notify(msg);
+                                    }
+                                } finally {
+                                    progressHandle.finish();
+                                }
+                            }
+                        };
+                        new Thread(call).start();
+                    }
+                };
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Exception in opening scene");
             ex.printStackTrace();
-        } 
+        }
     }
 
     @Override
@@ -476,7 +481,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
             }
             SceneApplication.getApplication().removeSceneListener(this);
             CinematicEditorManager.getInstance().setCurrentRequest(null);
-            
+
             cleanupControllers();
         }
     }
@@ -485,6 +490,7 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
     public void previewCreated(PreviewRequest pr) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     private void cleanupControllers() {
         if (camController != null) {
             camController.disable();
@@ -500,6 +506,44 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         }
     }
 
+        private void setSceneInfo(JmeNode jmeNode, FileObject file, boolean active) {
+        if(jmeNode!=null) {
+            selectSpatial(jmeNode);
+        } else{
+            //System.out.println("JmeNode in setSceneInfo");
+        }
+        if (active) {
+            if(file!=null){
+                System.out.println("***Name : " + file.getNameExt());
+                System.out.println("***Size : " + file.getSize()/1024+" kb");
+            }
+            requestActive();
+            open();
+        }
+    }
+
+    private void selectSpatial(JmeNode spatial) {
+        if(editorController!=null)
+            editorController.setSelectedSpat(spatial);
+        if(spatial==null) {
+            setSelectedObjectText(null);
+            return;
+        } else{
+            if(toolController!=null) {
+                toolController.setSelectedSpatial(spatial);
+                toolController.updateSelection(spatial.getLookup().lookup(Spatial.class));
+            }
+        }
+        SceneViewerTopComponent.findInstance().setActivatedNodes(new org.openide.nodes.Node[]{spatial});
+        SceneExplorerTopComponent.findInstance().setSelectedNode(spatial);
+    }
+
+    private void setSelectedObjectText(String string) {
+        if(string!=null)
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO,string);
+        else
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO,"No Spatial Selected");
+    }
     protected CinematicEditorToolController getToolController() {
         return toolController;
     }
@@ -521,8 +565,6 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         this.lookupContent = lookupContent;
     }
 
-
-
     public AbstractLookup getCinematicLookup() {
         return cinematicLookup;
     }
@@ -535,9 +577,5 @@ public final class CinematicEditorTopComponent extends TopComponent implements S
         this.cinematicEditorUI = cinematicEditorUI;
     }
 
-    
-    
 
-    
-    
 }
