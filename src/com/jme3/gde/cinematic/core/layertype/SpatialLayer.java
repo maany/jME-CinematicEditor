@@ -150,6 +150,7 @@ public class SpatialLayer extends Layer{
         File oldFile = this.file;
         this.file = file;
         if(assetManager==null)
+            
             assetManager = CinematicEditorManager.getInstance().getCurrentDataObject().getContentLookup().lookup(ProjectAssetManager.class);
             System.out.println("Absolute Asset Path : " + file.getAbsolutePath());
             String relativeAssetPath = assetManager.getRelativeAssetPath(file.getAbsolutePath());

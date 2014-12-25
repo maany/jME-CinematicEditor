@@ -108,7 +108,8 @@ public class MainToolbarControl extends HBox{
                     @Override
                     public void run() {
                         try {
-                        System.out.println("SCALE TOOl");
+                            System.out.println("**Thread Name from javafx : " + Thread.currentThread().getName());
+                            System.out.println("SCALE TOOl");
                         ScaleTool tool = new ScaleTool();
                         CinematicEditorTopComponent cinematicEditor = CinematicEditorTopComponent.findInstance();
                         CinematicEditorToolController toolController = cinematicEditor.getCinematicLookup().lookup(CinematicEditorToolController.class);
